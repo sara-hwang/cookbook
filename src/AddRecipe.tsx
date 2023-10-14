@@ -70,15 +70,17 @@ const AddRecipe = ({}) => {
                             return (
                               <div key={index}>
                                 <Typography variant="h6">
-                                  <TextField
+                                  <Field
+                                    name={`ingredients.${index}.amount`}
                                     type="number"
-                                    placeholder="Amount"
-                                    name={`ingredients.${index}.`}
+                                    as={TextField}
+                                    label="Amount"
                                   />
                                   g
-                                  <TextField
-                                    placeholder="Ingredient"
+                                  <Field
                                     name={`ingredients.${index}.element`}
+                                    as={TextField}
+                                    label="Ingredient"
                                   />
                                   <IconButton
                                     onClick={() => {
@@ -115,9 +117,10 @@ const AddRecipe = ({}) => {
                             <div key={index}>
                               <Typography variant="h6">
                                 {index + 1}.
-                                <TextField
-                                  placeholder="Instructions..."
+                                <Field
                                   name={`steps.${index}`}
+                                  label="Instructions..."
+                                  as={TextField}
                                 />
                                 <IconButton
                                   onClick={() => {
