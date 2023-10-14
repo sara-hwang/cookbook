@@ -59,6 +59,7 @@
   "author": "",
   "license": "ISC",
   "devDependencies": {
-    "@types/mui-datatables": "^4.3.6"
+    "@types/mui-datatables": "^4.3.6",
+    "@babel/plugin-proposal-private-property-in-object": "7.21.11"
   }
 }
