@@ -1,20 +1,17 @@
-import { Box, Button, Grid, Paper, TextField } from "@mui/material";
-import axios from "axios";
-import { Field, Form, Formik } from "formik";
+import { Box, Grid, Paper, TextField } from "@mui/material";
 import { Recipe } from "./types";
 import { useEffect, useState } from "react";
 import "./App.css";
 import RecipeDetails from "./RecipeDetails";
+import { getAllRecipes } from "./api";
 
 const ViewRecipes = ({}) => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   useEffect(() => {
-    axios
-      .get("http://localhost:3001/get")
-      .then((result) => {
-        setRecipes(result.data);
-      })
-      .catch((error) => console.log(error));
+    async function loadRecipes() {
+      setRecipes(await getAllRecipes());
+    }
+    loadRecipes();
   }, []);
 
   return (
@@ -25,7 +22,7 @@ const ViewRecipes = ({}) => {
             {recipes &&
               recipes.map((recipe) => {
                 return (
-                  <Grid item xs={4}>
+                  <Grid item xs={4} key={recipes.indexOf(recipe)}>
                     <img
                       src={recipe.photo}
                       width="200"

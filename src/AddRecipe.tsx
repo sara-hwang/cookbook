@@ -3,15 +3,13 @@ import {
   Button,
   Grid,
   IconButton,
-  MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
-import axios from "axios";
 import { Field, FieldArray, Form, Formik } from "formik";
 import { Ingredient } from "./types";
 import { Add, Delete } from "@mui/icons-material";
+import { addRecipe } from "./api";
 
 const AddRecipe = ({}) => {
   return (
@@ -25,11 +23,7 @@ const AddRecipe = ({}) => {
         }}
         onSubmit={(data, { setSubmitting }) => {
           setSubmitting(true);
-          console.log("submtting");
-          axios
-            .post("http://localhost:3001/add", data)
-            .then((result) => console.log(result))
-            .catch((error) => console.log(error));
+          addRecipe(data);
           setSubmitting(false);
         }}
       >

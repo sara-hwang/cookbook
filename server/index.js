@@ -20,7 +20,7 @@ app.get("/get", (req, res) => {
 
 app.post("/add", (req, res) => {
   const obj = req.body;
-  console.log(title);
+  console.log(obj);
   RecipeModel.create(obj)
     .then((result) => res.json(result))
     .catch((error) => console.log(error));

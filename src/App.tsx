@@ -1,11 +1,7 @@
 import React from "react";
-import logo from "./logo.svg";
 import "./App.css";
-import { Field, Form, Formik } from "formik";
-import { Box, Paper, Grid, Button, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs, Typography } from "@mui/material";
 
-import axios from "axios";
-import TextField from "@mui/material/TextField";
 import AddRecipe from "./AddRecipe";
 import ViewRecipes from "./ViewRecipes";
 
@@ -17,7 +13,6 @@ interface TabPanelProps {
 
 function TabPanel(props: TabPanelProps) {
   const { children, value, index, ...other } = props;
-
   return (
     <div
       role="tabpanel"
@@ -26,11 +21,7 @@ function TabPanel(props: TabPanelProps) {
       aria-labelledby={`tab-${index}`}
       {...other}
     >
-      {value === index && (
-        <Box sx={{ p: 3 }}>
-          <Typography>{children}</Typography>
-        </Box>
-      )}
+      {value === index && <Box sx={{ p: 3 }}>{children}</Box>}
     </div>
   );
 }
