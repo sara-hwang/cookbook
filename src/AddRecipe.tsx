@@ -7,21 +7,25 @@ import {
   Typography,
 } from "@mui/material";
 import { Field, FieldArray, Form, Formik } from "formik";
-import { Ingredient } from "./types";
+import { Ingredient, Recipe } from "./types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe } from "./api";
 
-const AddRecipe = ({}) => {
+const initialValues: Recipe = {
+  title: "",
+  servings: 1,
+  ingredients: [],
+  steps: [],
+  photo: undefined,
+  tags: [],
+};
+
+const AddRecipe = () => {
   return (
     <div>
       <Formik
-        initialValues={{
-          title: "",
-          servings: 1,
-          ingredients: [],
-          steps: [],
-        }}
-        onSubmit={(data, { setSubmitting }) => {
+        initialValues={initialValues}
+        onSubmit={(data: Recipe, { setSubmitting }) => {
           setSubmitting(true);
           addRecipe(data);
           setSubmitting(false);
@@ -65,7 +69,7 @@ const AddRecipe = ({}) => {
                             <Add />
                           </IconButton>
                         </Typography>
-                        {values.ingredients.map(
+                        {values.ingredients?.map(
                           (ingredient: Ingredient, index) => {
                             return (
                               <div key={index}>
@@ -112,7 +116,7 @@ const AddRecipe = ({}) => {
                             <Add />
                           </IconButton>
                         </Typography>
-                        {values.steps.map((step, index) => {
+                        {values.steps?.map((step, index) => {
                           return (
                             <div key={index}>
                               <Typography variant="h6">

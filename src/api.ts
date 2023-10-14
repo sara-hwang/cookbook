@@ -1,6 +1,7 @@
 import axios from "axios";
+import { Recipe } from "./types";
 
-export const addRecipe = async (data: any) => {
+export const addRecipe = async (data: Recipe) => {
   console.log("submtting");
   console.log(data);
   try {

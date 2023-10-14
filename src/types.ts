@@ -1,9 +1,9 @@
 export type Recipe = {
-  title: String;
+  title: string;
   ingredients: Ingredient[] | undefined;
-  steps: String[] | undefined;
-  servings: Number;
-  photo: string;
+  steps: string[] | undefined;
+  servings: number;
+  photo: string | undefined;
   tags: string[];
 };
 

@@ -1,6 +1,6 @@
 import React from "react";
 import "./App.css";
-import { Box, Tab, Tabs, Typography } from "@mui/material";
+import { Box, Tab, Tabs } from "@mui/material";
 
 import AddRecipe from "./AddRecipe";
 import ViewRecipes from "./ViewRecipes";

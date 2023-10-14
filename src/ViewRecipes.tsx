@@ -1,11 +1,11 @@
-import { Box, Grid, Paper, TextField } from "@mui/material";
+import { Box, Grid, Paper } from "@mui/material";
 import { Recipe } from "./types";
 import { useEffect, useState } from "react";
 import "./App.css";
 import RecipeDetails from "./RecipeDetails";
 import { getAllRecipes } from "./api";
 
-const ViewRecipes = ({}) => {
+const ViewRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   useEffect(() => {
     async function loadRecipes() {
@@ -24,6 +24,7 @@ const ViewRecipes = ({}) => {
                 return (
                   <Grid item xs={4} key={recipes.indexOf(recipe)}>
                     <img
+                      alt="Recipe Photo"
                       src={recipe.photo}
                       width="200"
                       height="200"
