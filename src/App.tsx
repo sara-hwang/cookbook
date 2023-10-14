@@ -7,6 +7,7 @@ import { Box, Paper, Grid, Button, Tab, Tabs, Typography } from "@mui/material";
 import axios from "axios";
 import TextField from "@mui/material/TextField";
 import AddRecipe from "./AddRecipe";
+import ViewRecipes from "./ViewRecipes";
 
 interface TabPanelProps {
   children?: React.ReactNode;
@@ -44,20 +45,16 @@ export default function App() {
   return (
     <Box sx={{ width: "100%" }}>
       <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
-        <Tabs
-          value={value}
-          onChange={handleChange}
-          aria-label="basic tabs example"
-        >
-          <Tab label="Add Recipe" />
-          <Tab label="View Recipes" />
+        <Tabs value={value} onChange={handleChange}>
+          <Tab label="View Recipe" />
+          <Tab label="Add Recipes" />
         </Tabs>
       </Box>
       <TabPanel value={value} index={0}>
-        <AddRecipe />
+        <ViewRecipes />
       </TabPanel>
       <TabPanel value={value} index={1}>
-        todo
+        <AddRecipe />
       </TabPanel>
     </Box>
   );
