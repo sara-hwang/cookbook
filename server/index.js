@@ -23,7 +23,6 @@ app.get("/get", async (req, res) => {
 
 app.post("/add", (req, res) => {
   const obj = req.body;
-  console.log(obj);
   try {
     let response = RecipeModel.create(obj);
     res.json(response);

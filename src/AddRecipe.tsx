@@ -23,12 +23,9 @@ const AddRecipe = () => {
 
   const FormObserver: React.FC = () => {
     const { values } = useFormikContext<Recipe>();
-
     useEffect(() => {
-      console.log("FormObserver::values", values);
       dispatch(setRecipeDraft(values));
     }, [values]);
-
     return null;
   };
 
