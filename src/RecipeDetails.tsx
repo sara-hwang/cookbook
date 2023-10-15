@@ -23,7 +23,7 @@ const RecipeDetails = () => {
       };
       dispatch(pushTab(newTab));
     }
-  }, []);
+  }, [id]);
 
   return (
     <Paper>

@@ -8,7 +8,7 @@ const initialState: { tabsList: TabItem[]; currentTab: number } = {
     { label: "View Recipes", link: "/view" },
     { label: "Add Recipe", link: "/add" },
   ],
-  currentTab: 0,
+  currentTab: window.location.pathname == "/view" ? 0 : 1,
 };
 
 export const tabsListSlice = createSlice({
