@@ -12,7 +12,7 @@ mongoose.connect(
   `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cookbook.efjxjit.mongodb.net/cookbook`
 );
 
-app.get("/get", async (req, res) => {
+app.get("/recipes/getAll", async (req, res) => {
   try {
     let response = await RecipeModel.find();
     res.json(response);
@@ -21,10 +21,19 @@ app.get("/get", async (req, res) => {
   }
 });
 
-app.post("/add", (req, res) => {
+app.get("/recipes/get", async (req, res) => {
+  try {
+    let response = await RecipeModel.find(req.query);
+    res.json(response);
+  } catch (error) {
+    res.json(error);
+  }
+});
+
+app.post("/recipes/add", async (req, res) => {
   const obj = req.body;
   try {
-    let response = RecipeModel.create(obj);
+    let response = await RecipeModel.create(obj);
     res.json(response);
   } catch (error) {
     console.log(error);

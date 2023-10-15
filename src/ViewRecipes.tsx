@@ -5,8 +5,10 @@ import "./App.css";
 import RecipeDetails from "./RecipeDetails";
 import { getAllRecipes } from "./api";
 import React from "react";
+import { Link, useNavigate } from "react-router-dom";
 
 const ViewRecipes = () => {
+  const navigate = useNavigate();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   useEffect(() => {
     async function loadRecipes() {
@@ -39,16 +41,12 @@ const ViewRecipes = () => {
                       src={recipe.photo}
                       alt="Recipe Photo"
                       onClick={() => {
-                        console.log("Clicked");
-                        <RecipeDetails recipe={recipe} />;
+                        navigate(`/view/${recipe.title}`);
                       }}
                     />
                   </Grid>
                 );
               })}
-          </Grid>
-          <Grid container item>
-            <pre>{JSON.stringify(recipes, null, 2)}</pre>;
           </Grid>
         </Box>
       </Paper>

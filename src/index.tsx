@@ -7,6 +7,7 @@ import { Provider } from "react-redux";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import ViewRecipes from "./ViewRecipes";
 import AddRecipe from "./AddRecipe";
+import RecipeDetails from "./RecipeDetails";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -17,9 +18,10 @@ root.render(
       <BrowserRouter>
         <App />
         <Routes>
-          <Route path="/" Component={ViewRecipes} />
-          <Route path="/view" Component={ViewRecipes} />
-          <Route path="/add" Component={AddRecipe} />
+          <Route path="/" element={<ViewRecipes />} />
+          <Route path="/view" element={<ViewRecipes />} />
+          <Route path="/add" element={<AddRecipe />} />
+          <Route path="/view/:id" element={<RecipeDetails />} />
         </Routes>
       </BrowserRouter>
     </Provider>

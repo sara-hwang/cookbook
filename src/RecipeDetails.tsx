@@ -1,11 +1,19 @@
 import { Box, Grid, Paper } from "@mui/material";
 import { Recipe } from "./types";
+import { useParams } from "react-router-dom";
+import { getRecipe } from "./api";
+import { useEffect, useState } from "react";
 
-interface IProps {
-  recipe: Recipe;
-}
+const RecipeDetails = () => {
+  const { id } = useParams();
+  const [recipe, setRecipe] = useState<Recipe>();
+  useEffect(() => {
+    async function getRecipeDetails() {
+      setRecipe(await getRecipe(id));
+    }
+    getRecipeDetails();
+  }, []);
 
-const RecipeDetails = ({ recipe }: IProps) => {
   return (
     <Paper>
       <Box>
@@ -18,4 +26,5 @@ const RecipeDetails = ({ recipe }: IProps) => {
     </Paper>
   );
 };
+
 export default RecipeDetails;
