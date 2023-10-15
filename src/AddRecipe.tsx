@@ -3,11 +3,13 @@ import {
   Button,
   Grid,
   IconButton,
+  MenuItem,
+  Select,
   TextField,
   Typography,
 } from "@mui/material";
 import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
-import { Ingredient, Recipe } from "./types";
+import { Ingredient, Recipe, Unit } from "./types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe } from "./api";
 import { RootState } from "./redux/store";
@@ -37,6 +39,7 @@ const AddRecipe = () => {
     photo: photo,
     tags: tags,
   };
+
   return (
     <div>
       <Formik
@@ -80,6 +83,7 @@ const AddRecipe = () => {
                             onClick={() => {
                               arrayHelpers.push({
                                 amount: "",
+                                unit: "g",
                                 element: "",
                               });
                             }}
@@ -98,7 +102,20 @@ const AddRecipe = () => {
                                     as={TextField}
                                     label="Amount"
                                   />
-                                  g
+                                  <Field
+                                    name={`ingredients.${index}.unit`}
+                                    type="number"
+                                    as={Select}
+                                    label="Unit"
+                                  >
+                                    {Object.values(Unit)
+                                      .filter((unit) => typeof unit == "string")
+                                      .map((unit) => (
+                                        <MenuItem key={unit} value={unit}>
+                                          {unit}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
                                   <Field
                                     name={`ingredients.${index}.element`}
                                     as={TextField}

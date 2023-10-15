@@ -34,14 +34,8 @@ const RecipeDetails = () => {
             {recipe?.ingredients.map((ing) => (
               <Fragment key={ing.element}>
                 <li>
-                  {ing.amount} unit {ing.element}
+                  {ing.amount} {ing.unit} {ing.element}
                 </li>
-                {/* <input
-                  type="checkbox"
-                  checked={x.completed}
-                  id={x.id}
-                  onChange={this.toggleCompleted}
-                /> */}
               </Fragment>
             ))}
           </ul>

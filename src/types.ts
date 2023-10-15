@@ -9,6 +9,7 @@ export type Recipe = {
 
 export type Ingredient = {
   amount: number;
+  unit: Unit;
   element: string;
 };
 
@@ -16,3 +17,12 @@ export type TabItem = {
   label: string;
   link: string;
 };
+
+export enum Unit {
+  g,
+  mL,
+  tsp,
+  tbsp,
+  cup,
+  count,
+}
