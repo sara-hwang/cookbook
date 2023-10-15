@@ -26,7 +26,10 @@ export const tabsListSlice = createSlice({
       const index = findIndex(state.tabsList, action.payload);
       if (index > -1) {
         state.currentTab = index - 1;
-        state.tabsList.splice(index, 1);
+        state.tabsList = [
+          ...state.tabsList.slice(0, index),
+          ...state.tabsList.slice(index + 1),
+        ];
       }
     },
     pushTab: (state, action: PayloadAction<TabItem>) => {
