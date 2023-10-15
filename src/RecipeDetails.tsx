@@ -1,16 +1,16 @@
-import { Box, Grid, Paper } from "@mui/material";
+import { Box, Divider, Grid, Paper, Typography } from "@mui/material";
 import { Recipe, TabItem } from "./types";
 import { useParams } from "react-router-dom";
 import { getRecipe } from "./api";
-import { useEffect, useState } from "react";
+import { Fragment, useEffect, useState } from "react";
 import { pushTab } from "./redux/tabsList";
 import { useAppDispatch } from "./redux/hooks";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
-
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe>();
+
   useEffect(() => {
     async function getRecipeDetails() {
       setRecipe(await getRecipe(id));
@@ -26,15 +26,44 @@ const RecipeDetails = () => {
   }, [id]);
 
   return (
-    <Paper>
-      <Box>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <pre>{JSON.stringify(recipe, null, 2)}</pre>;
-          </Grid>
+    <Box>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <Typography variant="h6">Ingredients</Typography>
+          <ul>
+            {recipe?.ingredients.map((ing) => (
+              <Fragment key={ing.element}>
+                <li>
+                  {ing.amount} unit {ing.element}
+                </li>
+                {/* <input
+                  type="checkbox"
+                  checked={x.completed}
+                  id={x.id}
+                  onChange={this.toggleCompleted}
+                /> */}
+              </Fragment>
+            ))}
+          </ul>
+          <Typography variant="h6">Steps</Typography>
+          <ol>
+            {recipe?.steps.map((step) => (
+              <Fragment key={step}>
+                <li>{step}</li>
+              </Fragment>
+            ))}
+          </ol>
+          {recipe?.photo && (
+            <img
+              src={recipe?.photo}
+              width="400"
+              height="400"
+              alt={recipe.title}
+            />
+          )}
         </Grid>
-      </Box>
-    </Paper>
+      </Grid>
+    </Box>
   );
 };
 

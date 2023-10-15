@@ -1,7 +1,7 @@
 export type Recipe = {
   title: string;
-  ingredients: Ingredient[] | undefined;
-  steps: string[] | undefined;
+  ingredients: Ingredient[];
+  steps: string[];
   servings: number;
   photo: string | undefined;
   tags: string[];

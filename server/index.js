@@ -23,7 +23,8 @@ app.get("/recipes/getAll", async (req, res) => {
 
 app.get("/recipes/get", async (req, res) => {
   try {
-    let response = await RecipeModel.find(req.query);
+    let response = await RecipeModel.findOne(req.query);
+    console.log(response);
     res.json(response);
   } catch (error) {
     res.json(error);
