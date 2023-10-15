@@ -44,6 +44,7 @@ const AddRecipe = () => {
         onSubmit={(data: Recipe, { setSubmitting }) => {
           setSubmitting(true);
           addRecipe(data);
+          alert("Saved recipe");
           setSubmitting(false);
         }}
       >

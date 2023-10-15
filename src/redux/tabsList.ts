@@ -11,17 +11,23 @@ const initialState: { tabsList: TabItem[]; currentTab: number } = {
   currentTab: window.location.pathname == "/view" ? 0 : 1,
 };
 
+const findIndex = (tabs: TabItem[], newTab: TabItem) => {
+  return tabs.map((tab) => tab.label).indexOf(newTab.label);
+};
+
 export const tabsListSlice = createSlice({
   name: "tabsList",
   initialState,
   reducers: {
+    popTab: (state, action: PayloadAction<TabItem>) => {
+      const index = findIndex(state.tabsList, action.payload);
+      if (index > -1) {
+        state.currentTab = index - 1;
+        state.tabsList.splice(index, 1);
+      }
+    },
     pushTab: (state, action: PayloadAction<TabItem>) => {
-      const findIndex = (newTab: TabItem) => {
-        return state.tabsList
-          .map((tab) => tab.label)
-          .indexOf(action.payload.label);
-      };
-      const index = findIndex(action.payload);
+      const index = findIndex(state.tabsList, action.payload);
       if (index == -1) {
         state.tabsList = [...state.tabsList, action.payload];
         state.currentTab = state.tabsList.length - 1;
@@ -36,4 +42,4 @@ export const tabsListSlice = createSlice({
 });
 
 export default tabsListSlice.reducer;
-export const { pushTab, setCurrentTab } = tabsListSlice.actions;
+export const { popTab, pushTab, setCurrentTab } = tabsListSlice.actions;
