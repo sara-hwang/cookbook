@@ -11,3 +11,8 @@ export type Ingredient = {
   amount: number;
   element: string;
 };
+
+export type TabItem = {
+  label: string;
+  link: string;
+};
