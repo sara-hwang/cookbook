@@ -1,10 +1,12 @@
-import { Action, Middleware, configureStore } from "@reduxjs/toolkit";
+import { configureStore } from "@reduxjs/toolkit";
 import recipeDraftReducer from "./recipeDraft";
-import { TypedUseSelectorHook, useDispatch, useSelector } from "react-redux";
+import tabsListReducer from "./tabsList";
+import { persistReducer, persistStore } from "redux-persist";
 
 export const store = configureStore({
   reducer: {
     recipeDraft: recipeDraftReducer,
+    tabsList: tabsListReducer,
   },
 });
 

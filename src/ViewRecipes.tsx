@@ -1,11 +1,14 @@
 import { Box, Grid, Paper } from "@mui/material";
-import { Recipe } from "./types";
+import { Recipe, TabItem } from "./types";
 import { useEffect, useState } from "react";
 import "./App.css";
 import RecipeDetails from "./RecipeDetails";
 import { getAllRecipes } from "./api";
 import React from "react";
 import { Link, useNavigate } from "react-router-dom";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import { RootState } from "./redux/store";
+import { pushTab } from "./redux/tabsList";
 
 const ViewRecipes = () => {
   const navigate = useNavigate();
@@ -16,6 +19,7 @@ const ViewRecipes = () => {
     }
     loadRecipes();
   }, []);
+  const dispatch = useAppDispatch();
 
   return (
     <React.Fragment>
@@ -41,7 +45,13 @@ const ViewRecipes = () => {
                       src={recipe.photo}
                       alt="Recipe Photo"
                       onClick={() => {
-                        navigate(`/view/${recipe.title}`);
+                        const path = `/view/${recipe.title}`;
+                        const newTab: TabItem = {
+                          label: recipe.title,
+                          link: path,
+                        };
+                        dispatch(pushTab(newTab));
+                        navigate(path);
                       }}
                     />
                   </Grid>
