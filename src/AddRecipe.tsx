@@ -6,21 +6,40 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Field, FieldArray, Form, Formik } from "formik";
+import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
 import { Ingredient, Recipe } from "./types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe } from "./api";
-
-const initialValues: Recipe = {
-  title: "",
-  servings: 1,
-  ingredients: [],
-  steps: [],
-  photo: undefined,
-  tags: [],
-};
+import { RootState } from "./redux/store";
+import { useEffect } from "react";
+import { setRecipeDraft } from "./redux/recipeDraft";
+import { useAppDispatch, useAppSelector } from "./redux/hooks";
 
 const AddRecipe = () => {
+  const dispatch = useAppDispatch();
+  const { title, servings, ingredients, steps, photo, tags } = useAppSelector(
+    (state: RootState) => state.recipeDraft
+  );
+
+  const FormObserver: React.FC = () => {
+    const { values } = useFormikContext<Recipe>();
+
+    useEffect(() => {
+      console.log("FormObserver::values", values);
+      dispatch(setRecipeDraft(values));
+    }, [values]);
+
+    return null;
+  };
+
+  const initialValues: Recipe = {
+    title: title,
+    servings: servings,
+    ingredients: ingredients,
+    steps: steps,
+    photo: photo,
+    tags: tags,
+  };
   return (
     <div>
       <Formik
@@ -33,6 +52,7 @@ const AddRecipe = () => {
       >
         {({ values, errors, isSubmitting }) => (
           <Form>
+            <FormObserver />
             <Box sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>

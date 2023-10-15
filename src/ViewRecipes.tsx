@@ -22,17 +22,26 @@ const ViewRecipes = () => {
             {recipes &&
               recipes.map((recipe) => {
                 return (
-                  <Grid item xs={4} key={recipes.indexOf(recipe)}>
-                    <img
-                      alt="Recipe Photo"
-                      src={recipe.photo}
+                  <Grid
+                    item
+                    xs={12}
+                    sm={6}
+                    md={4}
+                    lg={2}
+                    xl={1}
+                    key={recipes.indexOf(recipe)}
+                  >
+                    <input
+                      type="image"
                       width="200"
                       height="200"
+                      src={recipe.photo}
+                      alt="Recipe Photo"
                       onClick={() => {
                         console.log("Clicked");
                         <RecipeDetails recipe={recipe} />;
                       }}
-                    ></img>
+                    />
                   </Grid>
                 );
               })}
