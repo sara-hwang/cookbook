@@ -8,7 +8,10 @@ const initialState: { tabsList: TabItem[]; currentTab: number } = {
     { label: "View Recipes", link: "/view" },
     { label: "Add Recipe", link: "/add" },
   ],
-  currentTab: window.location.pathname == "/view" ? 0 : 1,
+  currentTab:
+    window.location.pathname == "/view" || window.location.pathname == "/"
+      ? 0
+      : 1,
 };
 
 const findIndex = (tabs: TabItem[], newTab: TabItem) => {
