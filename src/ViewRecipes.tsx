@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import "./App.css";
 import RecipeDetails from "./RecipeDetails";
 import { getAllRecipes } from "./api";
+import React from "react";
 
 const ViewRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
@@ -15,7 +16,7 @@ const ViewRecipes = () => {
   }, []);
 
   return (
-    <div>
+    <React.Fragment>
       <Paper>
         <Box sx={{ flexGrow: 1 }}>
           <Grid container spacing={3}>
@@ -51,7 +52,7 @@ const ViewRecipes = () => {
           </Grid>
         </Box>
       </Paper>
-    </div>
+    </React.Fragment>
   );
 };
 
