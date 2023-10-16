@@ -35,16 +35,22 @@ const ViewRecipes = () => {
                   xl={1}
                   key={recipes.indexOf(recipe)}
                 >
-                  <input
-                    type="image"
-                    width="200"
-                    height="200"
-                    src={recipe.photo}
-                    alt="Recipe Photo"
-                    onClick={() => {
-                      navigate(`/view/${recipe.title}`);
-                    }}
-                  />
+                  <div className="image-container ">
+                    <input
+                      style={{ width: "100%", height: "100%" }}
+                      type="image"
+                      src={recipe.photo}
+                      alt="Recipe Photo"
+                    />
+                    <div
+                      className="overlay"
+                      onClick={() => {
+                        navigate(`/view/${recipe.title}`);
+                      }}
+                    >
+                      {recipe.title}{" "}
+                    </div>
+                  </div>
                 </Grid>
               );
             })}
