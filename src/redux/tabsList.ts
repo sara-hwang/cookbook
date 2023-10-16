@@ -25,7 +25,11 @@ export const tabsListSlice = createSlice({
     popTab: (state, action: PayloadAction<TabItem>) => {
       const index = findIndex(state.tabsList, action.payload);
       if (index > -1) {
-        state.currentTab = index - 1;
+        if (index == state.currentTab) {
+          state.currentTab = 0;
+        } else if (index < state.currentTab) {
+          state.currentTab -= 1;
+        }
         state.tabsList = [
           ...state.tabsList.slice(0, index),
           ...state.tabsList.slice(index + 1),

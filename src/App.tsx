@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -17,7 +17,6 @@ export default function App() {
 
   const handleChange = (event: React.SyntheticEvent, newValue: number) => {
     dispatch(setCurrentTab(newValue));
-    navigate(tabsList[newValue].link);
   };
 
   useEffect(() => {
@@ -45,7 +44,9 @@ export default function App() {
                       <IconButton
                         size="small"
                         component="span"
-                        onClick={() => {
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
                           dispatch(popTab(tab));
                         }}
                       >
@@ -54,8 +55,6 @@ export default function App() {
                     )}
                   </span>
                 }
-                component={Link}
-                to={tab.link}
               />
             );
           })}
