@@ -21,7 +21,7 @@ const ViewRecipes = () => {
 
   return (
     <React.Fragment>
-      <Box sx={{ flexGrow: 1 }}>
+      <Box className="containers" sx={{ flexGrow: 1 }}>
         <Grid container spacing={3}>
           {recipes &&
             recipes.map((recipe) => {

@@ -26,7 +26,7 @@ const RecipeDetails = () => {
   }, [id]);
 
   return (
-    <Box>
+    <Box className="containers">
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <Typography variant="h6">Ingredients</Typography>

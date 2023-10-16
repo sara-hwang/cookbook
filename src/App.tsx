@@ -1,12 +1,13 @@
 import React, { useCallback, useEffect, useState } from "react";
 import "./App.css";
-import { Box, IconButton, Tab, Tabs } from "@mui/material";
+import { Box, Icon, IconButton, Tab, Tabs } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { Link, useLocation, useNavigate } from "react-router-dom";
 import { TabItem } from "./types";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { RootState } from "./redux/store";
 import { popTab, setCurrentTab } from "./redux/tabsList";
+import logo from "./icon.png";
 
 export default function App() {
   const { tabsList, currentTab } = useAppSelector(
@@ -25,7 +26,11 @@ export default function App() {
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Box sx={{ borderBottom: 1, borderColor: "divider" }}>
+      <img src={logo} className="logo" />
+      <Box
+        className="paragraph"
+        sx={{ borderBottom: 1, borderColor: "lightblue" }}
+      >
         <Tabs
           value={currentTab}
           onChange={handleChange}

@@ -54,7 +54,7 @@ const AddRecipe = () => {
         {({ values, errors, isSubmitting }) => (
           <Form>
             <FormObserver />
-            <Box sx={{ flexGrow: 1 }}>
+            <Box className="containers" sx={{ flexGrow: 1 }}>
               <Grid container spacing={2}>
                 <Grid item xs={12}>
                   <Field
