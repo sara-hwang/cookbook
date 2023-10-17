@@ -44,11 +44,12 @@ const AddRecipe = () => {
     <div>
       <Formik
         initialValues={initialValues}
-        onSubmit={(data: Recipe, { setSubmitting }) => {
+        onSubmit={(data: Recipe, { setSubmitting, resetForm }) => {
           setSubmitting(true);
           addRecipe(data);
           alert("Saved recipe");
           setSubmitting(false);
+          resetForm();
         }}
       >
         {({ values, errors, isSubmitting }) => (
