@@ -12,9 +12,12 @@ import { pushTab } from "./redux/tabsList";
 const ViewRecipes = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
+  const [loading, setLoading] = useState(true);
   useEffect(() => {
     async function loadRecipes() {
+      setLoading(true);
       setRecipes(await getAllRecipes());
+      setLoading(false);
     }
     loadRecipes();
   }, []);
@@ -23,6 +26,9 @@ const ViewRecipes = () => {
     <React.Fragment>
       <Box className="containers" sx={{ flexGrow: 1 }}>
         <Grid container spacing={3}>
+          <div style={{ display: loading ? "block" : "none" }}>
+            loading (may take up to 1 minute on first render)...
+          </div>
           {recipes &&
             recipes.map((recipe) => {
               return (
