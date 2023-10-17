@@ -1,1 +1,1 @@
-https://best-cookbook.netlify.app
+https://susanscookbook.netlify.app
