@@ -2,7 +2,7 @@ import React, { useEffect, useState } from "react";
 import "./Search.css";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { RootState } from "./redux/store";
 import { popTab, setCurrentTab } from "./redux/tabsList";
@@ -12,6 +12,7 @@ interface IProps {
 }
 
 export default function NavBar({ isActive }: IProps) {
+  const { pathname } = useLocation();
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
@@ -25,6 +26,15 @@ export default function NavBar({ isActive }: IProps) {
   useEffect(() => {
     navigate(tabsList[currentTab].link);
   }, [currentTab]);
+
+  useEffect(() => {
+    console.log(pathname);
+    if (pathname == "/" || pathname == "/view") {
+      dispatch(setCurrentTab(0));
+    } else if (pathname == "/add") {
+      dispatch(setCurrentTab(1));
+    }
+  }, [pathname]);
 
   useEffect(() => {
     if (isActive) {
