@@ -1,9 +1,11 @@
 import axios from "axios";
 import { Recipe } from "./types";
 
+const URI = process.env.REACT_APP_SERVER_URI;
+
 export const addRecipe = async (data: Recipe) => {
   try {
-    await axios.post("http://localhost:3001/recipes/add", data);
+    await axios.post(`${URI}/recipes/add`, data);
   } catch (error) {
     console.log(error);
   }
@@ -11,7 +13,7 @@ export const addRecipe = async (data: Recipe) => {
 
 export const getAllRecipes = async () => {
   try {
-    const response = await axios.get("http://localhost:3001/recipes/getAll");
+    const response = await axios.get(`${URI}/recipes/getAll`);
     return response.data;
   } catch (error) {
     console.log(error);
@@ -21,7 +23,7 @@ export const getAllRecipes = async () => {
 
 export const getRecipe = async (title: string | undefined) => {
   try {
-    const response = await axios.get("http://localhost:3001/recipes/get", {
+    const response = await axios.get(`${URI}/recipes/get`, {
       params: {
         title: title,
       },
