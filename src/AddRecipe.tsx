@@ -9,6 +9,7 @@ import {
   Typography,
 } from "@mui/material";
 import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
+import * as yup from "yup";
 import { Ingredient, Recipe, Unit } from "./types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe } from "./api";
@@ -41,10 +42,15 @@ const AddRecipe = () => {
     tags: tags,
   };
 
+  const validationSchema = yup.object({
+    title: yup.string().required("Please provide a title.").max(250),
+  });
+
   return (
     <div>
       <Formik
         initialValues={initialValues}
+        validationSchema={validationSchema}
         onSubmit={async (data: Recipe, { resetForm }) => {
           const response = await addRecipe(data);
           if (response && response.status === 200) {
@@ -55,7 +61,7 @@ const AddRecipe = () => {
           resetForm();
         }}
       >
-        {({ values, errors, isSubmitting, setFieldValue }) => (
+        {({ values, errors, dirty, isSubmitting, setFieldValue }) => (
           <Form>
             <FormObserver />
             <Box className="containers" sx={{ flexGrow: 1 }}>
@@ -68,6 +74,8 @@ const AddRecipe = () => {
                     as={TextField}
                     label="Title"
                     fullWidth
+                    error={errors.title !== undefined}
+                    helperText={errors.title}
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -205,7 +213,7 @@ const AddRecipe = () => {
                 <Grid item xs={12}>
                   <Button
                     variant="contained"
-                    disabled={isSubmitting}
+                    disabled={!dirty || isSubmitting}
                     type="submit"
                   >
                     Submit
