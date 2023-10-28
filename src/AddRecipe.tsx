@@ -16,6 +16,7 @@ import { RootState } from "./redux/store";
 import { useEffect } from "react";
 import { setRecipeDraft } from "./redux/recipeDraft";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
+import UploadImage from "./UploadImage";
 
 const AddRecipe = () => {
   const dispatch = useAppDispatch();
@@ -52,7 +53,7 @@ const AddRecipe = () => {
           resetForm();
         }}
       >
-        {({ values, errors, isSubmitting }) => (
+        {({ values, errors, isSubmitting, setFieldValue }) => (
           <Form>
             <FormObserver />
             <Box className="containers" sx={{ flexGrow: 1 }}>
@@ -190,6 +191,14 @@ const AddRecipe = () => {
                       </div>
                     )}
                   </FieldArray>
+                </Grid>
+                <Grid item>
+                  <Field
+                    name="photo"
+                    type="input"
+                    as={UploadImage}
+                    setFieldValue={setFieldValue}
+                  />
                 </Grid>
                 <Grid item xs={12}>
                   <Button

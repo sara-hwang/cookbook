@@ -37,9 +37,9 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  padding: 0; /* Remove padding to match the image size */
+  padding: 0;
   text-align: center;
-  box-sizing: border-box; /* Ensure the overlay includes padding in its dimensions */
+  box-sizing: border-box;
 }
 
 .text-field-input {
