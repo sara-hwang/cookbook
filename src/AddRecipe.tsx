@@ -18,9 +18,11 @@ import { useEffect } from "react";
 import { setRecipeDraft } from "./redux/recipeDraft";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import UploadImage from "./UploadImage";
+import { useNavigate } from "react-router-dom";
 
 const AddRecipe = () => {
   const dispatch = useAppDispatch();
+  const navigate = useNavigate();
   const { title, servings, ingredients, steps, photo, tags } = useAppSelector(
     (state: RootState) => state.recipeDraft
   );
@@ -54,7 +56,7 @@ const AddRecipe = () => {
         onSubmit={async (data: Recipe, { resetForm }) => {
           const response = await addRecipe(data);
           if (response && response.status === 200) {
-            alert("Saved recipe");
+            navigate(`/view/${title}`);
           } else {
             alert(response.data);
           }
