@@ -64,6 +64,7 @@ const AddRecipe = () => {
                     type="input"
                     as={TextField}
                     label="Title"
+                    fullWidth
                   />
                 </Grid>
                 <Grid item xs={12}>
@@ -72,9 +73,10 @@ const AddRecipe = () => {
                     type="number"
                     as={TextField}
                     label="Number of Servings"
+                    size="small"
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item container>
                   <FieldArray name="ingredients">
                     {(arrayHelpers) => (
                       <div>
@@ -95,19 +97,28 @@ const AddRecipe = () => {
                         {values.ingredients?.map(
                           (ingredient: Ingredient, index) => {
                             return (
-                              <div key={index}>
+                              <Grid
+                                item
+                                key={index}
+                                xs={12}
+                                padding={0.5}
+                                marginLeft={1}
+                              >
                                 <Typography variant="h6">
                                   <Field
                                     name={`ingredients.${index}.amount`}
                                     type="number"
                                     as={TextField}
                                     label="Amount"
+                                    size="small"
                                   />
                                   <Field
                                     name={`ingredients.${index}.unit`}
                                     type="number"
                                     as={Select}
                                     label="Unit"
+                                    size="small"
+                                    className="text-field-input"
                                   >
                                     {Object.values(Unit)
                                       .filter((unit) => typeof unit == "string")
@@ -121,6 +132,7 @@ const AddRecipe = () => {
                                     name={`ingredients.${index}.element`}
                                     as={TextField}
                                     label="Ingredient"
+                                    size="small"
                                   />
                                   <IconButton
                                     onClick={() => {
@@ -130,7 +142,7 @@ const AddRecipe = () => {
                                     <Delete />
                                   </IconButton>
                                 </Typography>
-                              </div>
+                              </Grid>
                             );
                           }
                         )}
@@ -138,7 +150,7 @@ const AddRecipe = () => {
                     )}
                   </FieldArray>
                 </Grid>
-                <Grid item xs={12}>
+                <Grid item container xs={12}>
                   <FieldArray name="steps">
                     {(arrayHelpers) => (
                       <div>
@@ -154,13 +166,15 @@ const AddRecipe = () => {
                         </Typography>
                         {values.steps?.map((step, index) => {
                           return (
-                            <div key={index}>
+                            <Grid item key={index} padding={0.5} marginLeft={1}>
                               <Typography variant="h6">
-                                {index + 1}.
+                                {index + 1}.&nbsp;
                                 <Field
                                   name={`steps.${index}`}
                                   label="Instructions..."
                                   as={TextField}
+                                  size="small"
+                                  multiline
                                 />
                                 <IconButton
                                   onClick={() => {
@@ -170,7 +184,7 @@ const AddRecipe = () => {
                                   <Delete />
                                 </IconButton>
                               </Typography>
-                            </div>
+                            </Grid>
                           );
                         })}
                       </div>

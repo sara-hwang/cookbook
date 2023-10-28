@@ -41,3 +41,8 @@
   text-align: center;
   box-sizing: border-box; /* Ensure the overlay includes padding in its dimensions */
 }
+
+.text-field-input {
+  margin-right: 10px;
+  margin-left: 10px;
+}
