@@ -45,11 +45,13 @@ const AddRecipe = () => {
     <div>
       <Formik
         initialValues={initialValues}
-        onSubmit={(data: Recipe, { setSubmitting, resetForm }) => {
-          setSubmitting(true);
-          addRecipe(data);
-          alert("Saved recipe");
-          setSubmitting(false);
+        onSubmit={async (data: Recipe, { resetForm }) => {
+          const response = await addRecipe(data);
+          if (response && response.status === 200) {
+            alert("Saved recipe");
+          } else {
+            alert(response.data);
+          }
           resetForm();
         }}
       >

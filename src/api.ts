@@ -5,9 +5,10 @@ const URI = process.env.REACT_APP_SERVER_URI;
 
 export const addRecipe = async (data: Recipe) => {
   try {
-    await axios.post(`${URI}/recipes/add`, data);
-  } catch (error) {
-    console.log(error);
+    const response = await axios.post(`${URI}/recipes/add`, data);
+    return response;
+  } catch (error: any) {
+    return error.response;
   }
 };
 
