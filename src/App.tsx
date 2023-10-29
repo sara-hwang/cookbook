@@ -15,7 +15,7 @@ export default function App() {
       </div>
       <div className="body-container">
         <div>
-          <NavBar isActive={true} />
+          <NavBar />
         </div>
         <Routes>
           <Route

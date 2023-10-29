@@ -24,7 +24,7 @@ const AddRecipe = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { title, servings, ingredients, steps, photo, tags } = useAppSelector(
-    (state: RootState) => state.recipeDraft
+    (state: RootState) => state.recipeDraft,
   );
 
   const FormObserver: React.FC = () => {
@@ -156,7 +156,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}

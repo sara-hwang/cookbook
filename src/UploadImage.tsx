@@ -6,8 +6,8 @@ import { Recipe } from "./types";
 interface IProps {
   setFieldValue: (
     field: string,
-    value: any,
-    shouldValidate?: boolean | undefined
+    value: string | ArrayBuffer | null,
+    shouldValidate?: boolean | undefined,
   ) => Promise<void | FormikErrors<Recipe>>;
 }
 

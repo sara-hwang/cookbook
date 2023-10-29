@@ -7,14 +7,10 @@ import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { RootState } from "./redux/store";
 import { popTab, setCurrentTab } from "./redux/tabsList";
 
-interface IProps {
-  isActive: boolean;
-}
-
-export default function NavBar({ isActive }: IProps) {
+export default function NavBar() {
   const { pathname } = useLocation();
   const { tabsList, currentTab } = useAppSelector(
-    (state: RootState) => state.tabsList
+    (state: RootState) => state.tabsList,
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -28,19 +24,12 @@ export default function NavBar({ isActive }: IProps) {
   }, [currentTab]);
 
   useEffect(() => {
-    console.log(pathname);
     if (pathname == "/" || pathname == "/view") {
       dispatch(setCurrentTab(0));
     } else if (pathname == "/add") {
       dispatch(setCurrentTab(1));
     }
   }, [pathname]);
-
-  useEffect(() => {
-    if (isActive) {
-      dispatch(setCurrentTab(0));
-    }
-  }, [isActive]);
 
   return (
     <Box className="nav-tabs">
