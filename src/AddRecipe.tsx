@@ -13,19 +13,30 @@ import * as yup from "yup";
 import slugify from "slugify";
 import { Ingredient, Recipe, Unit } from "./types";
 import { Add, Delete } from "@mui/icons-material";
-import { addRecipe } from "./api";
+import { addRecipe, updateRecipe } from "./api";
 import { RootState } from "./redux/store";
-import { useEffect } from "react";
+import { useEffect, useState } from "react";
 import { setRecipeDraft } from "./redux/recipeDraft";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import UploadImage from "./UploadImage";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { getRecipeDetails } from "./helpers";
 
 const AddRecipe = () => {
-  const dispatch = useAppDispatch();
-  const navigate = useNavigate();
   const { key, title, servings, ingredients, steps, photo, tags } =
     useAppSelector((state: RootState) => state.recipeDraft);
+  const dispatch = useAppDispatch();
+  const navigate = useNavigate();
+  const { id } = useParams();
+  const [initialValues, setInitialValues] = useState({
+    key: key,
+    title: title,
+    servings: servings,
+    ingredients: ingredients,
+    steps: steps,
+    photo: photo,
+    tags: tags,
+  });
 
   const FormObserver: React.FC = () => {
     const { values } = useFormikContext<Recipe>();
@@ -35,15 +46,11 @@ const AddRecipe = () => {
     return null;
   };
 
-  const initialValues: Recipe = {
-    key: key,
-    title: title,
-    servings: servings,
-    ingredients: ingredients,
-    steps: steps,
-    photo: photo,
-    tags: tags,
-  };
+  useEffect(() => {
+    if (id !== undefined) {
+      getRecipeDetails(id, setInitialValues);
+    }
+  }, [id]);
 
   const validationSchema = yup.object({
     title: yup.string().required("Please provide a title.").max(250),
@@ -52,13 +59,17 @@ const AddRecipe = () => {
   return (
     <Formik
       initialValues={initialValues}
+      enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={async (data: Recipe, { resetForm }) => {
         const key = slugify(data.title, { lower: true });
-        const response = await addRecipe({
-          ...data,
-          key: key,
-        });
+        let response;
+        data = { ...data, key: key };
+        if (id === undefined) {
+          response = await addRecipe(data);
+        } else {
+          response = await updateRecipe(data);
+        }
         if (response && response.status === 200) {
           resetForm();
           navigate(`/view/${key}`);
@@ -80,8 +91,13 @@ const AddRecipe = () => {
                   as={TextField}
                   label="Title"
                   fullWidth
+                  disabled={id !== undefined}
                   error={errors.title !== undefined}
-                  helperText={errors.title}
+                  helperText={
+                    id
+                      ? "You cannot edit a recipe title after creation."
+                      : errors.title
+                  }
                 />
               </Grid>
               <Grid item xs={12}>
@@ -126,14 +142,13 @@ const AddRecipe = () => {
                                   name={`ingredients.${index}.amount`}
                                   type="number"
                                   as={TextField}
-                                  label="Amount"
+                                  placeholder="Amount"
                                   size="small"
                                 />
                                 <Field
                                   name={`ingredients.${index}.unit`}
                                   type="number"
                                   as={Select}
-                                  label="Unit"
                                   size="small"
                                   className="text-field-input"
                                 >
@@ -148,7 +163,7 @@ const AddRecipe = () => {
                                 <Field
                                   name={`ingredients.${index}.element`}
                                   as={TextField}
-                                  label="Ingredient"
+                                  placeholder="Ingredient"
                                   size="small"
                                 />
                                 <IconButton
@@ -161,7 +176,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}
@@ -188,7 +203,7 @@ const AddRecipe = () => {
                               {index + 1}.&nbsp;
                               <Field
                                 name={`steps.${index}`}
-                                label="Instructions..."
+                                placeholder="Instructions..."
                                 as={TextField}
                                 size="small"
                                 multiline
@@ -222,7 +237,7 @@ const AddRecipe = () => {
                   disabled={!isValid || isSubmitting}
                   type="submit"
                 >
-                  Submit
+                  {id ? "Save" : "Submit"}
                 </Button>
               </Grid>
             </Grid>

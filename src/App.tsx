@@ -18,31 +18,11 @@ export default function App() {
           <NavBar />
         </div>
         <Routes>
-          <Route
-            path="/"
-            element={
-              <div>
-                <ViewRecipes />
-              </div>
-            }
-          />
-          <Route
-            path="/view"
-            element={
-              <div>
-                <ViewRecipes />
-              </div>
-            }
-          />
-          <Route
-            path="/add"
-            element={
-              <div>
-                <AddRecipe />
-              </div>
-            }
-          />
+          <Route path="/" element={<ViewRecipes />} />
+          <Route path="/view" element={<ViewRecipes />} />
+          <Route path="/add" element={<AddRecipe />} />
           <Route path="/view/:id" element={<RecipeDetails />} />
+          <Route path="/edit/:id" element={<AddRecipe />} />
         </Routes>
       </div>
     </Box>

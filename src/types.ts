@@ -27,3 +27,13 @@ export enum Unit {
   cup,
   count,
 }
+
+export const EmptyRecipe = {
+  key: "",
+  title: "",
+  servings: 1,
+  ingredients: [],
+  steps: [],
+  photo: undefined,
+  tags: [],
+};

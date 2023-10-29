@@ -13,6 +13,16 @@ export const addRecipe = async (data: Recipe) => {
   }
 };
 
+export const updateRecipe = async (data: Recipe) => {
+  try {
+    const response = await axios.put(`${URI}/recipes/:id`, data);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
 export const getAllRecipes = async () => {
   try {
     const response = await axios.get(`${URI}/recipes/getAll`);

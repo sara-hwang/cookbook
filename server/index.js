@@ -51,6 +51,20 @@ app.post("/recipes/add", async (req, res) => {
   }
 });
 
+app.put("/recipes/:id", async (req, res) => {
+  const obj = req.body;
+  try {
+    RecipeModel.validate(obj);
+    let response = await RecipeModel.updateOne({ key: obj.key }, obj);
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
+});
+
 app.listen(3001, () => {
   console.log("server is running");
 });

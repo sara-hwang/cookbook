@@ -17,3 +17,8 @@
   display: flex;
   flex-direction: row;
 }
+
+.body-container .MuiButton-root {
+  margin-left: auto;
+  height: fit-content;
+}
