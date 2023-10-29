@@ -55,14 +55,14 @@ const AddRecipe = () => {
       onSubmit={async (data: Recipe, { resetForm }) => {
         const response = await addRecipe(data);
         if (response && response.status === 200) {
+          resetForm();
           navigate(`/view/${title}`);
         } else {
-          alert(response.data);
+          alert(response?.data);
         }
-        resetForm();
       }}
     >
-      {({ values, errors, dirty, isSubmitting, setFieldValue }) => (
+      {({ values, errors, isValid, isSubmitting, setFieldValue }) => (
         <Form>
           <FormObserver />
           <Box className="containers">
@@ -214,7 +214,7 @@ const AddRecipe = () => {
               <Grid item xs={12}>
                 <Button
                   variant="contained"
-                  disabled={!dirty || isSubmitting}
+                  disabled={!isValid || isSubmitting}
                   type="submit"
                 >
                   Submit

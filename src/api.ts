@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, { AxiosError } from "axios";
 import { Recipe } from "./types";
 
 const URI = process.env.REACT_APP_SERVER_URI;
@@ -7,7 +7,8 @@ export const addRecipe = async (data: Recipe) => {
   try {
     const response = await axios.post(`${URI}/recipes/add`, data);
     return response;
-  } catch (error: any) {
+  } catch (e) {
+    const error = e as AxiosError;
     return error.response;
   }
 };
