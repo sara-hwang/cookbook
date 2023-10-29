@@ -8,9 +8,15 @@
 }
 
 .nav-tabs {
-  border-right: 5px solid rgb(221, 246, 255);
+    border-top: 2.55px solid white;
   height: 100%;
   width: 200px;
+}
+
+.nav-tabs .MuiTab-root {
+  border-bottom: 2.5px solid white;
+  border-top: 2.55px solid white;
+  background-color: rgb(221, 246, 255);
 }
 
 .body-container {
