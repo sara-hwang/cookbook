@@ -30,9 +30,9 @@ export const getRecipe = async (title: string | undefined) => {
         title: title,
       },
     });
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    return null;
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
   }
 };

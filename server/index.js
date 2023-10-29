@@ -24,9 +24,11 @@ app.get("/recipes/getAll", async (req, res) => {
 app.get("/recipes/get", async (req, res) => {
   try {
     let response = await RecipeModel.findOne(req.query);
-    console.log(response);
+    res.status(200);
     res.json(response);
   } catch (error) {
+    console.log(error);
+    res.status(400);
     res.json(error);
   }
 });

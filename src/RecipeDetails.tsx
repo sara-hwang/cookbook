@@ -11,10 +11,16 @@ const RecipeDetails = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe>();
 
-  useEffect(() => {
-    async function getRecipeDetails() {
-      setRecipe(await getRecipe(id));
+  async function getRecipeDetails() {
+    const response = await getRecipe(id);
+    if (response && response.status === 200) {
+      setRecipe(response.data);
+    } else {
+      alert(response?.data);
     }
+  }
+
+  useEffect(() => {
     getRecipeDetails();
     if (id != undefined) {
       const newTab: TabItem = {
