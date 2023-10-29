@@ -2,6 +2,7 @@ import { Box, Grid } from "@mui/material";
 import { Recipe } from "./types";
 import { useEffect, useState } from "react";
 import "./App.css";
+import "./ViewRecipes.css";
 import { getAllRecipes } from "./api";
 import { useNavigate } from "react-router-dom";
 
@@ -21,9 +22,11 @@ const ViewRecipes = () => {
   return (
     <Box className="containers">
       <Grid container spacing={3}>
-        <div style={{ display: loading ? "block" : "none" }}>
-          loading (may take up to 1 minute on first render)...
-        </div>
+        {loading && (
+          <div className="loading-text">
+            loading (may take up to 1 minute on first render)...
+          </div>
+        )}
         {recipes &&
           recipes.map((recipe) => {
             return (
