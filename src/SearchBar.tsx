@@ -1,23 +1,8 @@
-import { useEffect, useState } from "react";
 import "./Search.css";
-import logo from "./icon.png";
 
-interface IProps {
-  isActive: boolean;
-  onExpand: () => void;
-}
-
-function SearchBar({ isActive, onExpand }: IProps) {
+function SearchBar() {
   return (
-    <div className={`search ${isActive ? "active" : ""}`} id="search-bar">
-      <button
-        className="search-button"
-        onClick={() => {
-          onExpand();
-        }}
-      >
-        <img src={logo} className="logo" />
-      </button>
+    <div className="search">
       <input
         className="search-txt"
         type="text"

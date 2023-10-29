@@ -1,5 +1,5 @@
-import React, { useEffect, useState } from "react";
-import "./Search.css";
+import React, { useEffect } from "react";
+import "./App.css";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation, useNavigate } from "react-router-dom";
@@ -43,14 +43,12 @@ export default function NavBar({ isActive }: IProps) {
   }, [isActive]);
 
   return (
-    <Box>
+    <Box className="nav-tabs">
       <Tabs
-        // className={isActive ? "tabs" : ""}
         value={currentTab}
         onChange={handleChange}
         variant="scrollable"
-        scrollButtons
-        allowScrollButtonsMobile
+        orientation="vertical"
       >
         {tabsList.map((tab, key) => {
           return (
