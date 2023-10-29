@@ -49,10 +49,10 @@ const ViewRecipes = () => {
                   <div
                     className="overlay"
                     onClick={() => {
-                      navigate(`/view/${recipe.title}`);
+                      navigate(`/view/${recipe.key}`);
                     }}
                   >
-                    {recipe.title}{" "}
+                    {recipe.title}
                   </div>
                 </div>
               </Grid>

@@ -10,6 +10,7 @@ import {
 } from "@mui/material";
 import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
 import * as yup from "yup";
+import slugify from "slugify";
 import { Ingredient, Recipe, Unit } from "./types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe } from "./api";
@@ -23,9 +24,8 @@ import { useNavigate } from "react-router-dom";
 const AddRecipe = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const { title, servings, ingredients, steps, photo, tags } = useAppSelector(
-    (state: RootState) => state.recipeDraft,
-  );
+  const { key, title, servings, ingredients, steps, photo, tags } =
+    useAppSelector((state: RootState) => state.recipeDraft);
 
   const FormObserver: React.FC = () => {
     const { values } = useFormikContext<Recipe>();
@@ -36,6 +36,7 @@ const AddRecipe = () => {
   };
 
   const initialValues: Recipe = {
+    key: key,
     title: title,
     servings: servings,
     ingredients: ingredients,
@@ -53,10 +54,14 @@ const AddRecipe = () => {
       initialValues={initialValues}
       validationSchema={validationSchema}
       onSubmit={async (data: Recipe, { resetForm }) => {
-        const response = await addRecipe(data);
+        const key = slugify(data.title, { lower: true });
+        const response = await addRecipe({
+          ...data,
+          key: key,
+        });
         if (response && response.status === 200) {
           resetForm();
-          navigate(`/view/${title}`);
+          navigate(`/view/${key}`);
         } else {
           alert(response?.data);
         }
@@ -156,7 +161,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}

@@ -23,11 +23,11 @@ export const getAllRecipes = async () => {
   }
 };
 
-export const getRecipe = async (title: string | undefined) => {
+export const getRecipe = async (key: string | undefined) => {
   try {
     const response = await axios.get(`${URI}/recipes/get`, {
       params: {
-        title: title,
+        key: key,
       },
     });
     return response;

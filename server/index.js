@@ -42,10 +42,10 @@ app.post("/recipes/add", async (req, res) => {
   } catch (error) {
     console.log(error);
     if (error.code === 11000) {
-      res.status(401);
+      res.status(400);
       res.json("A recipe with that title already exists.");
     } else {
-      res.status(400);
+      res.status(500);
       res.json(error.message);
     }
   }

@@ -1,10 +1,14 @@
 const mongoose = require("mongoose");
 
 const RecipeSchema = new mongoose.Schema({
-  title: {
+  key: {
     type: String,
     required: true,
     unique: true,
+  },
+  title: {
+    type: String,
+    required: true,
   },
   ingredients: [
     {

@@ -4,6 +4,7 @@ import { Recipe } from "../types";
 import type { RootState } from "./store";
 
 const initialState: Recipe = {
+  key: "",
   title: "",
   ingredients: [],
   steps: [],

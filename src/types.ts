@@ -1,4 +1,5 @@
 export type Recipe = {
+  key: string;
   title: string;
   ingredients: Ingredient[];
   steps: string[];

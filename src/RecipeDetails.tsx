@@ -22,14 +22,17 @@ const RecipeDetails = () => {
 
   useEffect(() => {
     getRecipeDetails();
-    if (id != undefined) {
+  }, [id]);
+
+  useEffect(() => {
+    if (recipe !== undefined) {
       const newTab: TabItem = {
-        label: id,
+        label: recipe.title,
         link: `/view/${id}`,
       };
       dispatch(pushTab(newTab));
     }
-  }, [id]);
+  }, [recipe]);
 
   return (
     <Box className="containers">
