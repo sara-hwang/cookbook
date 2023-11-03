@@ -57,6 +57,10 @@ const AddRecipe = () => {
     }
   }, [id]);
 
+  useEffect(() => {
+    setEditTags(tags);
+  }, [tags]);
+
   const validationSchema = yup.object({
     title: yup.string().required("Please provide a title.").max(250),
   });
