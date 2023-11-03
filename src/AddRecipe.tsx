@@ -15,18 +15,21 @@ import { Ingredient, Recipe, Unit } from "./types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe, updateRecipe } from "./api";
 import { RootState } from "./redux/store";
-import { useEffect, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 import { setRecipeDraft } from "./redux/recipeDraft";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import UploadImage from "./UploadImage";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRecipeDetails } from "./helpers";
+import TagInput from "./TagInput";
+import "./AddRecipe.css";
 
 const AddRecipe = () => {
   const { key, title, servings, ingredients, steps, photo, tags } =
     useAppSelector((state: RootState) => state.recipeDraft);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const [editTags, setEditTags] = useState<string[]>(tags);
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState({
     key: key,
@@ -37,6 +40,8 @@ const AddRecipe = () => {
     photo: photo,
     tags: tags,
   });
+
+  const inputRef = useRef<HTMLInputElement | null>(null);
 
   const FormObserver: React.FC = () => {
     const { values } = useFormikContext<Recipe>();
@@ -56,6 +61,32 @@ const AddRecipe = () => {
     title: yup.string().required("Please provide a title.").max(250),
   });
 
+  const parentElement: HTMLDivElement | null =
+    document.querySelector(".tag-input");
+  const inputElement: HTMLInputElement | null = parentElement
+    ? parentElement.querySelector("input")
+    : null;
+
+  if (parentElement && inputElement) {
+    parentElement.addEventListener("click", () => {
+      inputElement.focus();
+    });
+  }
+
+  const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
+    if (
+      (event.target as HTMLInputElement).value !== "" &&
+      !editTags.includes((event.target as HTMLInputElement).value)
+    ) {
+      setEditTags([...editTags, (event.target as HTMLInputElement).value]);
+      (event.target as HTMLInputElement).value = "";
+    }
+  };
+
+  const removeTag = (indexToRemove: number) => {
+    setEditTags([...editTags.filter((_, index) => index !== indexToRemove)]);
+  };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -64,7 +95,7 @@ const AddRecipe = () => {
       onSubmit={async (data: Recipe, { resetForm }) => {
         const key = slugify(data.title, { lower: true });
         let response;
-        data = { ...data, key: key };
+        data = { ...data, key: key, tags: editTags };
         if (id === undefined) {
           response = await addRecipe(data);
         } else {
@@ -79,7 +110,11 @@ const AddRecipe = () => {
       }}
     >
       {({ values, errors, isValid, isSubmitting, setFieldValue }) => (
-        <Form>
+        <Form
+          onKeyDown={(event) =>
+            event.key === "Enter" ? event.preventDefault() : null
+          }
+        >
           <FormObserver />
           <Box className="containers">
             <Grid container spacing={2}>
@@ -223,13 +258,27 @@ const AddRecipe = () => {
                   )}
                 </FieldArray>
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <Field
                   name="photo"
                   type="input"
                   as={UploadImage}
                   setFieldValue={setFieldValue}
                 />
+              </Grid>
+              <Grid item>
+                <Typography variant="h6">Tags</Typography>
+                <div className="tag-input">
+                  <Field
+                    name="tags"
+                    type="input"
+                    as={TagInput}
+                    tags={editTags}
+                    inputRef={inputRef}
+                    addTag={addTag}
+                    removeTag={removeTag}
+                  />
+                </div>
               </Grid>
               <Grid item xs={12}>
                 <Button

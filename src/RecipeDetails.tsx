@@ -7,8 +7,8 @@ import { useAppDispatch } from "./redux/hooks";
 import { getRecipeDetails } from "./helpers";
 import EditIcon from "@mui/icons-material/Edit";
 import { setSearchTags } from "./redux/searchTags";
-import "./searchbar/Search.css";
 import { chipStyle } from "./styles";
+import ChipDisplay from "./ChipDisplay";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
@@ -71,7 +71,14 @@ const RecipeDetails = () => {
             />
           )}
           <Typography variant="h6">Tags</Typography>
-          {recipe.tags.map((tag, index) => (
+          <ChipDisplay
+            tags={recipe.tags}
+            onChipClick={(tag) => {
+              dispatch(setSearchTags([tag]));
+              dispatch(setCurrentTab(0));
+            }}
+          />
+          {/* {recipe.tags.map((tag, index) => (
             <Chip
               key={index}
               label={tag}
@@ -81,7 +88,7 @@ const RecipeDetails = () => {
               }}
               sx={chipStyle}
             />
-          ))}
+          ))} */}
         </Grid>
       </Grid>
     </Box>
