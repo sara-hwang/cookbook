@@ -5,19 +5,29 @@ import "./App.css";
 import "./ViewRecipes.css";
 import { getAllRecipes } from "./api";
 import { useNavigate } from "react-router-dom";
+import { useAppSelector } from "./redux/hooks";
+import { RootState } from "./redux/store";
 
 const ViewRecipes = () => {
   const navigate = useNavigate();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
+  const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   useEffect(() => {
     async function loadRecipes() {
       setLoading(true);
-      setRecipes(await getAllRecipes());
+      const allRecipes = await getAllRecipes();
+      setRecipes(
+        searchTags.length > 0
+          ? allRecipes.filter((recipe: Recipe) =>
+              recipe.tags.some((tag) => searchTags.includes(tag))
+            )
+          : allRecipes
+      );
       setLoading(false);
     }
     loadRecipes();
-  }, []);
+  }, [searchTags]);
 
   return (
     <Box className="containers">

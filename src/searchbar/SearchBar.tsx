@@ -1,27 +1,34 @@
 import "./Search.css";
-import { useAppDispatch } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setCurrentTab } from "../redux/tabsList";
+import { setSearchTags } from "../redux/searchTags";
 import { useEffect, useRef, useState } from "react";
 import { Chip } from "@mui/material";
+import { RootState } from "../redux/store";
 
 function SearchBar() {
   const dispatch = useAppDispatch();
   const inputRef = useRef<HTMLInputElement | null>(null);
-  const [tags, setTags] = useState<string[]>([]);
-  // const [searchText, setSearchText] = useState<string>("");
-  useEffect(() => {
-    console.log(tags);
-  }, [tags]);
+  const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
 
   const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if ((event.target as HTMLInputElement).value !== "") {
-      setTags([...tags, (event.target as HTMLInputElement).value]);
+      dispatch(
+        setSearchTags([
+          ...searchTags,
+          (event.target as HTMLInputElement).value,
+        ]),
+      );
       (event.target as HTMLInputElement).value = "";
     }
   };
 
   const removeTag = (indexToRemove: number) => {
-    setTags([...tags.filter((_, index) => index !== indexToRemove)]);
+    dispatch(
+      setSearchTags([
+        ...searchTags.filter((_, index) => index !== indexToRemove),
+      ]),
+    );
   };
 
   return (
@@ -34,7 +41,7 @@ function SearchBar() {
         onClick={() => dispatch(setCurrentTab(0))}
         onKeyUp={(event) => (event.key === "Enter" ? addTag(event) : null)}
       />
-      {tags.map((tag, index) => (
+      {searchTags.map((tag, index) => (
         <Chip
           key={index}
           label={tag}
@@ -53,6 +60,3 @@ function SearchBar() {
 }
 
 export default SearchBar;
-
-
-

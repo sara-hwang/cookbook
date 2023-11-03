@@ -1,12 +1,13 @@
 import { configureStore } from "@reduxjs/toolkit";
 import recipeDraftReducer from "./recipeDraft";
 import tabsListReducer from "./tabsList";
-import { persistReducer, persistStore } from "redux-persist";
+import searchTagsReducer from "./searchTags";
 
 export const store = configureStore({
   reducer: {
     recipeDraft: recipeDraftReducer,
     tabsList: tabsListReducer,
+    searchTags: searchTagsReducer,
   },
 });
 
