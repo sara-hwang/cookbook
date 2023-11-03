@@ -1,8 +1,8 @@
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { setCurrentTab } from "./redux/tabsList";
-import { setSearchTags } from "./redux/searchTags";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { setCurrentTab } from "../redux/tabsList";
+import { setSearchTags } from "../redux/searchTags";
 import { useRef } from "react";
-import { RootState } from "./redux/store";
+import { RootState } from "../redux/store";
 import TagInput from "./TagInput";
 
 function SearchBar() {
@@ -13,10 +13,7 @@ function SearchBar() {
   const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
     if ((event.target as HTMLInputElement).value !== "") {
       dispatch(
-        setSearchTags([
-          ...searchTags,
-          (event.target as HTMLInputElement).value,
-        ]),
+        setSearchTags([...searchTags, (event.target as HTMLInputElement).value])
       );
       (event.target as HTMLInputElement).value = "";
     }
@@ -26,7 +23,7 @@ function SearchBar() {
     dispatch(
       setSearchTags([
         ...searchTags.filter((_, index) => index !== indexToRemove),
-      ]),
+      ])
     );
   };
 

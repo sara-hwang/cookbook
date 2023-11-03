@@ -1,6 +1,6 @@
 import { Chip } from "@mui/material";
 import { CSSProperties, RefObject } from "react";
-import { chipStyle } from "./constants/styles";
+import { chipStyle } from "../constants/styles";
 import ChipDisplay from "./ChipDisplay";
 
 interface IProps {

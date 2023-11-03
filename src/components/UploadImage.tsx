@@ -1,13 +1,13 @@
 import { Typography } from "@mui/material";
 import { FormikErrors } from "formik";
 import { useState } from "react";
-import { Recipe } from "./constants/types";
+import { Recipe } from "../constants/types";
 
 interface IProps {
   setFieldValue: (
     field: string,
     value: string | ArrayBuffer | null,
-    shouldValidate?: boolean | undefined,
+    shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<Recipe>>;
 }
 

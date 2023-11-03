@@ -18,10 +18,10 @@ import { RootState } from "../redux/store";
 import { useEffect, useRef, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import UploadImage from "../UploadImage";
+import UploadImage from "../components/UploadImage";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRecipeDetails } from "../helpers";
-import TagInput from "../TagInput";
+import TagInput from "../components/TagInput";
 import "./stylesheets/AddRecipe.css";
 
 const AddRecipe = () => {

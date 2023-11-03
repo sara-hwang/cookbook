@@ -3,14 +3,14 @@ import "./stylesheets/App.css";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
 import { useLocation, useNavigate } from "react-router-dom";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import { RootState } from "./redux/store";
-import { popTab, setCurrentTab } from "./redux/tabsList";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import { RootState } from "../redux/store";
+import { popTab, setCurrentTab } from "../redux/tabsList";
 
 export default function NavBar() {
   const { pathname } = useLocation();
   const { tabsList, currentTab } = useAppSelector(
-    (state: RootState) => state.tabsList,
+    (state: RootState) => state.tabsList
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
