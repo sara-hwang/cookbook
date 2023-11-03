@@ -1,12 +1,12 @@
 import { Box, Grid } from "@mui/material";
-import { Recipe } from "./constants/types";
+import { Recipe } from "../constants/types";
 import { useEffect, useState } from "react";
 import "./stylesheets/App.css";
 import "./stylesheets/ViewRecipes.css";
-import { getAllRecipes } from "./api";
+import { getAllRecipes } from "../api";
 import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "./redux/hooks";
-import { RootState } from "./redux/store";
+import { useAppSelector } from "../redux/hooks";
+import { RootState } from "../redux/store";
 
 const ViewRecipes = () => {
   const navigate = useNavigate();
@@ -20,9 +20,9 @@ const ViewRecipes = () => {
       setRecipes(
         searchTags.length > 0
           ? allRecipes.filter((recipe: Recipe) =>
-              recipe.tags.some((tag) => searchTags.includes(tag)),
+              recipe.tags.some((tag) => searchTags.includes(tag))
             )
-          : allRecipes,
+          : allRecipes
       );
       setLoading(false);
     }

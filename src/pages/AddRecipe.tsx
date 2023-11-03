@@ -11,17 +11,17 @@ import {
 import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
 import * as yup from "yup";
 import slugify from "slugify";
-import { Ingredient, Recipe, Unit } from "./constants/types";
+import { Ingredient, Recipe, Unit } from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
-import { addRecipe, updateRecipe } from "./api";
-import { RootState } from "./redux/store";
+import { addRecipe, updateRecipe } from "../api";
+import { RootState } from "../redux/store";
 import { useEffect, useRef, useState } from "react";
-import { setRecipeDraft } from "./redux/recipeDraft";
-import { useAppDispatch, useAppSelector } from "./redux/hooks";
-import UploadImage from "./UploadImage";
+import { setRecipeDraft } from "../redux/recipeDraft";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
+import UploadImage from "../UploadImage";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRecipeDetails } from "./helpers";
-import TagInput from "./TagInput";
+import { getRecipeDetails } from "../helpers";
+import TagInput from "../TagInput";
 import "./stylesheets/AddRecipe.css";
 
 const AddRecipe = () => {
@@ -227,7 +227,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}

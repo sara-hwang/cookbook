@@ -3,9 +3,9 @@ import { Box } from "@mui/material";
 import SearchBar from "./SearchBar";
 import NavBar from "./NavBar";
 import { Route, Routes } from "react-router-dom";
-import ViewRecipes from "./ViewRecipes";
-import AddRecipe from "./AddRecipe";
-import RecipeDetails from "./RecipeDetails";
+import ViewRecipes from "./pages/ViewRecipes";
+import AddRecipe from "./pages/AddRecipe";
+import RecipeDetails from "./pages/RecipeDetails";
 
 export default function App() {
   return (

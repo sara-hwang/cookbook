@@ -1,13 +1,13 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { EmptyRecipe, Recipe, TabItem } from "./constants/types";
+import { EmptyRecipe, Recipe, TabItem } from "../constants/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
-import { pushTab, setCurrentTab } from "./redux/tabsList";
-import { useAppDispatch } from "./redux/hooks";
-import { getRecipeDetails } from "./helpers";
+import { pushTab, setCurrentTab } from "../redux/tabsList";
+import { useAppDispatch } from "../redux/hooks";
+import { getRecipeDetails } from "../helpers";
 import EditIcon from "@mui/icons-material/Edit";
-import { setSearchTags } from "./redux/searchTags";
-import ChipDisplay from "./ChipDisplay";
+import { setSearchTags } from "../redux/searchTags";
+import ChipDisplay from "../ChipDisplay";
 import "./stylesheets/RecipeDetails.css";
 
 const RecipeDetails = () => {
