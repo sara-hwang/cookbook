@@ -1,7 +1,7 @@
 import { Typography } from "@mui/material";
 import { FormikErrors } from "formik";
 import { useState } from "react";
-import { Recipe } from "./types";
+import { Recipe } from "./constants/types";
 
 interface IProps {
   setFieldValue: (

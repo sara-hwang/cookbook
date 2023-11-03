@@ -1,5 +1,5 @@
 import { Box, Button, Grid, Typography } from "@mui/material";
-import { EmptyRecipe, Recipe, TabItem } from "./types";
+import { EmptyRecipe, Recipe, TabItem } from "./constants/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { pushTab, setCurrentTab } from "./redux/tabsList";

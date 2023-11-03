@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { Recipe } from "./types";
+import { Recipe } from "./constants/types";
 
 const URI = process.env.REACT_APP_SERVER_URI;
 

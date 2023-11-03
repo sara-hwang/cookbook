@@ -1,5 +1,5 @@
 import { getRecipe } from "./api";
-import { Recipe } from "./types";
+import { Recipe } from "./constants/types";
 
 export async function getRecipeDetails(
   id: string,

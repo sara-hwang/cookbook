@@ -1,5 +1,5 @@
 import { Chip } from "@mui/material";
-import { chipStyle } from "./styles";
+import { chipStyle } from "./constants/styles";
 
 interface IProps {
   tags: string[];

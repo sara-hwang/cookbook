@@ -11,7 +11,7 @@ import {
 import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
 import * as yup from "yup";
 import slugify from "slugify";
-import { Ingredient, Recipe, Unit } from "./types";
+import { Ingredient, Recipe, Unit } from "./constants/types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe, updateRecipe } from "./api";
 import { RootState } from "./redux/store";

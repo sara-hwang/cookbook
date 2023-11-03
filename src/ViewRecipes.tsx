@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import { Recipe } from "./types";
+import { Recipe } from "./constants/types";
 import { useEffect, useState } from "react";
 import "./stylesheets/App.css";
 import "./stylesheets/ViewRecipes.css";
