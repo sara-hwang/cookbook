@@ -12,3 +12,11 @@
   background: transparent;
   outline: none;
 }
+
+.search .MuiChip-root {
+  margin: 0px 0px 4px 4px;
+  background-color: rgb(125, 225, 255);
+  &:hover{
+    background-color: rgb(175, 228, 255)
+  }
+}
