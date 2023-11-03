@@ -1,0 +1,4 @@
+h6 + ul, h6 + ol {
+    margin-top: -4px;
+    margin-bottom: -2px;
+}

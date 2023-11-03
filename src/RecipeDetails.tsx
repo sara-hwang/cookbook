@@ -8,6 +8,7 @@ import { getRecipeDetails } from "./helpers";
 import EditIcon from "@mui/icons-material/Edit";
 import { setSearchTags } from "./redux/searchTags";
 import ChipDisplay from "./ChipDisplay";
+import "./RecipeDetails.css";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
