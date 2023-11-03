@@ -25,13 +25,13 @@ import TagInput from "./TagInput";
 import "./AddRecipe.css";
 
 const AddRecipe = () => {
-  const { key, title, servings, ingredients, steps, photo, tags } =
+  const { key, title, servings, ingredients, steps, photo, tags, url } =
     useAppSelector((state: RootState) => state.recipeDraft);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [editTags, setEditTags] = useState<string[]>(tags);
   const { id } = useParams();
-  const [initialValues, setInitialValues] = useState({
+  const [initialValues, setInitialValues] = useState<Recipe>({
     key: key,
     title: title,
     servings: servings,
@@ -39,6 +39,7 @@ const AddRecipe = () => {
     steps: steps,
     photo: photo,
     tags: tags,
+    url: url,
   });
 
   const inputRef = useRef<HTMLInputElement | null>(null);
@@ -141,6 +142,17 @@ const AddRecipe = () => {
               </Grid>
               <Grid item xs={12}>
                 <Field
+                  placeholder="eg. https://www.allrecipes.com/"
+                  name="url"
+                  type="input"
+                  as={TextField}
+                  label="Source URL"
+                  fullWidth
+                  size="small"
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <Field
                   name="servings"
                   type="number"
                   as={TextField}
@@ -215,7 +227,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -245,7 +257,6 @@ const AddRecipe = () => {
                                 placeholder="Instructions..."
                                 as={TextField}
                                 size="small"
-                                multiline
                               />
                               <IconButton
                                 onClick={() => {

@@ -6,6 +6,7 @@ export type Recipe = {
   servings: number;
   photo: string | undefined;
   tags: string[];
+  url: string;
 };
 
 export type Ingredient = {
@@ -36,4 +37,5 @@ export const EmptyRecipe = {
   steps: [],
   photo: undefined,
   tags: [],
+  url: "",
 };

@@ -33,7 +33,10 @@ const RecipeDetails = () => {
 
   return (
     <Box className="containers">
-      <Grid container spacing={3}>
+      <Grid container rowSpacing={2}>
+        <Grid item xs={12}>
+          <a href={recipe.url}>{recipe.url}</a>
+        </Grid>
         <Grid item xs={12}>
           <div className="body-container">
             <div>
@@ -53,6 +56,8 @@ const RecipeDetails = () => {
               &nbsp;Edit Recipe
             </Button>
           </div>
+        </Grid>
+        <Grid item xs={12}>
           <Typography variant="h6">Steps</Typography>
           <ol>
             {recipe?.steps.map((step) => (
@@ -61,6 +66,8 @@ const RecipeDetails = () => {
               </Fragment>
             ))}
           </ol>
+        </Grid>
+        <Grid item xs={12}>
           {recipe?.photo && (
             <img
               src={recipe?.photo}
@@ -69,6 +76,8 @@ const RecipeDetails = () => {
               alt={recipe.title}
             />
           )}
+        </Grid>
+        <Grid item xs={12}>
           <Typography variant="h6">Tags</Typography>
           <ChipDisplay
             tags={recipe.tags}

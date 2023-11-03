@@ -15,6 +15,7 @@ export const recipeDraftSlice = createSlice({
       state.servings = action.payload.servings;
       state.photo = action.payload.photo;
       state.tags = action.payload.tags;
+      state.url = action.payload.url;
     },
   },
 });
