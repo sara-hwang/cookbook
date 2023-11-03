@@ -1,6 +1,6 @@
 import "./App.css";
 import { Box } from "@mui/material";
-import SearchBar from "./SearchBar";
+import SearchBar from "./searchbar/SearchBar";
 import NavBar from "./NavBar";
 import { Route, Routes } from "react-router-dom";
 import ViewRecipes from "./ViewRecipes";

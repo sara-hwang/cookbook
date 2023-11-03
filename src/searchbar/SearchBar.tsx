@@ -1,6 +1,6 @@
 import "./Search.css";
-import { useAppDispatch } from "./redux/hooks";
-import { setCurrentTab } from "./redux/tabsList";
+import { useAppDispatch } from "../redux/hooks";
+import { setCurrentTab } from "../redux/tabsList";
 
 function SearchBar() {
   const dispatch = useAppDispatch();
