@@ -1,12 +1,14 @@
-import { Box, Button, Divider, Grid, Paper, Typography } from "@mui/material";
+import { Box, Button, Chip, Grid, Typography } from "@mui/material";
 import { EmptyRecipe, Recipe, TabItem } from "./types";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRecipe } from "./api";
 import { Fragment, useEffect, useState } from "react";
-import { pushTab } from "./redux/tabsList";
+import { pushTab, setCurrentTab } from "./redux/tabsList";
 import { useAppDispatch } from "./redux/hooks";
 import { getRecipeDetails } from "./helpers";
 import EditIcon from "@mui/icons-material/Edit";
+import { setSearchTags } from "./redux/searchTags";
+import "./searchbar/Search.css";
+import { chipStyle } from "./styles";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
@@ -68,6 +70,18 @@ const RecipeDetails = () => {
               alt={recipe.title}
             />
           )}
+          <Typography variant="h6">Tags</Typography>
+          {recipe.tags.map((tag, index) => (
+            <Chip
+              key={index}
+              label={tag}
+              onClick={() => {
+                dispatch(setSearchTags([tag]));
+                dispatch(setCurrentTab(0));
+              }}
+              sx={chipStyle}
+            />
+          ))}
         </Grid>
       </Grid>
     </Box>
