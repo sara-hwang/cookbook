@@ -1,17 +1,8 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Recipe } from "../types";
-import type { RootState } from "./store";
+import { EmptyRecipe, Recipe } from "../types";
 
-const initialState: Recipe = {
-  key: "",
-  title: "",
-  ingredients: [],
-  steps: [],
-  servings: 1,
-  photo: undefined,
-  tags: [],
-};
+const initialState: Recipe = EmptyRecipe;
 
 export const recipeDraftSlice = createSlice({
   name: "recipeDraft",
