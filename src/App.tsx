@@ -1,4 +1,4 @@
-import "./App.css";
+import "./stylesheets/App.css";
 import { Box } from "@mui/material";
 import SearchBar from "./SearchBar";
 import NavBar from "./NavBar";

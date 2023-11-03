@@ -22,7 +22,7 @@ import UploadImage from "./UploadImage";
 import { useNavigate, useParams } from "react-router-dom";
 import { getRecipeDetails } from "./helpers";
 import TagInput from "./TagInput";
-import "./AddRecipe.css";
+import "./stylesheets/AddRecipe.css";
 
 const AddRecipe = () => {
   const { key, title, servings, ingredients, steps, photo, tags, url } =

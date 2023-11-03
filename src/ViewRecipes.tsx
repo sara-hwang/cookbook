@@ -1,8 +1,8 @@
 import { Box, Grid } from "@mui/material";
 import { Recipe } from "./types";
 import { useEffect, useState } from "react";
-import "./App.css";
-import "./ViewRecipes.css";
+import "./stylesheets/App.css";
+import "./stylesheets/ViewRecipes.css";
 import { getAllRecipes } from "./api";
 import { useNavigate } from "react-router-dom";
 import { useAppSelector } from "./redux/hooks";
