@@ -2,6 +2,8 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const RecipeModel = require("./models/recipes");
+const jwt = require("jsonwebtoken");
+const UserModel = require("./models/users");
 
 require("dotenv").config({ path: "../.env" });
 const app = express();
@@ -11,6 +13,40 @@ app.use(express.json());
 mongoose.connect(
   `mongodb+srv://${process.env.DB_USERNAME}:${process.env.DB_PASSWORD}@cookbook.efjxjit.mongodb.net/cookbook`
 );
+
+app.post("/authenticate", async (req, res) => {
+  let { username, password } = req.body;
+  let existingUser;
+
+  try {
+    existingUser = await UserModel.findOne({ username: username });
+  } catch {
+    res.status(500).json({ message: "Error authenticating user" });
+  }
+  if (!existingUser || existingUser.password != password) {
+    res.status(500).json({ message: "Incorrect credentials" });
+  } else {
+    let token;
+    console.log(existingUser);
+    try {
+      //Creating jwt token
+      token = jwt.sign(
+        { username: existingUser.username },
+        "secretkeyappearshere",
+        { expiresIn: "1h" }
+      );
+      console.log(token);
+      res.json({
+        token: token,
+        expiresIn: 60 * 60,
+        authUserState: { username: existingUser.username },
+      });
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ message: error.message });
+    }
+  }
+});
 
 app.get("/recipes/getAll", async (req, res) => {
   try {

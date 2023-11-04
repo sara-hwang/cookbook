@@ -20,9 +20,9 @@ const ViewRecipes = () => {
       setRecipes(
         searchTags.length > 0
           ? allRecipes.filter((recipe: Recipe) =>
-              recipe.tags.some((tag) => searchTags.includes(tag))
+              recipe.tags.some((tag) => searchTags.includes(tag)),
             )
-          : allRecipes
+          : allRecipes,
       );
       setLoading(false);
     }

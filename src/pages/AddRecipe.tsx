@@ -227,7 +227,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}

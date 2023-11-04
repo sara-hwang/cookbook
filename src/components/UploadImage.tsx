@@ -7,7 +7,7 @@ interface IProps {
   setFieldValue: (
     field: string,
     value: string | ArrayBuffer | null,
-    shouldValidate?: boolean | undefined
+    shouldValidate?: boolean | undefined,
   ) => Promise<void | FormikErrors<Recipe>>;
 }
 

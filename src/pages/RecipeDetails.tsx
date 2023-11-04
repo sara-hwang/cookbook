@@ -52,7 +52,7 @@ const RecipeDetails = () => {
                 ))}
               </ul>
             </div>
-            <Button variant="contained" onClick={() => navigate(`/edit/${id}`)}>
+            <Button variant="contained" onClick={() => navigate(`/add/${id}`)}>
               <EditIcon />
               &nbsp;Edit Recipe
             </Button>

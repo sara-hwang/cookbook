@@ -10,7 +10,7 @@ import { popTab, setCurrentTab } from "../redux/tabsList";
 export default function NavBar() {
   const { pathname } = useLocation();
   const { tabsList, currentTab } = useAppSelector(
-    (state: RootState) => state.tabsList
+    (state: RootState) => state.tabsList,
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
