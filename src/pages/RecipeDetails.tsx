@@ -72,8 +72,8 @@ const RecipeDetails = () => {
           {recipe?.photo && (
             <img
               src={recipe?.photo}
-              width="400"
-              height="400"
+              width="fit-content"
+              height="fit-content"
               alt={recipe.title}
             />
           )}
