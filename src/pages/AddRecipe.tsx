@@ -107,6 +107,7 @@ const AddRecipe = () => {
           formData.append("type", "file");
           const photoResponse = await upload(formData);
           if (photoResponse && photoResponse.status == 200) {
+            console.log(photoResponse.data);
             data["photo"] = photoResponse.data.link;
           } else {
             console.log(photoResponse);
