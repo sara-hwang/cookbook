@@ -43,7 +43,7 @@ const ViewRecipes = () => {
         {recipes &&
           recipes.map((recipe) => {
             return (
-              <Grid item xs={12} sm={4} md={2} key={recipes.indexOf(recipe)}>
+              <Grid item key={recipes.indexOf(recipe)}>
                 <div className="image-container ">
                   <input
                     className="recipe-photo"
