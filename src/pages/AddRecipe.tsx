@@ -13,7 +13,7 @@ import * as yup from "yup";
 import slugify from "slugify";
 import { Ingredient, Recipe, Unit } from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
-import { addRecipe, updateRecipe } from "../api";
+import { addRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
 import { useEffect, useRef, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
@@ -30,6 +30,7 @@ const AddRecipe = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [editTags, setEditTags] = useState<string[]>(tags);
+  const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>({
     key: key,
@@ -100,6 +101,18 @@ const AddRecipe = () => {
       onSubmit={async (data: Recipe, { resetForm }) => {
         const key = slugify(data.title, { lower: true });
         let response;
+        if (selectedImage) {
+          const formData = new FormData();
+          formData.append("image", selectedImage);
+          formData.append("type", "file");
+          const photoResponse = await upload(formData);
+          if (photoResponse && photoResponse.status == 200) {
+            data["photo"] = photoResponse.data;
+          } else {
+            console.log(photoResponse);
+            return;
+          }
+        }
         data = { ...data, key: key, tags: editTags };
         if (id === undefined) {
           response = await addRecipe(data);
@@ -227,7 +240,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -279,6 +292,8 @@ const AddRecipe = () => {
                   type="input"
                   as={UploadImage}
                   setFieldValue={setFieldValue}
+                  selectedImage={selectedImage}
+                  setSelectedImage={setSelectedImage}
                 />
               </Grid>
               <Grid item>

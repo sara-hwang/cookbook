@@ -7,13 +7,17 @@ interface IProps {
   setFieldValue: (
     field: string,
     value: string | ArrayBuffer | null,
-    shouldValidate?: boolean | undefined,
+    shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<Recipe>>;
+  selectedImage: File;
+  setSelectedImage: React.Dispatch<React.SetStateAction<File | undefined>>;
 }
 
-const UploadImage = ({ setFieldValue }: IProps) => {
-  const [selectedImage, setSelectedImage] = useState<File>();
-
+const UploadImage = ({
+  setFieldValue,
+  selectedImage,
+  setSelectedImage,
+}: IProps) => {
   const setPhotoField = (img: File) => {
     const reader = new FileReader();
     reader.readAsDataURL(img);
@@ -32,7 +36,7 @@ const UploadImage = ({ setFieldValue }: IProps) => {
         onChange={(event) => {
           if (event.target.files !== null) {
             setSelectedImage(event.target.files[0]);
-            setPhotoField(event.target.files[0]);
+            // setPhotoField(event.target.files[0]);
           }
         }}
       />
