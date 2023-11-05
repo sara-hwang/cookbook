@@ -13,7 +13,7 @@
 
 .tag-input:active,
 .tag-input:focus-within{
-  border-color: #1876d2;
+  border-color: var(--ThemeBlue);
   border-width : 2px;
   padding: 0px;
 }

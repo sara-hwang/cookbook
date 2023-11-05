@@ -49,7 +49,7 @@ export default function App() {
           <Tooltip title="Login">
             <IconButton
               disableRipple
-              sx={{ "&:hover": { color: "#1876d2" } }}
+              sx={{ "&:hover": { color: "var(--ThemeBlue)" } }}
               onClick={() => setIsOpen(true)}
             >
               <LoginIcon />

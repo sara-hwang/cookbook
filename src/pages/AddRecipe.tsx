@@ -8,10 +8,17 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import { Field, FieldArray, Form, Formik, useFormikContext } from "formik";
+import {
+  Field,
+  FieldArray,
+  Form,
+  Formik,
+  FormikErrors,
+  useFormikContext,
+} from "formik";
 import * as yup from "yup";
 import slugify from "slugify";
-import { Ingredient, Recipe, Unit } from "../constants/types";
+import { EmptyRecipe, Ingredient, Recipe, Unit } from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
@@ -64,7 +71,18 @@ const AddRecipe = () => {
   }, [tags]);
 
   const validationSchema = yup.object({
-    title: yup.string().required("Please provide a title.").max(250),
+    title: yup.string().required("Required").max(250),
+    servings: yup.number().required("Required").min(0),
+    ingredients: yup.array().of(
+      yup.object().shape({
+        amount: yup
+          .number()
+          .required("Required")
+          .min(0, "Must be greater than 0"),
+        unit: yup.string().required("Required"),
+        element: yup.string().required("Required"),
+      }),
+    ),
   });
 
   const parentElement: HTMLDivElement | null =
@@ -120,6 +138,7 @@ const AddRecipe = () => {
         }
         if (response && response.status === 200) {
           resetForm();
+          dispatch(setRecipeDraft(EmptyRecipe));
           navigate(`/view/${key}`);
         } else {
           alert(response?.data);
@@ -143,6 +162,7 @@ const AddRecipe = () => {
                   as={TextField}
                   label="Title"
                   fullWidth
+                  required
                   disabled={id !== undefined}
                   error={errors.title !== undefined}
                   helperText={
@@ -170,6 +190,11 @@ const AddRecipe = () => {
                   as={TextField}
                   label="Number of Servings"
                   size="small"
+                  InputProps={{
+                    inputProps: { min: "0", step: "any" },
+                  }}
+                  error={errors.servings !== undefined}
+                  helperText={errors.servings}
                 />
               </Grid>
               <Grid item container>
@@ -205,8 +230,29 @@ const AddRecipe = () => {
                                   name={`ingredients.${index}.amount`}
                                   type="number"
                                   as={TextField}
-                                  placeholder="Amount"
+                                  placeholder="Amount *"
                                   size="small"
+                                  InputProps={{
+                                    inputProps: { min: "0", step: "any" },
+                                  }}
+                                  error={
+                                    errors.ingredients &&
+                                    errors.ingredients[index] &&
+                                    (
+                                      errors.ingredients[
+                                        index
+                                      ] as FormikErrors<Ingredient>
+                                    ).amount !== undefined
+                                  }
+                                  helperText={
+                                    errors.ingredients &&
+                                    errors.ingredients[index] &&
+                                    (
+                                      errors.ingredients[
+                                        index
+                                      ] as FormikErrors<Ingredient>
+                                    ).amount
+                                  }
                                 />
                                 <Field
                                   name={`ingredients.${index}.unit`}
@@ -226,8 +272,26 @@ const AddRecipe = () => {
                                 <Field
                                   name={`ingredients.${index}.element`}
                                   as={TextField}
-                                  placeholder="Ingredient"
+                                  placeholder="Ingredient *"
                                   size="small"
+                                  error={
+                                    errors.ingredients &&
+                                    errors.ingredients[index] &&
+                                    (
+                                      errors.ingredients[
+                                        index
+                                      ] as FormikErrors<Ingredient>
+                                    ).element !== undefined
+                                  }
+                                  helperText={
+                                    errors.ingredients &&
+                                    errors.ingredients[index] &&
+                                    (
+                                      errors.ingredients[
+                                        index
+                                      ] as FormikErrors<Ingredient>
+                                    ).element
+                                  }
                                 />
                                 <IconButton
                                   onClick={() => {

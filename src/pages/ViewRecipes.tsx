@@ -25,10 +25,10 @@ const ViewRecipes = () => {
                 (recipe: Recipe) =>
                   searchTags.every((tag) => recipe.tags.includes(tag)) ||
                   searchTags.every((tag) =>
-                    recipe.ingredients.map((ing) => ing.element).includes(tag)
-                  )
+                    recipe.ingredients.map((ing) => ing.element).includes(tag),
+                  ),
               )
-            : allRecipes
+            : allRecipes,
         );
       }
       setLoading(false);

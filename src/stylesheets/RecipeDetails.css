@@ -1,4 +1,14 @@
 h6 + ul, h6 + ol {
-    margin-top: -4px;
+    margin-top: -3px;
     margin-bottom: -2px;
+}
+
+h6 {
+    color: grey;
+}
+
+.h5{
+font-weight: bold;
+font-size: xx-large;
+color: var(--ThemeBlue)
 }

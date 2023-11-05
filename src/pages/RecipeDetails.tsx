@@ -36,11 +36,11 @@ const RecipeDetails = () => {
     <Box className="containers">
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
-          <a href={recipe.url}>{recipe.url}</a>
-        </Grid>
-        <Grid item xs={12}>
           <div className="side-by-side-container">
             <div>
+              <div className="h5">{recipe.title}</div>
+              {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
+              <p>Servings: {recipe.servings}</p>
               <Typography variant="h6">Ingredients</Typography>
               <ul>
                 {recipe?.ingredients.map((ing) => (
