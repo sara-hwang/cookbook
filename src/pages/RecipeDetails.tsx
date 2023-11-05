@@ -17,7 +17,7 @@ const RecipeDetails = () => {
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList
+    (state: RootState) => state.recipesList,
   );
 
   useEffect(() => {
@@ -26,7 +26,7 @@ const RecipeDetails = () => {
         getRecipeDetails(id, setRecipe);
       } else {
         setRecipe(
-          recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe
+          recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe,
         );
       }
     }
