@@ -27,15 +27,12 @@ app.post("/authenticate", async (req, res) => {
     res.status(500).json({ message: "Incorrect credentials" });
   } else {
     let token;
-    console.log(existingUser);
     try {
-      //Creating jwt token
       token = jwt.sign(
         { username: existingUser.username },
         "secretkeyappearshere",
         { expiresIn: "1h" }
       );
-      console.log(token);
       res.json({
         token: token,
         expiresIn: 60 * 60,
@@ -51,9 +48,9 @@ app.post("/authenticate", async (req, res) => {
 app.get("/recipes/getAll", async (req, res) => {
   try {
     let response = await RecipeModel.find();
-    res.json(response);
+    res.status(200).json(response);
   } catch (error) {
-    res.json(error);
+    res.status(500).json(error);
   }
 });
 

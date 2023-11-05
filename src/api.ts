@@ -8,7 +8,6 @@ export const authenticate = async (data: {
   username: string;
   password: string;
 }) => {
-  console.log(data);
   try {
     const response = await axios.post(`${URI}/authenticate`, data);
     return response;
@@ -23,7 +22,6 @@ export const upload = async (file: FormData) => {
     const response = await axios.post("https://api.imgur.com/3/image/", file, {
       headers: { Authorization: AUTH },
     });
-    console.log(response);
     return response;
   } catch (e) {
     const error = e as AxiosError;
@@ -54,10 +52,10 @@ export const updateRecipe = async (data: Recipe) => {
 export const getAllRecipes = async () => {
   try {
     const response = await axios.get(`${URI}/recipes/getAll`);
-    return response.data;
-  } catch (error) {
-    console.log(error);
-    return null;
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
   }
 };
 

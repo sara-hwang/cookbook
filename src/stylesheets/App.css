@@ -19,12 +19,12 @@
   background-color: rgb(221, 246, 255);
 }
 
-.body-container {
+.side-by-side-container {
   display: flex;
   flex-direction: row;
 }
 
-.body-container .MuiButton-root {
+.side-by-side-container .MuiButton-root {
   margin-left: auto;
   height: fit-content;
 }

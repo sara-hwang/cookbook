@@ -39,7 +39,7 @@ const RecipeDetails = () => {
           <a href={recipe.url}>{recipe.url}</a>
         </Grid>
         <Grid item xs={12}>
-          <div className="body-container">
+          <div className="side-by-side-container">
             <div>
               <Typography variant="h6">Ingredients</Typography>
               <ul>
@@ -70,12 +70,7 @@ const RecipeDetails = () => {
         </Grid>
         <Grid item xs={12}>
           {recipe?.photo && (
-            <img
-              src={recipe?.photo}
-              width="fit-content"
-              height="fit-content"
-              alt={recipe.title}
-            />
+            <img src={recipe?.photo} width="400" alt={recipe.title} />
           )}
         </Grid>
         <Grid item xs={12}>

@@ -107,16 +107,12 @@ const AddRecipe = () => {
           formData.append("image", selectedImage);
           formData.append("type", "file");
           const photoResponse = await upload(formData);
-          console.log(photoResponse);
-          console.log(photoResponse?.data);
           if (photoResponse && photoResponse.status == 200) {
-            console.log(photoResponse.data.data.link);
             data["photo"] = photoResponse.data.data.link;
           } else {
-            console.log(photoResponse);
+            alert("Could not upload photo.");
             return;
           }
-        console.log(data);
         }
         if (id === undefined) {
           response = await addRecipe(data);
@@ -244,7 +240,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}
