@@ -9,6 +9,7 @@ import { setSearchTags } from "../redux/searchTags";
 import ChipDisplay from "../components/ChipDisplay";
 import "../stylesheets/RecipeDetails.css";
 import { RootState } from "../redux/store";
+import { getRecipeDetails } from "../helpers";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
@@ -16,14 +17,20 @@ const RecipeDetails = () => {
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
 
   useEffect(() => {
     if (id !== undefined) {
-      setRecipe(recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe);
+      if (recipesList.length === 0) {
+        getRecipeDetails(id, setRecipe);
+      } else {
+        setRecipe(
+          recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe
+        );
+      }
     }
-  }, [id, recipesList]);
+  }, [id]);
 
   useEffect(() => {
     if (recipe?.title !== "") {

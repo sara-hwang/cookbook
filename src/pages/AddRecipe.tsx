@@ -25,6 +25,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getRecipeDetails } from "../helpers";
 import TagInput from "../components/TagInput";
 import "../stylesheets/AddRecipe.css";
+import { setRecipesList } from "../redux/recipesList";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
@@ -60,7 +61,7 @@ const AddRecipe = () => {
           .min(0, "Must be greater than 0"),
         unit: yup.string().required("Required"),
         element: yup.string().required("Required"),
-      }),
+      })
     ),
   });
 
@@ -123,6 +124,7 @@ const AddRecipe = () => {
         if (response && response.status === 200) {
           resetForm();
           dispatch(setRecipeDraft(EmptyRecipe));
+          dispatch(setRecipesList([]));
           navigate(`/view/${key}`);
         } else {
           alert(response?.data);
@@ -290,7 +292,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -404,7 +406,6 @@ const AddRecipe = () => {
                       variant="outlined"
                       onClick={() => saveDraft(values)}
                       disabled={values === EmptyRecipe}
-                      // sx={{ float: "right" }}
                     >
                       Save Draft
                     </Button>
