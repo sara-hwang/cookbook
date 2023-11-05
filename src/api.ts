@@ -20,10 +20,10 @@ export const authenticate = async (data: {
 
 export const upload = async (file: FormData) => {
   try {
-    console.log(file);
     const response = await axios.post("https://api.imgur.com/3/image/", file, {
       headers: { Authorization: AUTH },
     });
+    console.log(response);
     return response;
   } catch (e) {
     const error = e as AxiosError;
