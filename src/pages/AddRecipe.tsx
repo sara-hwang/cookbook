@@ -127,7 +127,7 @@ const AddRecipe = () => {
         }
       }}
     >
-      {({ values, errors, isValid, isSubmitting, setFieldValue }) => (
+      {({ values, errors, isValid, isSubmitting }) => (
         <Form
           onKeyDown={(event) =>
             event.key === "Enter" ? event.preventDefault() : null
@@ -291,7 +291,6 @@ const AddRecipe = () => {
                   name="photo"
                   type="input"
                   as={UploadImage}
-                  setFieldValue={setFieldValue}
                   selectedImage={selectedImage}
                   setSelectedImage={setSelectedImage}
                 />
