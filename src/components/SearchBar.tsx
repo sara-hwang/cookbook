@@ -53,6 +53,7 @@ export default function Testsearchbar() {
         value={searchTags}
         suggestions={filtered}
         completeMethod={search}
+        style={{ fontSize: "small" }}
         onChange={(e) => dispatch(setSearchTags(e.value))}
       />
     </div>

@@ -14,10 +14,30 @@
 }
 
 .nav-tabs .MuiTab-root {
-  font: inherit;
+  font-family: inherit;
+  font-size: small;
   border-bottom: 2.5px solid white;
   border-top: 2.55px solid white;
   background-color: rgb(221, 246, 255);
+  padding: 0 10px 0 5px;
+}
+
+.nav-tab-label {
+    padding: 10px 0;
+    display: flex;
+  justify-content: center;
+  width: 100%;
+}
+
+.nav-tab-close-button {
+  position: absolute;
+  top: 50%;
+  right: 0;
+  transform: translateY(-50%); 
+}
+
+.nav-tab-close-button:hover {
+  color: red;
 }
 
 .side-by-side-container {

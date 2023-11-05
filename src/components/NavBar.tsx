@@ -44,24 +44,31 @@ export default function NavBar() {
         {tabsList.map((tab, key) => {
           return (
             <Tab
+              disableRipple
               key={key}
               label={
-                <span>
-                  {tab.label}
+                <div className="side-by-side-container">
+                  <span className="nav-tab-label">{tab.label}</span>
                   {tab.link != "/view" && tab.link != "/add" && (
-                    <IconButton
-                      size="small"
-                      component="span"
-                      onClick={(event) => {
-                        event.preventDefault();
-                        event.stopPropagation();
-                        dispatch(popTab(tab));
-                      }}
-                    >
-                      <CloseIcon fontSize="small" />
-                    </IconButton>
+                    <div className="nav-tab-close-button">
+                      <IconButton
+                        size="small"
+                        component="span"
+                        disableRipple
+                        sx={{
+                          "&:hover": { color: "red" },
+                        }}
+                        onClick={(event) => {
+                          event.preventDefault();
+                          event.stopPropagation();
+                          dispatch(popTab(tab));
+                        }}
+                      >
+                        <CloseIcon fontSize="small" />
+                      </IconButton>
+                    </div>
                   )}
-                </span>
+                </div>
               }
             />
           );
