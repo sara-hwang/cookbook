@@ -3,24 +3,27 @@ import { EmptyRecipe, Recipe, TabItem } from "../constants/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { pushTab, setCurrentTab } from "../redux/tabsList";
-import { useAppDispatch } from "../redux/hooks";
-import { getRecipeDetails } from "../helpers";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import EditIcon from "@mui/icons-material/Edit";
 import { setSearchTags } from "../redux/searchTags";
 import ChipDisplay from "../components/ChipDisplay";
 import "../stylesheets/RecipeDetails.css";
+import { RootState } from "../redux/store";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
   const navigate = useNavigate();
+  const { recipesList } = useAppSelector(
+    (state: RootState) => state.recipesList,
+  );
 
   useEffect(() => {
     if (id !== undefined) {
-      getRecipeDetails(id, setRecipe);
+      setRecipe(recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe);
     }
-  }, [id]);
+  }, [id, recipesList]);
 
   useEffect(() => {
     if (recipe?.title !== "") {

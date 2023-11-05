@@ -1,40 +1,51 @@
 import { Box, Grid } from "@mui/material";
-import { Ingredient, Recipe } from "../constants/types";
+import { Recipe } from "../constants/types";
 import { useEffect, useState } from "react";
 import "../stylesheets/App.css";
 import "../stylesheets/ViewRecipes.css";
-import { getAllRecipes } from "../api";
-import { useNavigate } from "react-router-dom";
-import { useAppSelector } from "../redux/hooks";
+import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
+import { getRecipesList } from "../helpers";
+import { setRecipesList } from "../redux/recipesList";
+import { pushTab, setCurrentTab } from "../redux/tabsList";
 
 const ViewRecipes = () => {
-  const navigate = useNavigate();
+  const dispatch = useAppDispatch();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(true);
+  const [loading, setLoading] = useState(false);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
+  const { recipesList } = useAppSelector(
+    (state: RootState) => state.recipesList,
+  );
+  const { tabsList, currentTab } = useAppSelector(
+    (state: RootState) => state.tabsList,
+  );
+
   useEffect(() => {
-    async function loadRecipes() {
+    async function getRecipes() {
       setLoading(true);
-      const response = await getAllRecipes();
-      if (response?.status == 200) {
-        const allRecipes = response.data;
-        setRecipes(
-          searchTags.length > 0
-            ? allRecipes.filter(
-                (recipe: Recipe) =>
-                  searchTags.every((tag) => recipe.tags.includes(tag)) ||
-                  searchTags.every((tag) =>
-                    recipe.ingredients.map((ing) => ing.element).includes(tag),
-                  ),
-              )
-            : allRecipes,
-        );
-      }
+      const recipes = await getRecipesList();
       setLoading(false);
+      dispatch(setRecipesList(recipes));
     }
-    loadRecipes();
-  }, [searchTags]);
+    if (recipesList.length === 0) {
+      getRecipes();
+    }
+  }, []);
+
+  useEffect(() => {
+    setRecipes(
+      searchTags.length > 0
+        ? recipesList.filter(
+            (recipe: Recipe) =>
+              searchTags.every((tag) => recipe.tags.includes(tag)) ||
+              searchTags.every((tag) =>
+                recipe.ingredients.map((ing) => ing.element).includes(tag),
+              ),
+          )
+        : recipesList,
+    );
+  }, [searchTags, recipesList]);
 
   return (
     <Box className="containers">
@@ -47,7 +58,7 @@ const ViewRecipes = () => {
         {recipes &&
           recipes.map((recipe) => {
             return (
-              <Grid item key={recipes.indexOf(recipe)}>
+              <Grid item key={recipe.key}>
                 <div className="image-container ">
                   <input
                     className="recipe-photo"
@@ -58,7 +69,17 @@ const ViewRecipes = () => {
                   <div
                     className="overlay"
                     onClick={() => {
-                      navigate(`/view/${recipe.key}`);
+                      const existing = tabsList.findIndex(
+                        (tab) => tab.link === recipe.key,
+                      );
+                      dispatch(
+                        existing > -1
+                          ? setCurrentTab(existing)
+                          : pushTab({
+                              label: recipe.title,
+                              link: `/view/${recipe.key}`,
+                            }),
+                      );
                     }}
                   >
                     {recipe.title}

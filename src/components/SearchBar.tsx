@@ -1,55 +1,60 @@
+import { useState } from "react";
+import {
+  AutoComplete,
+  AutoCompleteCompleteEvent,
+} from "primereact/autocomplete";
+import "../stylesheets/Search.css";
+import "primereact/resources/themes/lara-light-indigo/theme.css"; // theme
+import "primeflex/primeflex.css"; // css utility
+import "primeicons/primeicons.css";
+import "primereact/resources/primereact.css"; // core css
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setCurrentTab } from "../redux/tabsList";
-import { setSearchTags } from "../redux/searchTags";
-import { useRef } from "react";
 import { RootState } from "../redux/store";
-import TagInput from "./TagInput";
+import { Recipe } from "../constants/types";
+import { setSearchTags } from "../redux/searchTags";
+import { setCurrentTab } from "../redux/tabsList";
 
-function SearchBar() {
+export default function Testsearchbar() {
   const dispatch = useAppDispatch();
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  const [filtered, setFiltered] = useState<string[]>();
+  const { recipesList } = useAppSelector(
+    (state: RootState) => state.recipesList,
+  );
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
 
-  const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if ((event.target as HTMLInputElement).value !== "") {
-      dispatch(
-        setSearchTags([
-          ...searchTags,
-          (event.target as HTMLInputElement).value,
-        ]),
+  const suggestions = recipesList.reduce(
+    (accumulator: string[], currentValue: Recipe) => [
+      ...accumulator,
+      ...currentValue.tags,
+      ...currentValue.ingredients.map((ing) => ing.element),
+    ],
+    [],
+  );
+
+  const search = (event: AutoCompleteCompleteEvent) => {
+    let filteredSuggestions;
+    if (!event.query.trim().length) {
+      filteredSuggestions = [...suggestions];
+    } else {
+      filteredSuggestions = suggestions.filter((s) =>
+        s.toLowerCase().startsWith(event.query.toLowerCase()),
       );
-      (event.target as HTMLInputElement).value = "";
     }
-  };
-
-  const removeTag = (indexToRemove: number) => {
-    dispatch(
-      setSearchTags([
-        ...searchTags.filter((_, index) => index !== indexToRemove),
-      ]),
-    );
-  };
-
-  const fieldOnClick = () => dispatch(setCurrentTab(0));
-
-  const searchStyle = {
-    background: "transparent",
-    width: "100%",
-    borderBottom: "5px solid lightblue",
-    fontSize: "18px",
+    setFiltered(filteredSuggestions);
   };
 
   return (
-    <div style={searchStyle}>
-      <TagInput
-        tags={searchTags}
-        inputRef={inputRef}
-        fieldOnClick={fieldOnClick}
-        addTag={addTag}
-        removeTag={removeTag}
+    <div className="card p-fluid">
+      <AutoComplete
+        placeholder="Start typing ingredients or tags..."
+        onFocus={() => dispatch(setCurrentTab(0))}
+        color="blue"
+        multiple
+        value={searchTags}
+        suggestions={filtered}
+        completeMethod={search}
+        onChange={(e) => dispatch(setSearchTags(e.value))}
       />
     </div>
   );
 }
-
-export default SearchBar;

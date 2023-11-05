@@ -242,6 +242,7 @@ const AddRecipe = () => {
                                   type="number"
                                   as={Select}
                                   size="small"
+                                  sx={{ width: "90px" }}
                                   className="text-field-input"
                                 >
                                   {Object.values(Unit)
@@ -315,6 +316,7 @@ const AddRecipe = () => {
                             key={index}
                             padding={0.5}
                             marginLeft={1}
+                            whiteSpace={"nowrap"}
                           >
                             <Typography variant="h6">
                               {index + 1}.&nbsp;
@@ -323,7 +325,11 @@ const AddRecipe = () => {
                                 placeholder="Instructions..."
                                 as={TextField}
                                 size="small"
-                                sx={{ width: "70%" }}
+                                multiline
+                                rows={2}
+                                sx={{
+                                  width: "80%",
+                                }}
                               />
                               <IconButton
                                 onClick={() => {

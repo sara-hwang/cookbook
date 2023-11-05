@@ -44,9 +44,7 @@ export const Login = ({ isOpen, setIsOpen }: IProps) => {
         <IconButton
           onClick={() => {
             setIsOpen(false);
-            if (pathname == "/add") {
-              navigate("/");
-            } else if (pathname.startsWith("/add")) {
+            if (pathname.startsWith("/add")) {
               navigate(-1);
             }
           }}

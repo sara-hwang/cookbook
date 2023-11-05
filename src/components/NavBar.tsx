@@ -20,7 +20,9 @@ export default function NavBar() {
   };
 
   useEffect(() => {
-    navigate(tabsList[currentTab].link);
+    if (pathname !== tabsList[currentTab].link) {
+      navigate(tabsList[currentTab].link);
+    }
   }, [currentTab]);
 
   useEffect(() => {

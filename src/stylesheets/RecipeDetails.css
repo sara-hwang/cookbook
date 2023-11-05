@@ -1,14 +1,21 @@
-h6 + ul, h6 + ol {
-    margin-top: -3px;
-    margin-bottom: -2px;
+h6 + ul,
+h6 + ol {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }
 
-h6 {
-    color: grey;
+.MuiTypography-root.MuiTypography-h6 {
+  font-family: var(--font-family);
+  color: grey;
 }
 
-.h5{
-font-weight: bold;
-font-size: xx-large;
-color: var(--ThemeBlue)
+.h5 {
+  font-family: var(--font-family);
+  font-weight: bold;
+  font-size: xx-large;
+  color: var(--ThemeBlue);
+}
+
+h6 + div {
+  margin-top: 5px;
 }
