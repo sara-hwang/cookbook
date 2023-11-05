@@ -110,7 +110,7 @@ const AddRecipe = () => {
           console.log("sara");
           console.log(photoResponse?.status);
           if (photoResponse && photoResponse.status == 200) {
-            console.log(photoResponse.data);
+            console.log(photoResponse.data.link);
             data["photo"] = photoResponse.data.link;
           } else {
             console.log(photoResponse);
