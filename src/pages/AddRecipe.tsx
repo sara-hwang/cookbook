@@ -47,8 +47,9 @@ const AddRecipe = () => {
   }, [id]);
 
   useEffect(() => {
-    setEditTags(draft.tags);
-  }, [draft.tags]);
+    console.log(initialValues);
+    setEditTags(initialValues.tags);
+  }, [initialValues]);
 
   const validationSchema = yup.object({
     title: yup.string().required("Required").max(250),
@@ -404,7 +405,7 @@ const AddRecipe = () => {
                   <div>
                     <Button
                       variant="outlined"
-                      onClick={() => saveDraft(values)}
+                      onClick={() => saveDraft({ ...values, tags: editTags })}
                       disabled={values === EmptyRecipe}
                     >
                       Save Draft
