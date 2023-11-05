@@ -100,6 +100,7 @@ const AddRecipe = () => {
       validationSchema={validationSchema}
       onSubmit={async (data: Recipe, { resetForm }) => {
         const key = slugify(data.title, { lower: true });
+        data = { ...data, key: key, tags: editTags };
         let response;
         if (selectedImage) {
           const formData = new FormData();
@@ -116,7 +117,6 @@ const AddRecipe = () => {
             return;
           }
         }
-        data = { ...data, key: key, tags: editTags };
         if (id === undefined) {
           response = await addRecipe(data);
         } else {
