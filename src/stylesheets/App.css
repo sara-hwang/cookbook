@@ -24,6 +24,10 @@
   flex-direction: row;
 }
 
+.top-border {
+  border-top: 5px solid lightblue;
+}
+
 .side-by-side-container .MuiButton-root {
   margin-left: auto;
   height: fit-content;

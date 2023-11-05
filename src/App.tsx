@@ -57,7 +57,7 @@ export default function App() {
           </Tooltip>
         )}
       </div>
-      <div className="side-by-side-container">
+      <div className="side-by-side-container top-border">
         <div>
           <NavBar />
         </div>
