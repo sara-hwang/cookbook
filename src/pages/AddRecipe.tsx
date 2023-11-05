@@ -13,7 +13,7 @@ import * as yup from "yup";
 import slugify from "slugify";
 import { Ingredient, Recipe, Unit } from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
-import { addRecipe, updateRecipe } from "../api";
+import { addRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
 import { useEffect, useRef, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
@@ -30,6 +30,7 @@ const AddRecipe = () => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const [editTags, setEditTags] = useState<string[]>(tags);
+  const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>({
     key: key,
@@ -99,8 +100,19 @@ const AddRecipe = () => {
       validationSchema={validationSchema}
       onSubmit={async (data: Recipe, { resetForm }) => {
         const key = slugify(data.title, { lower: true });
-        let response;
         data = { ...data, key: key, tags: editTags };
+        let response;
+        if (selectedImage) {
+          const formData = new FormData();
+          formData.append("image", selectedImage);
+          const photoResponse = await upload(formData);
+          if (photoResponse && photoResponse.status == 200) {
+            data["photo"] = photoResponse.data.data.link;
+          } else {
+            alert("Could not upload photo.");
+            return;
+          }
+        }
         if (id === undefined) {
           response = await addRecipe(data);
         } else {
@@ -114,7 +126,7 @@ const AddRecipe = () => {
         }
       }}
     >
-      {({ values, errors, isValid, isSubmitting, setFieldValue }) => (
+      {({ values, errors, isValid, isSubmitting }) => (
         <Form
           onKeyDown={(event) =>
             event.key === "Enter" ? event.preventDefault() : null
@@ -278,7 +290,8 @@ const AddRecipe = () => {
                   name="photo"
                   type="input"
                   as={UploadImage}
-                  setFieldValue={setFieldValue}
+                  selectedImage={selectedImage}
+                  setSelectedImage={setSelectedImage}
                 />
               </Grid>
               <Grid item>

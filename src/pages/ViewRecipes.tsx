@@ -16,14 +16,17 @@ const ViewRecipes = () => {
   useEffect(() => {
     async function loadRecipes() {
       setLoading(true);
-      const allRecipes = await getAllRecipes();
-      setRecipes(
-        searchTags.length > 0
-          ? allRecipes.filter((recipe: Recipe) =>
-              recipe.tags.some((tag) => searchTags.includes(tag)),
-            )
-          : allRecipes,
-      );
+      const response = await getAllRecipes();
+      if (response?.status == 200) {
+        const allRecipes = response.data;
+        setRecipes(
+          searchTags.length > 0
+            ? allRecipes.filter((recipe: Recipe) =>
+                recipe.tags.some((tag) => searchTags.includes(tag)),
+              )
+            : allRecipes,
+        );
+      }
       setLoading(false);
     }
     loadRecipes();
@@ -40,18 +43,10 @@ const ViewRecipes = () => {
         {recipes &&
           recipes.map((recipe) => {
             return (
-              <Grid
-                item
-                xs={12}
-                sm={4}
-                md={4}
-                lg={2}
-                xl={1}
-                key={recipes.indexOf(recipe)}
-              >
+              <Grid item xs={12} sm={4} md={2} key={recipes.indexOf(recipe)}>
                 <div className="image-container ">
                   <input
-                    style={{ width: "100%", height: "100%" }}
+                    className="recipe-photo"
                     type="image"
                     src={recipe.photo}
                     alt="Recipe Photo"

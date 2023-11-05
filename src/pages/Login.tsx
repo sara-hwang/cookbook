@@ -64,7 +64,6 @@ export const Login = ({ isOpen, setIsOpen }: IProps) => {
           validationSchema={validationSchema}
           onSubmit={async (data: { username: string; password: string }) => {
             const response = await authenticate(data);
-            console.log(response);
             if (
               response?.status === 200 &&
               signIn({
@@ -74,7 +73,6 @@ export const Login = ({ isOpen, setIsOpen }: IProps) => {
                 authState: response.data.authUserState,
               })
             ) {
-              console.log("success");
               setIsOpen(false);
             } else {
               setErrorMessage(response?.data.message);
