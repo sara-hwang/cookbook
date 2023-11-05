@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import { Recipe } from "../constants/types";
+import { Ingredient, Recipe } from "../constants/types";
 import { useEffect, useState } from "react";
 import "../stylesheets/App.css";
 import "../stylesheets/ViewRecipes.css";
@@ -21,10 +21,14 @@ const ViewRecipes = () => {
         const allRecipes = response.data;
         setRecipes(
           searchTags.length > 0
-            ? allRecipes.filter((recipe: Recipe) =>
-                recipe.tags.some((tag) => searchTags.includes(tag)),
+            ? allRecipes.filter(
+                (recipe: Recipe) =>
+                  searchTags.every((tag) => recipe.tags.includes(tag)) ||
+                  searchTags.every((tag) =>
+                    recipe.ingredients.map((ing) => ing.element).includes(tag)
+                  )
               )
-            : allRecipes,
+            : allRecipes
         );
       }
       setLoading(false);
