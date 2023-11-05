@@ -39,7 +39,7 @@ export default function App() {
           <Tooltip title="Logout">
             <IconButton
               disableRipple
-              sx={{ padding: 0, "&:hover": { color: "red" } }}
+              sx={{ padding: "0 5px 0 0", "&:hover": { color: "red" } }}
               onClick={signOut}
             >
               <LogoutIcon />
