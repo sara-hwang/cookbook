@@ -116,6 +116,7 @@ const AddRecipe = () => {
             console.log(photoResponse);
             return;
           }
+        console.log(data);
         }
         if (id === undefined) {
           response = await addRecipe(data);
