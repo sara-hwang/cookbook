@@ -8,14 +8,7 @@ import {
   TextField,
   Typography,
 } from "@mui/material";
-import {
-  Field,
-  FieldArray,
-  Form,
-  Formik,
-  FormikErrors,
-  useFormikContext,
-} from "formik";
+import { Field, FieldArray, Form, Formik, FormikErrors } from "formik";
 import * as yup from "yup";
 import slugify from "slugify";
 import { EmptyRecipe, Ingredient, Recipe, Unit } from "../constants/types";
@@ -32,43 +25,27 @@ import TagInput from "../components/TagInput";
 import "../stylesheets/AddRecipe.css";
 
 const AddRecipe = () => {
-  const { key, title, servings, ingredients, steps, photo, tags, url } =
-    useAppSelector((state: RootState) => state.recipeDraft);
+  const draft = useAppSelector((state: RootState) => state.recipeDraft);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [editTags, setEditTags] = useState<string[]>(tags);
+  const [editTags, setEditTags] = useState<string[]>(draft.tags);
   const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
-  const [initialValues, setInitialValues] = useState<Recipe>({
-    key: key,
-    title: title,
-    servings: servings,
-    ingredients: ingredients,
-    steps: steps,
-    photo: photo,
-    tags: tags,
-    url: url,
-  });
+  const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
-
-  const FormObserver: React.FC = () => {
-    const { values } = useFormikContext<Recipe>();
-    useEffect(() => {
-      dispatch(setRecipeDraft(values));
-    }, [values]);
-    return null;
-  };
 
   useEffect(() => {
     if (id !== undefined) {
       getRecipeDetails(id, setInitialValues);
+    } else {
+      setInitialValues(draft);
     }
   }, [id]);
 
   useEffect(() => {
-    setEditTags(tags);
-  }, [tags]);
+    setEditTags(draft.tags);
+  }, [draft.tags]);
 
   const validationSchema = yup.object({
     title: yup.string().required("Required").max(250),
@@ -81,7 +58,7 @@ const AddRecipe = () => {
           .min(0, "Must be greater than 0"),
         unit: yup.string().required("Required"),
         element: yup.string().required("Required"),
-      }),
+      })
     ),
   });
 
@@ -109,6 +86,11 @@ const AddRecipe = () => {
 
   const removeTag = (indexToRemove: number) => {
     setEditTags([...editTags.filter((_, index) => index !== indexToRemove)]);
+  };
+
+  const saveDraft = (values: Recipe) => {
+    dispatch(setRecipeDraft(values));
+    alert("Draft saved!");
   };
 
   return (
@@ -151,7 +133,6 @@ const AddRecipe = () => {
             event.key === "Enter" ? event.preventDefault() : null
           }
         >
-          <FormObserver />
           <Box className="containers">
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -172,7 +153,7 @@ const AddRecipe = () => {
                   }
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item xs={12} md={9}>
                 <Field
                   placeholder="eg. https://www.allrecipes.com/"
                   name="url"
@@ -303,13 +284,13 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
                 </FieldArray>
               </Grid>
-              <Grid item container xs={12}>
+              <Grid item xs={12}>
                 <FieldArray name="steps">
                   {(arrayHelpers) => (
                     <div>
@@ -325,7 +306,13 @@ const AddRecipe = () => {
                       </Typography>
                       {values.steps?.map((step, index) => {
                         return (
-                          <Grid item key={index} padding={0.5} marginLeft={1}>
+                          <Grid
+                            item
+                            xs={12}
+                            key={index}
+                            padding={0.5}
+                            marginLeft={1}
+                          >
                             <Typography variant="h6">
                               {index + 1}.&nbsp;
                               <Field
@@ -333,6 +320,7 @@ const AddRecipe = () => {
                                 placeholder="Instructions..."
                                 as={TextField}
                                 size="small"
+                                sx={{ width: "70%" }}
                               />
                               <IconButton
                                 onClick={() => {
@@ -358,7 +346,7 @@ const AddRecipe = () => {
                   setSelectedImage={setSelectedImage}
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={12} md={9}>
                 <Typography variant="h6">Tags</Typography>
                 <div className="tag-input">
                   <Field
@@ -379,6 +367,14 @@ const AddRecipe = () => {
                   type="submit"
                 >
                   {id ? "Save" : "Submit"}
+                </Button>
+                <Button
+                  variant="outlined"
+                  onClick={() => saveDraft(values)}
+                  disabled={values === EmptyRecipe}
+                  sx={{ float: "right" }}
+                >
+                  Save Draft
                 </Button>
               </Grid>
             </Grid>
