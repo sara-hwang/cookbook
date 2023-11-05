@@ -58,7 +58,7 @@ const AddRecipe = () => {
           .min(0, "Must be greater than 0"),
         unit: yup.string().required("Required"),
         element: yup.string().required("Required"),
-      })
+      }),
     ),
   });
 
@@ -205,6 +205,7 @@ const AddRecipe = () => {
                               xs={12}
                               padding={0.5}
                               marginLeft={1}
+                              style={{ whiteSpace: "nowrap" }}
                             >
                               <Typography variant="h6">
                                 <Field
@@ -213,6 +214,7 @@ const AddRecipe = () => {
                                   as={TextField}
                                   placeholder="Amount *"
                                   size="small"
+                                  sx={{ width: "25%" }}
                                   InputProps={{
                                     inputProps: { min: "0", step: "any" },
                                   }}
@@ -255,6 +257,7 @@ const AddRecipe = () => {
                                   as={TextField}
                                   placeholder="Ingredient *"
                                   size="small"
+                                  sx={{ width: "65%" }}
                                   error={
                                     errors.ingredients &&
                                     errors.ingredients[index] &&
@@ -284,7 +287,7 @@ const AddRecipe = () => {
                               </Typography>
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}
