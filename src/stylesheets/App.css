@@ -8,9 +8,10 @@
 }
 
 .nav-tabs {
-    border-top: 2.55px solid white;
-  height: 100%;
+  border-top: 2.5px solid white;
   width: 200px;
+  position: sticky;
+  top: 48px
 }
 
 .nav-tabs .MuiTab-root {
@@ -45,8 +46,15 @@
   flex-direction: row;
 }
 
-.top-border {
-  border-top: 5px solid lightblue;
+.top-bar-container {
+  display: flex;
+  flex-direction: row;
+  position: sticky;
+  top: 0px;
+  border-bottom: 5px solid lightblue;
+  z-index: 9;
+  background-color: white;
+  padding-right: 15px;
 }
 
 .side-by-side-container .MuiButton-root {

@@ -33,7 +33,7 @@ export default function App() {
   return (
     <Box sx={{ width: "100%" }}>
       <Login isOpen={isOpen} setIsOpen={setIsOpen} />
-      <div className="side-by-side-container">
+      <div className="top-bar-container">
         <SearchBar />
         {isAuthenticated() ? (
           <Tooltip title="Logout">
@@ -57,7 +57,7 @@ export default function App() {
           </Tooltip>
         )}
       </div>
-      <div className="side-by-side-container top-border">
+      <div className="side-by-side-container">
         <div>
           <NavBar />
         </div>
