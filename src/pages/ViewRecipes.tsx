@@ -1,5 +1,5 @@
 import { Box, Grid } from "@mui/material";
-import { Recipe } from "../constants/types";
+import { Recipe, DEFAULT_PHOTO } from "../constants/types";
 import { useEffect, useState } from "react";
 import "../stylesheets/App.css";
 import "../stylesheets/ViewRecipes.css";
@@ -40,10 +40,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag)
-              )
+                recipe.ingredients.map((ing) => ing.element).includes(tag),
+              ),
           )
-        : recipesList
+        : recipesList,
     );
   }, [searchTags, recipesList]);
 
@@ -63,14 +63,14 @@ const ViewRecipes = () => {
                   <input
                     className="recipe-photo"
                     type="image"
-                    src={recipe.photo}
+                    src={recipe.photo ?? DEFAULT_PHOTO}
                     alt="Recipe Photo"
                   />
                   <div
                     className="overlay"
                     onClick={() => {
                       const existing = tabsList.findIndex(
-                        (tab) => tab.link === recipe.key
+                        (tab) => tab.link === recipe.key,
                       );
                       dispatch(
                         existing > -1
@@ -78,7 +78,7 @@ const ViewRecipes = () => {
                           : pushTab({
                               label: recipe.title,
                               link: `/view/${recipe.key}`,
-                            })
+                            }),
                       );
                     }}
                   >

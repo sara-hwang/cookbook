@@ -47,7 +47,6 @@ const AddRecipe = () => {
   }, [id]);
 
   useEffect(() => {
-    console.log(initialValues);
     setEditTags(initialValues.tags);
   }, [initialValues]);
 

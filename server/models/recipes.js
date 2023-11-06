@@ -25,11 +25,7 @@ const RecipeSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
-  photo: {
-    type: String,
-    default:
-      "https://www.bunsenburnerbakery.com/wp-content/uploads/2020/02/banana-bread-muffins-26-square-735x735.jpg",
-  },
+  photo: String,
   tags: [String],
   url: String,
 });
