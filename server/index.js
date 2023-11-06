@@ -7,7 +7,7 @@ const UserModel = require("./models/users");
 
 require("dotenv").config({ path: "../.env" });
 const app = express();
-app.use(cors());
+// app.use(cors());
 app.use(express.json());
 
 mongoose.connect(

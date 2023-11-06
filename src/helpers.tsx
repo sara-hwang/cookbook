@@ -9,7 +9,7 @@ export async function getRecipeDetails(
   if (response && response.status === 200) {
     setRecipe(response.data);
   } else {
-    alert(response?.data);
+    alert("Recipe returned " + response?.data + ", server may be down.");
   }
 }
 
@@ -18,7 +18,7 @@ export async function getRecipesList() {
   if (response && response.status === 200) {
     return response.data;
   } else {
-    alert(response?.data);
+    alert("Recipes returned " + response?.data + ", server may be down.");
     return [];
   }
 }

@@ -26,7 +26,7 @@ const ViewRecipes = () => {
       setLoading(true);
       const recipes = await getRecipesList();
       setLoading(false);
-      dispatch(setRecipesList(recipes));
+      dispatch(setRecipesList(recipes.toReversed()));
     }
     if (recipesList.length === 0) {
       getRecipes();
@@ -40,10 +40,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag),
-              ),
+                recipe.ingredients.map((ing) => ing.element).includes(tag)
+              )
           )
-        : recipesList,
+        : recipesList
     );
   }, [searchTags, recipesList]);
 
@@ -70,7 +70,7 @@ const ViewRecipes = () => {
                     className="overlay"
                     onClick={() => {
                       const existing = tabsList.findIndex(
-                        (tab) => tab.link === recipe.key,
+                        (tab) => tab.link === recipe.key
                       );
                       dispatch(
                         existing > -1
@@ -78,7 +78,7 @@ const ViewRecipes = () => {
                           : pushTab({
                               label: recipe.title,
                               link: `/view/${recipe.key}`,
-                            }),
+                            })
                       );
                     }}
                   >
