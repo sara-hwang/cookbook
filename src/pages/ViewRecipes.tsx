@@ -60,25 +60,20 @@ const ViewRecipes = () => {
             return (
               <Grid item key={recipe.key}>
                 <div className="image-container ">
-                  <input
+                  <img
                     className="recipe-photo"
-                    type="image"
+                    loading="lazy"
                     src={recipe.photo ?? DEFAULT_PHOTO}
-                    alt="Recipe Photo"
+                    alt={recipe.title}
                   />
                   <div
                     className="overlay"
                     onClick={() => {
-                      const existing = tabsList.findIndex(
-                        (tab) => tab.link === recipe.key,
-                      );
                       dispatch(
-                        existing > -1
-                          ? setCurrentTab(existing)
-                          : pushTab({
-                              label: recipe.title,
-                              link: `/view/${recipe.key}`,
-                            }),
+                        pushTab({
+                          label: recipe.title,
+                          link: `/view/${recipe.key}`,
+                        })
                       );
                     }}
                   >
