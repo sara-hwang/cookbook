@@ -2,7 +2,7 @@ export type Recipe = {
   key: string;
   title: string;
   ingredients: Ingredient[];
-  steps: string[];
+  steps: Step[];
   servings: number;
   photo: string | undefined;
   tags: string[];
@@ -13,6 +13,11 @@ export type Ingredient = {
   amount: number;
   unit: Unit;
   element: string;
+};
+
+export type Step = {
+  stepNumber: number;
+  text: string;
 };
 
 export type TabItem = {

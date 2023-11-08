@@ -53,13 +53,19 @@ const RecipeDetails = () => {
               <p>Servings: {recipe.servings}</p>
               <Typography variant="h6">Ingredients</Typography>
               <ul>
-                {recipe?.ingredients.map((ing) => (
-                  <Fragment key={ing.element}>
-                    <li>
-                      {ing.amount} {ing.unit} {ing.element}
-                    </li>
-                  </Fragment>
-                ))}
+                {recipe?.ingredients.map((ing, index) =>
+                  ing.unit ? (
+                    <Fragment key={index}>
+                      <li>
+                        {ing.amount} {ing.unit} {ing.element}
+                      </li>
+                    </Fragment>
+                  ) : (
+                    <Typography variant="h6" marginLeft={"-30px"}>
+                      {ing.element}
+                    </Typography>
+                  )
+                )}
               </ul>
             </div>
             <Button variant="contained" onClick={() => navigate(`/add/${id}`)}>
@@ -71,11 +77,20 @@ const RecipeDetails = () => {
         <Grid item xs={12}>
           <Typography variant="h6">Steps</Typography>
           <ol>
-            {recipe?.steps.map((step) => (
-              <Fragment key={step}>
-                <li>{step}</li>
-              </Fragment>
-            ))}
+            {recipe?.steps.map((step, index) =>
+              step.stepNumber > 0 ? (
+                <Fragment key={index}>
+                  <li>
+                    {step.stepNumber > 0 ?? null}
+                    {step.text}
+                  </li>
+                </Fragment>
+              ) : (
+                <Typography variant="h6" marginLeft={"-30px"}>
+                  {step.text}
+                </Typography>
+              )
+            )}
           </ol>
         </Grid>
         <Grid item xs={12}>

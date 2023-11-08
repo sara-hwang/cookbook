@@ -20,7 +20,12 @@ const RecipeSchema = new mongoose.Schema({
       unit: String,
     },
   ],
-  steps: [String],
+  steps: [
+    {
+      stepNumber: Number,
+      text: String,
+    },
+  ],
   servings: {
     type: Number,
     default: 1,

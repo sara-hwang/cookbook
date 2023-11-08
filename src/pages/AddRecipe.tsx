@@ -13,7 +13,13 @@ import {
 import { Field, FieldArray, Form, Formik, FormikErrors } from "formik";
 import * as yup from "yup";
 import slugify from "slugify";
-import { EmptyRecipe, Ingredient, Recipe, Unit } from "../constants/types";
+import {
+  EmptyRecipe,
+  Ingredient,
+  Recipe,
+  Step,
+  Unit,
+} from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
@@ -35,6 +41,7 @@ const AddRecipe = () => {
   const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
+  const [numDividers, setNumDividers] = useState(0);
 
   const inputRef = useRef<HTMLInputElement | null>(null);
 
@@ -47,6 +54,13 @@ const AddRecipe = () => {
   }, [id]);
 
   useEffect(() => {
+    let dividers = 0;
+    initialValues.steps.forEach((step) => {
+      if (step.stepNumber === 0) {
+        dividers += 1;
+      }
+    });
+    setNumDividers(dividers);
     setEditTags(initialValues.tags);
   }, [initialValues]);
 
@@ -59,9 +73,14 @@ const AddRecipe = () => {
           .number()
           .required("Required")
           .min(0, "Must be greater than 0"),
-        unit: yup.string().required("Required"),
+        // unit: yup.string().required("Required"),
         element: yup.string().required("Required"),
-      }),
+      })
+    ),
+    steps: yup.array().of(
+      yup.object().shape({
+        text: yup.string().required("Required"),
+      })
     ),
   });
 
@@ -199,6 +218,18 @@ const AddRecipe = () => {
                         >
                           <Add />
                         </IconButton>
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            arrayHelpers.push({
+                              amount: "1",
+                              unit: undefined,
+                              element: "",
+                            });
+                          }}
+                        >
+                          Add Divider
+                        </Button>
                       </Typography>
                       {values.ingredients?.map(
                         (ingredient: Ingredient, index) => {
@@ -211,88 +242,125 @@ const AddRecipe = () => {
                               marginLeft={1}
                               style={{ whiteSpace: "nowrap" }}
                             >
-                              <Typography variant="h6">
-                                <Field
-                                  name={`ingredients.${index}.amount`}
-                                  type="number"
-                                  as={TextField}
-                                  placeholder="Amount *"
-                                  size="small"
-                                  sx={{ width: "25%" }}
-                                  InputProps={{
-                                    inputProps: { min: "0", step: "any" },
-                                  }}
-                                  error={
-                                    errors.ingredients &&
-                                    errors.ingredients[index] &&
-                                    (
-                                      errors.ingredients[
-                                        index
-                                      ] as FormikErrors<Ingredient>
-                                    ).amount !== undefined
-                                  }
-                                  helperText={
-                                    errors.ingredients &&
-                                    errors.ingredients[index] &&
-                                    (
-                                      errors.ingredients[
-                                        index
-                                      ] as FormikErrors<Ingredient>
-                                    ).amount
-                                  }
-                                />
-                                <Field
-                                  name={`ingredients.${index}.unit`}
-                                  type="number"
-                                  as={Select}
-                                  size="small"
-                                  sx={{ width: "90px" }}
-                                  className="text-field-input"
-                                >
-                                  {Object.values(Unit)
-                                    .filter((unit) => typeof unit == "string")
-                                    .map((unit) => (
-                                      <MenuItem key={unit} value={unit}>
-                                        {unit}
-                                      </MenuItem>
-                                    ))}
-                                </Field>
-                                <Field
-                                  name={`ingredients.${index}.element`}
-                                  as={TextField}
-                                  placeholder="Ingredient *"
-                                  size="small"
-                                  sx={{ width: "65%" }}
-                                  error={
-                                    errors.ingredients &&
-                                    errors.ingredients[index] &&
-                                    (
-                                      errors.ingredients[
-                                        index
-                                      ] as FormikErrors<Ingredient>
-                                    ).element !== undefined
-                                  }
-                                  helperText={
-                                    errors.ingredients &&
-                                    errors.ingredients[index] &&
-                                    (
-                                      errors.ingredients[
-                                        index
-                                      ] as FormikErrors<Ingredient>
-                                    ).element
-                                  }
-                                />
-                                <IconButton
-                                  onClick={() => {
-                                    arrayHelpers.remove(index);
-                                  }}
-                                >
-                                  <Delete />
-                                </IconButton>
-                              </Typography>
+                              {ingredient.unit === undefined ? (
+                                <div>
+                                  <Field
+                                    name={`ingredients.${index}.element`}
+                                    as={TextField}
+                                    placeholder="Section name *"
+                                    size="small"
+                                    sx={{ width: "65%" }}
+                                    error={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).element !== undefined
+                                    }
+                                    helperText={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).element
+                                    }
+                                  />
+                                  <IconButton
+                                    onClick={() => {
+                                      arrayHelpers.remove(index);
+                                    }}
+                                  >
+                                    <Delete />
+                                  </IconButton>
+                                </div>
+                              ) : (
+                                <Typography variant="h6">
+                                  <Field
+                                    name={`ingredients.${index}.amount`}
+                                    type="number"
+                                    as={TextField}
+                                    placeholder="Amount *"
+                                    size="small"
+                                    sx={{ width: "25%" }}
+                                    InputProps={{
+                                      inputProps: { min: "0", step: "any" },
+                                    }}
+                                    error={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).amount !== undefined
+                                    }
+                                    helperText={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).amount
+                                    }
+                                  />
+                                  <Field
+                                    name={`ingredients.${index}.unit`}
+                                    type="number"
+                                    as={Select}
+                                    size="small"
+                                    sx={{ width: "90px" }}
+                                    className="text-field-input"
+                                  >
+                                    {Object.values(Unit)
+                                      .filter((unit) => typeof unit == "string")
+                                      .map((unit) => (
+                                        <MenuItem key={unit} value={unit}>
+                                          {unit}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
+                                  <Field
+                                    name={`ingredients.${index}.element`}
+                                    as={TextField}
+                                    placeholder="Ingredient *"
+                                    size="small"
+                                    sx={{ width: "65%" }}
+                                    error={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).element !== undefined
+                                    }
+                                    helperText={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).element
+                                    }
+                                  />
+                                  <IconButton
+                                    onClick={() => {
+                                      arrayHelpers.remove(index);
+                                    }}
+                                  >
+                                    <Delete />
+                                  </IconButton>
+                                </Typography>
+                              )}
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -306,11 +374,26 @@ const AddRecipe = () => {
                         Steps
                         <IconButton
                           onClick={() => {
-                            arrayHelpers.push("");
+                            arrayHelpers.push({
+                              stepNumber: values.steps.length + 1 - numDividers,
+                              text: "",
+                            });
                           }}
                         >
                           <Add />
                         </IconButton>
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            arrayHelpers.push({
+                              stepNumber: 0,
+                              text: "",
+                            });
+                            setNumDividers(numDividers + 1);
+                          }}
+                        >
+                          Add Divider
+                        </Button>
                       </Typography>
                       {values.steps?.map((step, index) => {
                         return (
@@ -323,20 +406,51 @@ const AddRecipe = () => {
                             whiteSpace={"nowrap"}
                           >
                             <Typography variant="h6">
-                              {index + 1}.&nbsp;
+                              {step.stepNumber > 0 && (
+                                <>{step.stepNumber}.&nbsp;</>
+                              )}
                               <Field
-                                name={`steps.${index}`}
-                                placeholder="Instructions..."
+                                name={`steps.${index}.text`}
+                                placeholder={
+                                  step.stepNumber > 0
+                                    ? "Instructions..."
+                                    : "Section name..."
+                                }
                                 as={TextField}
                                 size="small"
-                                multiline
+                                multiline={step.stepNumber > 0 ?? undefined}
                                 rows={2}
                                 sx={{
-                                  width: "80%",
+                                  width:
+                                    step.stepNumber > 0 ? "80%" : undefined,
                                 }}
+                                error={
+                                  errors.steps &&
+                                  errors.steps[index] &&
+                                  (errors.steps[index] as FormikErrors<Step>)
+                                    .text !== undefined
+                                }
+                                helperText={
+                                  errors.steps &&
+                                  errors.steps[index] &&
+                                  (errors.steps[index] as FormikErrors<Step>)
+                                    .text
+                                }
                               />
                               <IconButton
                                 onClick={() => {
+                                  if (step.stepNumber === 0) {
+                                    setNumDividers(numDividers - 1);
+                                  } else {
+                                    values.steps.forEach((step) => {
+                                      if (
+                                        step.stepNumber > 0 &&
+                                        values.steps.indexOf(step) > index
+                                      ) {
+                                        step.stepNumber -= 1;
+                                      }
+                                    });
+                                  }
                                   arrayHelpers.remove(index);
                                 }}
                               >
