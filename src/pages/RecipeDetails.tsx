@@ -61,10 +61,10 @@ const RecipeDetails = () => {
                       </li>
                     </Fragment>
                   ) : (
-                    <Typography variant="h6" marginLeft={"-30px"}>
+                    <Typography variant="h6" marginLeft={"-30px"} key={index}>
                       {ing.element}
                     </Typography>
-                  )
+                  ),
                 )}
               </ul>
             </div>
@@ -86,10 +86,10 @@ const RecipeDetails = () => {
                   </li>
                 </Fragment>
               ) : (
-                <Typography variant="h6" marginLeft={"-30px"}>
+                <Typography variant="h6" marginLeft={"-30px"} key={index}>
                   {step.text}
                 </Typography>
-              )
+              ),
             )}
           </ol>
         </Grid>

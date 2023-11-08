@@ -73,7 +73,7 @@ const ViewRecipes = () => {
                         pushTab({
                           label: recipe.title,
                           link: `/view/${recipe.key}`,
-                        })
+                        }),
                       );
                     }}
                   >
