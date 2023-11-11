@@ -42,6 +42,7 @@ export const Login = ({ isOpen, setIsOpen }: IProps) => {
       <DialogTitle>
         Login
         <IconButton
+          disableRipple
           onClick={() => {
             setIsOpen(false);
             if (pathname.startsWith("/add")) {

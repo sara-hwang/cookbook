@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useEffect } from "react";
 import "../stylesheets/App.css";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -6,13 +6,15 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { popTab, setCurrentTab } from "../redux/tabsList";
-import MenuIcon from "@mui/icons-material/Menu";
 
-export default function NavBar() {
+interface IProps {
+  navBarVisible: boolean;
+}
+
+export default function NavBar({ navBarVisible }: IProps) {
   const { pathname } = useLocation();
-  const [navBarVisible, setNavBarVisible] = useState(window.innerWidth > 400);
   const { tabsList, currentTab } = useAppSelector(
-    (state: RootState) => state.tabsList
+    (state: RootState) => state.tabsList,
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -35,30 +37,8 @@ export default function NavBar() {
     }
   }, [pathname]);
 
-  const toggleVisibility = () => {
-    setNavBarVisible(!navBarVisible);
-  };
-
   return (
     <Box>
-      <div
-        style={{
-          display: "flex",
-          justifyContent: "flex-end",
-        }}
-      >
-        {navBarVisible && (
-          <img
-            src="/logo.png"
-            width="150"
-            height="25"
-            style={{ marginTop: "6px" }}
-          />
-        )}
-        <IconButton disableRipple onClick={toggleVisibility}>
-          <MenuIcon />
-        </IconButton>
-      </div>
       {navBarVisible && (
         <div className="nav-tabs">
           <Tabs

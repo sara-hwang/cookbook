@@ -44,15 +44,22 @@
   flex-direction: row;
 }
 
+.side-by-side-container2 {
+  display: flex;
+  flex-direction: row;
+  width: 100%;
+}
+
 .top-bar-container {
   display: flex;
   flex-direction: row;
   position: sticky;
   top: 0px;
-  border-bottom: 5px solid lightblue;
   z-index: 9;
   background-color: white;
   padding-right: 15px;
+  width: 100%;
+  height: 100%;
 }
 
 .side-by-side-container .MuiButton-root {

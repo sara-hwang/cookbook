@@ -1,76 +1,59 @@
 html {
-        font-size: inherit;
-    }
+  font-size: inherit;
+}
 
 body {
-    font-family: var(--font-family);
-    font-weight: normal;
-    /* background: #121212; */
-    /* color: wheat; */
-    /* padding: 1rem; */
-    -webkit-font-smoothing: antialiased;
-    -moz-osx-font-smoothing: grayscale;
+  font-family: var(--font-family);
+  font-weight: normal;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
 }
 
 .card {
-    /* background: var(--surface-card); */
-    /* padding: 2rem; */
-    /* border-radius: 10px; */
-    /* margin-bottom: 1rem; */
-      /* padding: 10px; */
   width: 100%;
   box-sizing: border-box;
   border: none;
   background: transparent;
   outline: none;
-  
+  z-index: 10;
 }
-
-/* .test-field{
-      width: 100%;
-  box-sizing: border-box;
-  font-size: inherit;
-  border: none;
-  background: transparent;
-  outline: none;
-} */
 
 .p-autocomplete-item {
-    font-size: medium;
-    padding: 2.5px 5px 2.55px 10px;
+  font-size: medium;
+  padding: 2.5px 5px 2.55px 10px;
 }
 
-.p-autocomplete-items{
-    padding: 5px 0px;
+.p-autocomplete-items {
+  padding: 5px 0px;
 }
 
-.p-autocomplete-multiple-container{
-    border: none;
-    box-shadow: none;
-    margin: 0;
-    padding: 5px 10px;
-    font-size: medium;
+.p-autocomplete-multiple-container {
+  border: none;
+  box-shadow: none;
+  margin: 0;
+  padding: 5px 10px 0px 10px;
+  font-size: medium;
 }
 
-.p-autocomplete-multiple-container:focus .p-component{
-    border: none
+.p-autocomplete-multiple-container:focus .p-component {
+  border: none;
 }
 
 .p-autocomplete-token {
-    color: var(--ThemeBlue);
-    margin: 0 0 0 -5px;
-    padding: 5px 5px
+  color: var(--ThemeBlue);
+  margin: 0 0 0 -5px;
+  padding: 5px 5px;
 }
 
 .p-autocomplete-token-label {
-    color: var(--ThemeBlue);
+  color: var(--ThemeBlue);
 }
 
 .p-autocomplete-input-token input {
-    font-size: medium;
+  font-size: medium;
 }
 
 svg {
-    width: 15px;
-    margin-left: 5px
+  width: 15px;
+  margin-left: 5px;
 }

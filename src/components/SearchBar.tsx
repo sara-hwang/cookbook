@@ -14,7 +14,7 @@ import { Recipe } from "../constants/types";
 import { setSearchTags } from "../redux/searchTags";
 import { setCurrentTab } from "../redux/tabsList";
 
-export default function Testsearchbar() {
+export default function SearchBar() {
   const dispatch = useAppDispatch();
   const [filtered, setFiltered] = useState<string[]>();
   const { recipesList } = useAppSelector(
