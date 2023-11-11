@@ -46,6 +46,7 @@ export default function App() {
             display: "flex",
             justifyContent: "flex-end",
             backgroundColor: navBarVisible ? "var(--TabBlue)" : "transparent",
+            alignItems: "center",
           }}
         >
           {navBarVisible && (
@@ -53,7 +54,7 @@ export default function App() {
               src="/logo.png"
               width="150"
               height="25"
-              style={{ margin: "7px -5px 0px 10px" }}
+              style={{ marginLeft: "10px", marginRight: "-5px" }}
             />
           )}
           <IconButton
