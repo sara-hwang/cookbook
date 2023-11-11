@@ -44,12 +44,6 @@
   flex-direction: row;
 }
 
-.side-by-side-container2 {
-  display: flex;
-  flex-direction: row;
-  width: 100%;
-}
-
 .top-bar-container {
   display: flex;
   flex-direction: row;

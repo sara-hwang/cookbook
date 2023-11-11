@@ -64,7 +64,7 @@ const RecipeDetails = () => {
                     <Typography variant="h6" marginLeft={"-30px"} key={index}>
                       {ing.element}
                     </Typography>
-                  ),
+                  )
                 )}
               </ul>
             </div>
@@ -89,13 +89,17 @@ const RecipeDetails = () => {
                 <Typography variant="h6" marginLeft={"-30px"} key={index}>
                   {step.text}
                 </Typography>
-              ),
+              )
             )}
           </ol>
         </Grid>
         <Grid item xs={12}>
           {recipe?.photo && (
-            <img src={recipe?.photo} width="400" alt={recipe.title} />
+            <img
+              src={recipe?.photo}
+              style={{ maxWidth: "100%", width: "400px" }}
+              alt={recipe.title}
+            />
           )}
         </Grid>
         <Grid item xs={12}>

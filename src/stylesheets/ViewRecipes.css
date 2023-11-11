@@ -18,6 +18,13 @@
   }
 }
 
+.recipe-grid-container .MuiGrid-container {
+  padding-top: 15px;
+  padding-bottom: 15px;
+  display: flex;
+  justify-content: center;
+}
+
 .image-container {
   position: relative;
   transition: transform 0.2s;

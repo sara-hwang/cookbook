@@ -48,7 +48,7 @@ const ViewRecipes = () => {
   }, [searchTags, recipesList]);
 
   return (
-    <Box className="containers">
+    <Box className="recipe-grid-container">
       <Grid container spacing={3}>
         {loading && (
           <div className="loading-text">
@@ -73,7 +73,7 @@ const ViewRecipes = () => {
                         pushTab({
                           label: recipe.title,
                           link: `/view/${recipe.key}`,
-                        }),
+                        })
                       );
                     }}
                   >
