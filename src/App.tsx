@@ -52,9 +52,9 @@ export default function App() {
           {navBarVisible && (
             <img
               src="/logo.png"
-              width="150"
-              height="50"
-              style={{ marginLeft: "10px", marginRight: "-5px" }}
+              width="130"
+              height="40"
+              style={{ marginLeft: "20px", marginRight: "5px" }}
             />
           )}
           <IconButton

@@ -51,7 +51,12 @@ const RecipeDetails = () => {
               <div className="h5">{recipe.title}</div>
               {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
               <p>Servings: {recipe.servings}</p>
-              <Typography variant="h6">Ingredients</Typography>
+              <Typography
+                variant="h6"
+                sx={{ color: "var(--ThemeBlue) !important" }}
+              >
+                Ingredients
+              </Typography>
               <ul>
                 {recipe?.ingredients.map((ing, index) =>
                   ing.unit ? (
@@ -75,7 +80,12 @@ const RecipeDetails = () => {
           </div>
         </Grid>
         <Grid item xs={12}>
-          <Typography variant="h6">Steps</Typography>
+          <Typography
+            variant="h6"
+            sx={{ color: "var(--ThemeBlue) !important" }}
+          >
+            Steps
+          </Typography>
           <ol>
             {recipe?.steps.map((step, index) =>
               step.stepNumber > 0 ? (
