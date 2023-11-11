@@ -33,41 +33,45 @@ export default function App() {
   return (
     <Box sx={{ width: "100%" }}>
       <Login isOpen={isOpen} setIsOpen={setIsOpen} />
-      <div className="top-bar-container">
-        <SearchBar />
-        {isAuthenticated() ? (
-          <Tooltip title="Logout">
-            <IconButton
-              disableRipple
-              sx={{ padding: "0 5px 0 0", "&:hover": { color: "red" } }}
-              onClick={signOut}
-            >
-              <LogoutIcon />
-            </IconButton>
-          </Tooltip>
-        ) : (
-          <Tooltip title="Login">
-            <IconButton
-              disableRipple
-              sx={{ "&:hover": { color: "var(--ThemeBlue)" } }}
-              onClick={() => setIsOpen(true)}
-            >
-              <LoginIcon />
-            </IconButton>
-          </Tooltip>
-        )}
-      </div>
       <div className="side-by-side-container">
-        <div>
+        <div style={{ position: "sticky", top: "0px", height: 40 }}>
           <NavBar />
         </div>
-        <Routes>
-          <Route path="/" element={elements[0]} />
-          <Route path="/view" element={elements[0]} />
-          <Route path="/view/:id" element={elements[1]} />
-          <Route path="/add" element={elements[2]} />
-          <Route path="/add/:id" element={elements[2]} />
-        </Routes>
+        <div>
+          <div className="top-bar-container">
+            <SearchBar />
+            {isAuthenticated() ? (
+              <Tooltip title="Logout">
+                <IconButton
+                  disableRipple
+                  sx={{ padding: "0 5px 0 0", "&:hover": { color: "red" } }}
+                  onClick={signOut}
+                >
+                  <LogoutIcon />
+                </IconButton>
+              </Tooltip>
+            ) : (
+              <Tooltip title="Login">
+                <IconButton
+                  disableRipple
+                  sx={{ "&:hover": { color: "var(--ThemeBlue)" } }}
+                  onClick={() => setIsOpen(true)}
+                >
+                  <LoginIcon />
+                </IconButton>
+              </Tooltip>
+            )}
+          </div>
+          <div>
+            <Routes>
+              <Route path="/" element={elements[0]} />
+              <Route path="/view" element={elements[0]} />
+              <Route path="/view/:id" element={elements[1]} />
+              <Route path="/add" element={elements[2]} />
+              <Route path="/add/:id" element={elements[2]} />
+            </Routes>
+          </div>
+        </div>
       </div>
     </Box>
   );

@@ -10,8 +10,6 @@
 .nav-tabs {
   border-top: 2.5px solid white;
   width: 200px;
-  position: sticky;
-  top: 48px
 }
 
 .nav-tabs .MuiTab-root {
