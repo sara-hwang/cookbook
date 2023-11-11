@@ -53,7 +53,7 @@ export default function App() {
             <img
               src="/logo.png"
               width="150"
-              height="25"
+              height="50"
               style={{ marginLeft: "10px", marginRight: "-5px" }}
             />
           )}
