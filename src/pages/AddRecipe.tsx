@@ -75,12 +75,12 @@ const AddRecipe = () => {
           .min(0, "Must be greater than 0"),
         // unit: yup.string().required("Required"),
         element: yup.string().required("Required"),
-      })
+      }),
     ),
     steps: yup.array().of(
       yup.object().shape({
         text: yup.string().required("Required"),
-      })
+      }),
     ),
   });
 
@@ -398,7 +398,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}

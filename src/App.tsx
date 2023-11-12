@@ -23,9 +23,28 @@ export default function App() {
   const [isLoginOpen, setIsLoginOpen] = useState(false);
   const [isGroceryOpen, setIsGroceryOpen] = useState(false);
   const [navBarVisible, setNavBarVisible] = useState(false);
+  const [topPosition, setTopPosition] = useState(0);
   useEffect(() => {
     setNavBarVisible(window.innerWidth > 600);
   }, [pathname]);
+
+  useEffect(() => {
+    setTopPosition(
+      document.getElementById("search-bar")?.getBoundingClientRect().height ??
+        50
+    );
+  }, []);
+
+  const searchBarElement = document.getElementById("search-bar");
+  if (searchBarElement) {
+    const resizeObserver = new ResizeObserver(() => {
+      setTopPosition(
+        document.getElementById("search-bar")?.getBoundingClientRect().height ??
+          50
+      );
+    });
+    resizeObserver.observe(searchBarElement);
+  }
 
   const elements = [
     <>
@@ -124,12 +143,8 @@ export default function App() {
         <div
           style={{
             position: "sticky",
-            top:
-              document.getElementById("search-bar")?.getBoundingClientRect()
-                .height ?? "50",
-            height:
-              document.getElementById("search-bar")?.getBoundingClientRect()
-                .height ?? "50",
+            top: topPosition,
+            height: topPosition,
           }}
         >
           <NavBar navBarVisible={navBarVisible} />
@@ -138,9 +153,7 @@ export default function App() {
           <div
             style={{
               position: "sticky",
-              top:
-                document.getElementById("search-bar")?.getBoundingClientRect()
-                  .height ?? "50",
+              top: topPosition,
               zIndex: 1,
               borderTop: "5px solid lightblue",
             }}

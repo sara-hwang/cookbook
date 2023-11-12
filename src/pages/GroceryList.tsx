@@ -64,7 +64,7 @@ export const GroceryList = ({ isGroceryOpen, setIsGroceryOpen }: IProps) => {
                     {groceryItem.unit}&nbsp;
                     {groceryItem.element}
                   </Grid>
-                )
+                ),
             )}
           </>
           {/* <Grid item>
