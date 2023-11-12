@@ -115,7 +115,7 @@ const AddRecipe = () => {
     alert("Draft saved!");
   };
 
-  const uploadToImgur = (
+  const uploadToImgur = async (
     setFieldValue: (
       field: string,
       value: string,
@@ -163,7 +163,7 @@ const AddRecipe = () => {
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
         let response;
-        uploadToImgur(setFieldValue);
+        await uploadToImgur(setFieldValue);
         console.log(data["photo"]);
         if (id === undefined) {
           response = await addRecipe(data);
