@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { Recipe } from "./constants/types";
+import { Ingredient, Recipe } from "./constants/types";
 
 const URI = process.env.REACT_APP_SERVER_URI;
 const AUTH = "Client-ID " + process.env.REACT_APP_IMGUR_CLIENT_ID;
@@ -10,6 +10,26 @@ export const authenticate = async (data: {
 }) => {
   try {
     const response = await axios.post(`${URI}/authenticate`, data);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
+export const getGroceryList = async (user: string) => {
+  try {
+    const response = await axios.get(`${URI}/user/${user}/grocery`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
+export const appendGroceryList = async (user: string, item: Ingredient) => {
+  try {
+    const response = await axios.put(`${URI}/user/${user}/grocery`, item);
     return response;
   } catch (e) {
     const error = e as AxiosError;

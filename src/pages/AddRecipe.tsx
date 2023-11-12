@@ -149,7 +149,6 @@ const AddRecipe = () => {
 
         const photoResponse = await upload(formData);
         if (photoResponse && photoResponse.status === 200) {
-          console.log(photoResponse.data.data.link);
           return photoResponse.data.data.link;
         } else {
           alert("Could not upload photo.");

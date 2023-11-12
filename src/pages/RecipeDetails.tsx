@@ -1,26 +1,22 @@
-import {
-  Box,
-  Button,
-  Grid,
-  IconButton,
-  Tooltip,
-  Typography,
-} from "@mui/material";
-import { EmptyRecipe, Recipe, TabItem } from "../constants/types";
+import { Box, Button, Grid, Tooltip, Typography } from "@mui/material";
+import { EmptyRecipe, Ingredient, Recipe, TabItem } from "../constants/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { pushTab, setCurrentTab } from "../redux/tabsList";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import EditIcon from "@mui/icons-material/Edit";
-import ChecklistIcon from "@mui/icons-material/Checklist";
 import { setSearchTags } from "../redux/searchTags";
 import ChipDisplay from "../components/ChipDisplay";
 import "../stylesheets/RecipeDetails.css";
 import { RootState } from "../redux/store";
 import { getRecipeDetails } from "../helpers";
+import { appendGroceryList } from "../api";
+import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
+  const auth = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
   const navigate = useNavigate();
@@ -50,6 +46,12 @@ const RecipeDetails = () => {
     }
   }, [recipe]);
 
+  const addToGrocery = (item: Ingredient) => {
+    if (auth()?.username && item.unit) {
+      appendGroceryList(auth()?.username, item);
+    }
+  };
+
   return (
     <Box className="containers">
       <Grid container rowSpacing={2}>
@@ -64,25 +66,30 @@ const RecipeDetails = () => {
                 sx={{ color: "var(--ThemeBlue) !important" }}
               >
                 Ingredients
-                <Tooltip
-                  title="Add ingredients to grocery list"
-                  sx={{
-                    padding: 0,
-                    "&:hover": { color: "var(--ThemeBlue)" },
-                  }}
-                >
-                  <IconButton disableRipple>
-                    <ChecklistIcon fontSize="large" />
-                  </IconButton>
-                </Tooltip>
               </Typography>
               <ul>
                 {recipe?.ingredients.map((ing, index) =>
                   ing.unit ? (
                     <Fragment key={index}>
-                      <li>
-                        {ing.amount} {ing.unit} {ing.element}
-                      </li>
+                      <Tooltip
+                        arrow
+                        disableInteractive
+                        placement="right"
+                        title={
+                          isAuthenticated()
+                            ? `Click to add ${ing.element} to grocery list`
+                            : "Log in to add to grocery list"
+                        }
+                      >
+                        <li
+                          onClick={() => {
+                            isAuthenticated() && addToGrocery(ing);
+                          }}
+                          style={{ width: "fit-content" }}
+                        >
+                          {ing.amount} {ing.unit} {ing.element}
+                        </li>
+                      </Tooltip>
                     </Fragment>
                   ) : (
                     <Typography variant="h6" marginLeft={"-30px"} key={index}>

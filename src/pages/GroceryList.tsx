@@ -6,30 +6,35 @@ import {
   Grid,
   IconButton,
 } from "@mui/material";
-import * as yup from "yup";
 import { useEffect, useState } from "react";
-import { useSignIn } from "react-auth-kit";
+import { useAuthUser } from "react-auth-kit";
 import { useLocation, useNavigate } from "react-router-dom";
 import CloseIcon from "@mui/icons-material/Close";
+import { getGroceryList } from "../api";
+import { Ingredient } from "../constants/types";
 interface IProps {
   isGroceryOpen: boolean;
   setIsGroceryOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
 export const GroceryList = ({ isGroceryOpen, setIsGroceryOpen }: IProps) => {
-  const signIn = useSignIn();
-  const [errorMessage, setErrorMessage] = useState("");
-  const [showPassword, setShowPassword] = useState(false);
+  const auth = useAuthUser();
   const navigate = useNavigate();
   const { pathname } = useLocation();
-  useEffect(() => {
-    setErrorMessage("");
-  }, [isGroceryOpen]);
+  const [groceryList, setGroceryList] = useState<Ingredient[]>([]);
 
-  const validationSchema = yup.object({
-    username: yup.string().required().max(50),
-    password: yup.string().required().max(50),
-  });
+  useEffect(() => {
+    const initGroceryList = async () => {
+      const response = await getGroceryList(username);
+      if (response && response.status === 200) {
+        setGroceryList(response.data.grocery);
+      } else {
+        alert("Groceries returned " + response?.data + ", server may be down.");
+      }
+    };
+    const username = auth()?.username;
+    username && initGroceryList();
+  }, [isGroceryOpen]);
 
   return (
     <Dialog open={isGroceryOpen}>
@@ -49,21 +54,24 @@ export const GroceryList = ({ isGroceryOpen, setIsGroceryOpen }: IProps) => {
         </IconButton>
       </DialogTitle>
       <DialogContent>
-        <Grid
-          container
-          direction="column"
-          justifyContent="flex-start"
-          alignItems="center"
-          spacing={2}
-        >
-          <Grid item sx={{ marginTop: "10px", width: "100%" }}></Grid>
-          <Grid item xs={12}></Grid>
-
-          <Grid item>
+        <Grid container spacing={2}>
+          <>
+            {groceryList.map(
+              (groceryItem, index) =>
+                groceryItem.unit && (
+                  <Grid item key={index} xs={12}>
+                    {groceryItem.amount}&nbsp;
+                    {groceryItem.unit}&nbsp;
+                    {groceryItem.element}
+                  </Grid>
+                )
+            )}
+          </>
+          {/* <Grid item>
             <Button variant="contained" type="submit">
               Send
             </Button>
-          </Grid>
+          </Grid> */}
         </Grid>
       </DialogContent>
     </Dialog>

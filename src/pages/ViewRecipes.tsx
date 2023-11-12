@@ -7,7 +7,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { getRecipesList } from "../helpers";
 import { setRecipesList } from "../redux/recipesList";
-import { pushTab, setCurrentTab } from "../redux/tabsList";
+import { pushTab } from "../redux/tabsList";
 
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
@@ -15,10 +15,7 @@ const ViewRecipes = () => {
   const [loading, setLoading] = useState(false);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
-  );
-  const { tabsList, currentTab } = useAppSelector(
-    (state: RootState) => state.tabsList,
+    (state: RootState) => state.recipesList
   );
 
   useEffect(() => {
@@ -40,10 +37,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag),
-              ),
+                recipe.ingredients.map((ing) => ing.element).includes(tag)
+              )
           )
-        : recipesList,
+        : recipesList
     );
   }, [searchTags, recipesList]);
 

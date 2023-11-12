@@ -74,7 +74,9 @@ export default function App() {
             <MenuIcon fontSize="large" />
           </IconButton>
         </div>
-        <SearchBar />
+        <div id="search-bar" style={{ width: "100%" }}>
+          <SearchBar />
+        </div>
         <div className="side-by-side-container">
           <Tooltip title="Grocery List">
             <IconButton
@@ -83,7 +85,11 @@ export default function App() {
                 paddingLeft: 0,
                 "&:hover": { color: "var(--ThemeBlue)" },
               }}
-              onClick={() => setIsGroceryOpen(true)}
+              onClick={() => {
+                isAuthenticated()
+                  ? setIsGroceryOpen(true)
+                  : setIsLoginOpen(true);
+              }}
             >
               <ReceiptLongIcon fontSize="large" />
             </IconButton>
@@ -115,14 +121,26 @@ export default function App() {
         </div>
       </div>
       <div className="side-by-side-container">
-        <div style={{ position: "sticky", top: "40px", height: 40 }}>
+        <div
+          style={{
+            position: "sticky",
+            top:
+              document.getElementById("search-bar")?.getBoundingClientRect()
+                .height ?? "50",
+            height:
+              document.getElementById("search-bar")?.getBoundingClientRect()
+                .height ?? "50",
+          }}
+        >
           <NavBar navBarVisible={navBarVisible} />
         </div>
         <div style={{ width: "100%" }}>
           <div
             style={{
               position: "sticky",
-              top: 40,
+              top:
+                document.getElementById("search-bar")?.getBoundingClientRect()
+                  .height ?? "50",
               zIndex: 1,
               borderTop: "5px solid lightblue",
             }}

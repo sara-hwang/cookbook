@@ -45,6 +45,36 @@ app.post("/authenticate", async (req, res) => {
   }
 });
 
+app.get("/user/:id/grocery", async (req, res) => {
+  try {
+    let response = await UserModel.findOne({ username: req.params.id });
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: `Error getting grocery list for user ${req.params.id}`,
+    });
+  }
+});
+
+app.put("/user/:id/grocery", async (req, res) => {
+  const obj = req.body;
+  try {
+    let original = await UserModel.findOne({ username: req.params.id });
+    let response = await UserModel.updateOne(
+      { username: req.params.id },
+      {
+        grocery: [...original.grocery, obj],
+      }
+    );
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
+});
+
 app.get("/recipes/getAll", async (req, res) => {
   try {
     let response = await RecipeModel.find();
