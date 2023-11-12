@@ -115,13 +115,7 @@ const AddRecipe = () => {
     alert("Draft saved!");
   };
 
-  const uploadToImgur = async (
-    setFieldValue: (
-      field: string,
-      value: string,
-      shouldValidate?: boolean | undefined
-    ) => Promise<void | FormikErrors<Recipe>>
-  ) => {
+  const uploadToImgur = async () => {
     if (!selectedImage) {
       return null;
     }
@@ -137,11 +131,9 @@ const AddRecipe = () => {
 
     try {
       const img = await loadImage(URL.createObjectURL(selectedImage));
-
       const aspectRatio = img.width / img.height;
-
       const canvas = document.createElement("canvas");
-      canvas.width = Math.min(img.width, 800);
+      canvas.width = Math.min(img.width, 600);
       canvas.height = canvas.width / aspectRatio;
 
       const ctx = canvas.getContext("2d");
@@ -156,7 +148,6 @@ const AddRecipe = () => {
         formData.append("image", blob);
 
         const photoResponse = await upload(formData);
-
         if (photoResponse && photoResponse.status === 200) {
           console.log(photoResponse.data.data.link);
           return photoResponse.data.data.link;
@@ -175,12 +166,11 @@ const AddRecipe = () => {
       initialValues={initialValues}
       enableReinitialize={true}
       validationSchema={validationSchema}
-      onSubmit={async (data: Recipe, { resetForm, setFieldValue }) => {
+      onSubmit={async (data: Recipe, { resetForm }) => {
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
         let response;
-        const imgUrl = await uploadToImgur(setFieldValue);
-        console.log(imgUrl);
+        const imgUrl = await uploadToImgur();
         if (imgUrl) {
           data["photo"] = imgUrl;
         }
