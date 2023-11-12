@@ -115,6 +115,36 @@ const AddRecipe = () => {
     alert("Draft saved!");
   };
 
+  const uploadToImgur = () => {
+    if (!selectedImage) {
+      return null;
+    }
+    const img = new Image();
+    img.src = URL.createObjectURL(selectedImage);
+    const aspectRatio = img.width / img.height;
+
+    const canvas = document.createElement("canvas");
+    canvas.width = Math.min(img.width, 800);
+    canvas.height = canvas.width / aspectRatio;
+
+    const ctx = canvas.getContext("2d");
+    ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+    const resizedBlob = canvas.toBlob(async (blob) => {
+      const formData = new FormData();
+      if (blob) {
+        formData.append("image", blob);
+      }
+      const photoResponse = await upload(formData);
+      if (photoResponse && photoResponse.status == 200) {
+        return photoResponse.data.data.link;
+      } else {
+        alert("Could not upload photo.");
+        return null;
+      }
+    });
+  };
+
   return (
     <Formik
       initialValues={initialValues}
@@ -124,16 +154,9 @@ const AddRecipe = () => {
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
         let response;
-        if (selectedImage) {
-          const formData = new FormData();
-          formData.append("image", selectedImage);
-          const photoResponse = await upload(formData);
-          if (photoResponse && photoResponse.status == 200) {
-            data["photo"] = photoResponse.data.data.link;
-          } else {
-            alert("Could not upload photo.");
-            return;
-          }
+        const imgUrl = uploadToImgur();
+        if (imgUrl != null) {
+          data["photo"] = imgUrl;
         }
         if (id === undefined) {
           response = await addRecipe(data);
@@ -360,7 +383,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
