@@ -15,9 +15,13 @@ import { useSignOut } from "react-auth-kit";
 import MenuIcon from "@mui/icons-material/Menu";
 import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
 import GroceryList from "./pages/GroceryList";
+import { useAppDispatch } from "./redux/hooks";
+import { setCurrentTab } from "./redux/tabsList";
+import { setSearchTags } from "./redux/searchTags";
 
 export default function App() {
   const { pathname } = useLocation();
+  const dispatch = useAppDispatch();
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
@@ -82,7 +86,11 @@ export default function App() {
               src="/logo.png"
               width="150"
               height="50"
-              style={{ marginLeft: "5px" }}
+              style={{ marginLeft: "5px", cursor: "pointer" }}
+              onClick={() => {
+                dispatch(setCurrentTab(0));
+                dispatch(setSearchTags([]));
+              }}
             />
           )}
           <IconButton
