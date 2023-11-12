@@ -125,8 +125,19 @@ const AddRecipe = () => {
     if (!selectedImage) {
       return null;
     }
-    const img = new Image();
-    img.onload = function () {
+
+    const loadImage = (src: string): Promise<HTMLImageElement> => {
+      return new Promise((resolve, reject) => {
+        const img = new Image();
+        img.onload = () => resolve(img);
+        img.onerror = (error) => reject(error);
+        img.src = src;
+      });
+    };
+
+    try {
+      const img = await loadImage(URL.createObjectURL(selectedImage));
+
       const aspectRatio = img.width / img.height;
 
       const canvas = document.createElement("canvas");
@@ -136,22 +147,27 @@ const AddRecipe = () => {
       const ctx = canvas.getContext("2d");
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
 
-      canvas.toBlob(async (blob) => {
+      const blob = await new Promise<Blob | null>((resolve) => {
+        canvas.toBlob((result) => resolve(result));
+      });
+
+      if (blob) {
         const formData = new FormData();
-        if (blob) {
-          formData.append("image", blob);
-        }
+        formData.append("image", blob);
+
         const photoResponse = await upload(formData);
-        if (photoResponse && photoResponse.status == 200) {
+
+        if (photoResponse && photoResponse.status === 200) {
           console.log(photoResponse.data.data.link);
-          setFieldValue("photo", photoResponse.data.data.link);
+          await setFieldValue("photo", photoResponse.data.data.link);
         } else {
           alert("Could not upload photo.");
           return null;
         }
-      });
-    };
-    img.src = URL.createObjectURL(selectedImage);
+      }
+    } catch (error) {
+      console.error("Error during image processing:", error);
+    }
   };
 
   return (
