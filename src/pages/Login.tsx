@@ -18,11 +18,11 @@ import CloseIcon from "@mui/icons-material/Close";
 import VisibilityIcon from "@mui/icons-material/Visibility";
 import VisibilityOffIcon from "@mui/icons-material/VisibilityOff";
 interface IProps {
-  isOpen: boolean;
-  setIsOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  isLoginOpen: boolean;
+  setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Login = ({ isOpen, setIsOpen }: IProps) => {
+export const Login = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
   const signIn = useSignIn();
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -30,7 +30,7 @@ export const Login = ({ isOpen, setIsOpen }: IProps) => {
   const { pathname } = useLocation();
   useEffect(() => {
     setErrorMessage("");
-  }, [isOpen]);
+  }, [isLoginOpen]);
 
   const validationSchema = yup.object({
     username: yup.string().required().max(50),
@@ -38,13 +38,13 @@ export const Login = ({ isOpen, setIsOpen }: IProps) => {
   });
 
   return (
-    <Dialog open={isOpen}>
+    <Dialog open={isLoginOpen}>
       <DialogTitle>
         Login
         <IconButton
           disableRipple
           onClick={() => {
-            setIsOpen(false);
+            setIsLoginOpen(false);
             if (pathname.startsWith("/add")) {
               navigate(-1);
             }
@@ -72,7 +72,7 @@ export const Login = ({ isOpen, setIsOpen }: IProps) => {
                 authState: response.data.authUserState,
               })
             ) {
-              setIsOpen(false);
+              setIsLoginOpen(false);
             } else {
               setErrorMessage(response?.data.message);
             }

@@ -13,12 +13,15 @@ import { useIsAuthenticated } from "react-auth-kit";
 import { useEffect, useState } from "react";
 import { useSignOut } from "react-auth-kit";
 import MenuIcon from "@mui/icons-material/Menu";
+import ReceiptLongIcon from "@mui/icons-material/ReceiptLong";
+import GroceryList from "./pages/GroceryList";
 
 export default function App() {
   const { pathname } = useLocation();
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
-  const [isOpen, setIsOpen] = useState(false);
+  const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isGroceryOpen, setIsGroceryOpen] = useState(false);
   const [navBarVisible, setNavBarVisible] = useState(false);
   useEffect(() => {
     setNavBarVisible(window.innerWidth > 600);
@@ -33,13 +36,19 @@ export default function App() {
     </>,
     <>
       <AddRecipe />
-      {!isAuthenticated() && <Login isOpen={true} setIsOpen={setIsOpen} />}
+      {!isAuthenticated() && (
+        <Login isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
+      )}
     </>,
   ];
 
   return (
     <Box sx={{ width: "100%" }}>
-      <Login isOpen={isOpen} setIsOpen={setIsOpen} />
+      <Login isLoginOpen={isLoginOpen} setIsLoginOpen={setIsLoginOpen} />
+      <GroceryList
+        isGroceryOpen={isGroceryOpen}
+        setIsGroceryOpen={setIsGroceryOpen}
+      />
       <div className="top-bar-container">
         <div
           style={{
@@ -52,40 +61,58 @@ export default function App() {
           {navBarVisible && (
             <img
               src="/logo.png"
-              width="130"
-              height="40"
-              style={{ marginLeft: "20px", marginRight: "5px" }}
+              width="150"
+              height="50"
+              style={{ marginLeft: "5px" }}
             />
           )}
           <IconButton
             disableRipple
+            style={{ padding: "0 5px 0 0" }}
             onClick={() => setNavBarVisible(!navBarVisible)}
           >
-            <MenuIcon />
+            <MenuIcon fontSize="large" />
           </IconButton>
         </div>
         <SearchBar />
-        {isAuthenticated() ? (
-          <Tooltip title="Logout">
+        <div className="side-by-side-container">
+          <Tooltip title="Grocery List">
             <IconButton
               disableRipple
-              sx={{ padding: "0 5px 0 0", "&:hover": { color: "red" } }}
-              onClick={signOut}
+              sx={{
+                paddingLeft: 0,
+                "&:hover": { color: "var(--ThemeBlue)" },
+              }}
+              onClick={() => setIsGroceryOpen(true)}
             >
-              <LogoutIcon />
+              <ReceiptLongIcon fontSize="large" />
             </IconButton>
           </Tooltip>
-        ) : (
-          <Tooltip title="Login">
-            <IconButton
-              disableRipple
-              sx={{ "&:hover": { color: "var(--ThemeBlue)" } }}
-              onClick={() => setIsOpen(true)}
-            >
-              <LoginIcon />
-            </IconButton>
-          </Tooltip>
-        )}
+          {isAuthenticated() ? (
+            <Tooltip title="Logout">
+              <IconButton
+                disableRipple
+                sx={{ padding: "0 5px 0 0", "&:hover": { color: "red" } }}
+                onClick={signOut}
+              >
+                <LogoutIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+          ) : (
+            <Tooltip title="Login">
+              <IconButton
+                disableRipple
+                sx={{
+                  padding: "0 5px 0 0",
+                  "&:hover": { color: "var(--ThemeBlue)" },
+                }}
+                onClick={() => setIsLoginOpen(true)}
+              >
+                <LoginIcon fontSize="large" />
+              </IconButton>
+            </Tooltip>
+          )}
+        </div>
       </div>
       <div className="side-by-side-container">
         <div style={{ position: "sticky", top: "40px", height: 40 }}>

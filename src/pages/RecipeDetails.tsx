@@ -1,10 +1,18 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import {
+  Box,
+  Button,
+  Grid,
+  IconButton,
+  Tooltip,
+  Typography,
+} from "@mui/material";
 import { EmptyRecipe, Recipe, TabItem } from "../constants/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
 import { pushTab, setCurrentTab } from "../redux/tabsList";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import EditIcon from "@mui/icons-material/Edit";
+import ChecklistIcon from "@mui/icons-material/Checklist";
 import { setSearchTags } from "../redux/searchTags";
 import ChipDisplay from "../components/ChipDisplay";
 import "../stylesheets/RecipeDetails.css";
@@ -17,7 +25,7 @@ const RecipeDetails = () => {
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
 
   useEffect(() => {
@@ -26,7 +34,7 @@ const RecipeDetails = () => {
         getRecipeDetails(id, setRecipe);
       } else {
         setRecipe(
-          recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe,
+          recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe
         );
       }
     }
@@ -56,6 +64,17 @@ const RecipeDetails = () => {
                 sx={{ color: "var(--ThemeBlue) !important" }}
               >
                 Ingredients
+                <Tooltip
+                  title="Add ingredients to grocery list"
+                  sx={{
+                    padding: 0,
+                    "&:hover": { color: "var(--ThemeBlue)" },
+                  }}
+                >
+                  <IconButton disableRipple>
+                    <ChecklistIcon fontSize="large" />
+                  </IconButton>
+                </Tooltip>
               </Typography>
               <ul>
                 {recipe?.ingredients.map((ing, index) =>
