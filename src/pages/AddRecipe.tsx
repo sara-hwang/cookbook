@@ -75,12 +75,12 @@ const AddRecipe = () => {
           .min(0, "Must be greater than 0"),
         // unit: yup.string().required("Required"),
         element: yup.string().required("Required"),
-      }),
+      })
     ),
     steps: yup.array().of(
       yup.object().shape({
         text: yup.string().required("Required"),
-      }),
+      })
     ),
   });
 
@@ -115,34 +115,42 @@ const AddRecipe = () => {
     alert("Draft saved!");
   };
 
-  const uploadToImgur = () => {
+  const uploadToImgur = (
+    setFieldValue: (
+      field: string,
+      value: string,
+      shouldValidate?: boolean | undefined
+    ) => Promise<void | FormikErrors<Recipe>>
+  ) => {
     if (!selectedImage) {
       return null;
     }
     const img = new Image();
+    img.onload = function () {
+      const aspectRatio = img.width / img.height;
+
+      const canvas = document.createElement("canvas");
+      canvas.width = Math.min(img.width, 800);
+      canvas.height = canvas.width / aspectRatio;
+
+      const ctx = canvas.getContext("2d");
+      ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
+
+      canvas.toBlob(async (blob) => {
+        const formData = new FormData();
+        if (blob) {
+          formData.append("image", blob);
+        }
+        const photoResponse = await upload(formData);
+        if (photoResponse && photoResponse.status == 200) {
+          setFieldValue("photo", photoResponse.data.data.link);
+        } else {
+          alert("Could not upload photo.");
+          return null;
+        }
+      });
+    };
     img.src = URL.createObjectURL(selectedImage);
-    const aspectRatio = img.width / img.height;
-
-    const canvas = document.createElement("canvas");
-    canvas.width = Math.min(img.width, 800);
-    canvas.height = canvas.width / aspectRatio;
-
-    const ctx = canvas.getContext("2d");
-    ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
-
-    const resizedBlob = canvas.toBlob(async (blob) => {
-      const formData = new FormData();
-      if (blob) {
-        formData.append("image", blob);
-      }
-      const photoResponse = await upload(formData);
-      if (photoResponse && photoResponse.status == 200) {
-        return photoResponse.data.data.link;
-      } else {
-        alert("Could not upload photo.");
-        return null;
-      }
-    });
   };
 
   return (
@@ -150,14 +158,11 @@ const AddRecipe = () => {
       initialValues={initialValues}
       enableReinitialize={true}
       validationSchema={validationSchema}
-      onSubmit={async (data: Recipe, { resetForm }) => {
+      onSubmit={async (data: Recipe, { resetForm, setFieldValue }) => {
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
         let response;
-        const imgUrl = uploadToImgur();
-        if (imgUrl != null) {
-          data["photo"] = imgUrl;
-        }
+        uploadToImgur(setFieldValue);
         if (id === undefined) {
           response = await addRecipe(data);
         } else {
