@@ -159,7 +159,7 @@ const AddRecipe = () => {
 
         if (photoResponse && photoResponse.status === 200) {
           console.log(photoResponse.data.data.link);
-          await setFieldValue("photo", photoResponse.data.data.link);
+          return photoResponse.data.data.link;
         } else {
           alert("Could not upload photo.");
           return null;
@@ -179,8 +179,11 @@ const AddRecipe = () => {
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
         let response;
-        await uploadToImgur(setFieldValue);
-        console.log(data["photo"]);
+        const imgUrl = await uploadToImgur(setFieldValue);
+        console.log(imgUrl);
+        if (imgUrl) {
+          data["photo"] = imgUrl;
+        }
         if (id === undefined) {
           response = await addRecipe(data);
         } else {
