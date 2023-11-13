@@ -117,7 +117,7 @@ const RecipeDetails = () => {
                   }}
                   onClick={() => {
                     groceryMode && isAuthenticated() && addToGrocery();
-                    setGroceryMode(!groceryMode);
+                    isAuthenticated() && setGroceryMode(!groceryMode);
                   }}
                 >
                   {groceryMode ? (
