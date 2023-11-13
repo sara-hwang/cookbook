@@ -64,6 +64,10 @@ const RecipeDetails = () => {
     setServings(recipe.servings);
   }, [recipe]);
 
+  const calculateAmount = (num: number) => {
+    return +((num * servings) / recipe.servings).toFixed(2);
+  };
+
   const addToGrocery = async () => {
     if (!auth()?.username) {
       return;
@@ -77,10 +81,7 @@ const RecipeDetails = () => {
         for (const [index, _] of formData.entries()) {
           items.push({
             ...recipe.ingredients[+index],
-            amount: +(
-              (recipe.ingredients[+index].amount * servings) /
-              recipe.servings
-            ).toFixed(2),
+            amount: calculateAmount(recipe.ingredients[+index].amount),
           });
         }
         updateGroceryList(auth()?.username, items);
@@ -197,7 +198,7 @@ const RecipeDetails = () => {
                       htmlFor={`ingredient-checkbox-${index}`}
                       style={{ fontSize: "large", textDecoration: "none" }}
                     >
-                      {+((ing.amount * servings) / recipe.servings).toFixed(2)}
+                      {calculateAmount(ing.amount)}
                       &nbsp;
                       {ing.unit}
                       &nbsp;
@@ -217,7 +218,7 @@ const RecipeDetails = () => {
                 ing.unit ? (
                   <Fragment key={index}>
                     <li style={{ width: "fit-content" }}>
-                      {+((ing.amount * servings) / recipe.servings).toFixed(2)}
+                      {calculateAmount(ing.amount)}
                       &nbsp;
                       {ing.unit}
                       &nbsp;
