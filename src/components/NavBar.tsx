@@ -6,6 +6,8 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { popTab, setCurrentTab } from "../redux/tabsList";
+import MenuBookIcon from "@mui/icons-material/MenuBook";
+import PostAddIcon from "@mui/icons-material/PostAdd";
 
 interface IProps {
   navBarVisible: boolean;
@@ -14,7 +16,7 @@ interface IProps {
 export default function NavBar({ navBarVisible }: IProps) {
   const { pathname } = useLocation();
   const { tabsList, currentTab } = useAppSelector(
-    (state: RootState) => state.tabsList,
+    (state: RootState) => state.tabsList
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
@@ -54,7 +56,21 @@ export default function NavBar({ navBarVisible }: IProps) {
                   key={key}
                   label={
                     <div className="side-by-side-container">
-                      <span className="nav-tab-label">{tab.label}</span>
+                      <span className="nav-tab-label">
+                        {tab.link == "/view" && (
+                          <MenuBookIcon
+                            fontSize="small"
+                            sx={{ marginRight: 1 }}
+                          />
+                        )}
+                        {tab.link == "/add" && (
+                          <PostAddIcon
+                            fontSize="small"
+                            sx={{ marginRight: 1 }}
+                          />
+                        )}
+                        {tab.label}
+                      </span>
                       {tab.link != "/view" && tab.link != "/add" && (
                         <div className="nav-tab-close-button">
                           <IconButton

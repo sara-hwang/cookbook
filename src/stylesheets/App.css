@@ -22,9 +22,10 @@
 }
 
 .nav-tab-label {
-    padding: 10px 15px 10px 0;
-    display: flex;
+  padding: 10px 15px 10px 0;
+  display: flex;
   justify-content: center;
+  align-items: center;
   width: 100%;
 }
 
