@@ -134,20 +134,18 @@ const RecipeDetails = () => {
                 </IconButton>
               </Tooltip>
               {groceryMode && (
-                <Tooltip arrow disableInteractive title="Cancel">
-                  <IconButton
-                    disableRipple
-                    sx={{
-                      padding: 0,
-                      "&:hover": { color: "red" },
-                    }}
-                    onClick={() => {
-                      setGroceryMode(!groceryMode);
-                    }}
-                  >
-                    <CancelOutlined fontSize="large" />
-                  </IconButton>
-                </Tooltip>
+                <Button
+                  color="error"
+                  variant="contained"
+                  sx={{
+                    marginLeft: "auto",
+                  }}
+                  onClick={() => {
+                    setGroceryMode(!groceryMode);
+                  }}
+                >
+                  Cancel
+                </Button>
               )}
             </Typography>
             {groceryMode ? (

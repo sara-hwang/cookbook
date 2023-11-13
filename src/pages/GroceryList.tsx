@@ -64,7 +64,7 @@ export const GroceryList = () => {
                 <input
                   type="checkbox"
                   name={"" + index}
-                  id={"checkboxId"}
+                  id={`checkbox-${index}`}
                   style={{
                     width: "20px",
                     height: "20px",
@@ -72,7 +72,7 @@ export const GroceryList = () => {
                   }}
                 />
                 <label
-                  htmlFor={"checkboxId"}
+                  htmlFor={`checkbox-${index}`}
                   style={{ fontSize: "large", textDecoration: "none" }}
                 >
                   {ing.amount} {ing.unit} {ing.element}
