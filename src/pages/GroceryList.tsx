@@ -1,25 +1,14 @@
-import {
-  Button,
-  Dialog,
-  DialogContent,
-  DialogTitle,
-  Grid,
-  IconButton,
-} from "@mui/material";
+import { Box, Button, Grid } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
-import { useLocation, useNavigate } from "react-router-dom";
-import CloseIcon from "@mui/icons-material/Close";
-import { getGroceryList } from "../api";
+import { useLocation } from "react-router-dom";
+import { getGroceryList, updateGroceryList } from "../api";
 import { Ingredient } from "../constants/types";
-interface IProps {
-  isGroceryOpen: boolean;
-  setIsGroceryOpen: React.Dispatch<React.SetStateAction<boolean>>;
-}
+import "../stylesheets/Grocery.css";
+import "../stylesheets/App.css";
 
-export const GroceryList = ({ isGroceryOpen, setIsGroceryOpen }: IProps) => {
+export const GroceryList = () => {
   const auth = useAuthUser();
-  const navigate = useNavigate();
   const { pathname } = useLocation();
   const [groceryList, setGroceryList] = useState<Ingredient[]>([]);
 
@@ -34,47 +23,87 @@ export const GroceryList = ({ isGroceryOpen, setIsGroceryOpen }: IProps) => {
     };
     const username = auth()?.username;
     username && initGroceryList();
-  }, [isGroceryOpen]);
+  }, [pathname]);
+
+  const update = async () => {
+    if (!auth()?.username) {
+      return;
+    }
+    const checkboxElement = document.getElementById("grocery-checklist");
+    if (checkboxElement) {
+      const items = groceryList.slice();
+      const formData = new FormData(checkboxElement as HTMLFormElement);
+      for (const [index, _] of formData.entries()) {
+        if (+index > -1) {
+          items.splice(+index, 1);
+        }
+      }
+      setGroceryList(items);
+      (checkboxElement as HTMLFormElement).reset();
+    }
+  };
+
+  useEffect(() => {
+    updateGroceryList(auth()?.username, groceryList);
+  }, [groceryList]);
 
   return (
-    <Dialog open={isGroceryOpen}>
-      <DialogTitle>
-        Grocery List
-        <IconButton
-          disableRipple
-          onClick={() => {
-            setIsGroceryOpen(false);
-            if (pathname.startsWith("/add")) {
-              navigate(-1);
-            }
-          }}
-          sx={{ "&:hover": { color: "red" }, float: "right", padding: "0px" }}
-        >
-          <CloseIcon />
-        </IconButton>
-      </DialogTitle>
-      <DialogContent>
-        <Grid container spacing={2}>
-          <>
-            {groceryList.map(
-              (groceryItem, index) =>
-                groceryItem.unit && (
-                  <Grid item key={index} xs={12}>
-                    {groceryItem.amount}&nbsp;
-                    {groceryItem.unit}&nbsp;
-                    {groceryItem.element}
-                  </Grid>
-                ),
-            )}
-          </>
-          {/* <Grid item>
-            <Button variant="contained" type="submit">
-              Send
-            </Button>
-          </Grid> */}
+    <Box className="containers">
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <div className="h5">Grocery List</div>
         </Grid>
-      </DialogContent>
-    </Dialog>
+        <Grid item xs={12} sx={{ padding: "0 !important" }}>
+          <form id="grocery-checklist">
+            {groceryList.map((ing, index) => (
+              <div
+                key={index}
+                className="grocery-list"
+                style={{
+                  width: "100%",
+                  margin: "8px 0px 8px 40px",
+                }}
+              >
+                <input
+                  type="checkbox"
+                  name={"" + index}
+                  id={"checkboxId"}
+                  style={{
+                    width: "20px",
+                    height: "20px",
+                    marginRight: "10px",
+                  }}
+                />
+                <label
+                  htmlFor={"checkboxId"}
+                  style={{ fontSize: "large", textDecoration: "none" }}
+                >
+                  {ing.amount} {ing.unit} {ing.element}
+                </label>
+              </div>
+            ))}
+          </form>
+        </Grid>
+        <Grid item xs={12}>
+          <div className="spaced-apart">
+            <div>
+              <Button variant="contained" onClick={update}>
+                Update
+              </Button>
+            </div>
+            <div>
+              <Button
+                variant="contained"
+                color="error"
+                onClick={() => setGroceryList([])}
+              >
+                Clear
+              </Button>
+            </div>
+          </div>
+        </Grid>
+      </Grid>
+    </Box>
   );
 };
 

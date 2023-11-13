@@ -17,7 +17,7 @@ import "../stylesheets/RecipeDetails.css";
 import "../stylesheets/App.css";
 import { RootState } from "../redux/store";
 import { getRecipeDetails } from "../helpers";
-import { appendGroceryList } from "../api";
+import { getGroceryList, updateGroceryList } from "../api";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,
@@ -60,16 +60,22 @@ const RecipeDetails = () => {
     }
   }, [recipe]);
 
-  const addToGrocery = () => {
+  const addToGrocery = async () => {
+    if (!auth()?.username) {
+      return;
+    }
     const checkboxElement = document.getElementById("grocery-checklist");
     if (checkboxElement) {
-      const items: Ingredient[] = [];
-      const formData = new FormData(checkboxElement as HTMLFormElement);
-      for (const [index, _] of formData.entries()) {
-        items.push(recipe.ingredients[+index]);
-      }
-      if (auth()?.username) {
-        appendGroceryList(auth()?.username, items);
+      const response = await getGroceryList(auth()?.username);
+      if (response && response.status === 200) {
+        const items: Ingredient[] = response.data.grocery;
+        const formData = new FormData(checkboxElement as HTMLFormElement);
+        for (const [index, _] of formData.entries()) {
+          items.push(recipe.ingredients[+index]);
+        }
+        updateGroceryList(auth()?.username, items);
+      } else {
+        alert("Could not add to groceries, server returned " + response?.data);
       }
     }
   };
@@ -133,7 +139,7 @@ const RecipeDetails = () => {
                     disableRipple
                     sx={{
                       padding: 0,
-                      "&:hover": { color: "var(--ThemeBlue)" },
+                      "&:hover": { color: "red" },
                     }}
                     onClick={() => {
                       setGroceryMode(!groceryMode);

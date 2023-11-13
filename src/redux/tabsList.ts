@@ -1,17 +1,19 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Recipe, TabItem } from "../constants/types";
-import type { RootState } from "./store";
+import { TabItem } from "../constants/types";
 
 const initialState: { tabsList: TabItem[]; currentTab: number } = {
   tabsList: [
     { label: "View Recipes", link: "/view" },
     { label: "Add Recipe", link: "/add" },
+    { label: "Grocery List", link: "/grocery" },
   ],
   currentTab:
-    window.location.pathname == "/view" || window.location.pathname == "/"
-      ? 0
-      : 1,
+    window.location.pathname == "/add"
+      ? 1
+      : window.location.pathname == "/grocery"
+      ? 2
+      : 0,
 };
 
 const findIndex = (tabs: TabItem[], newTab: TabItem) => {

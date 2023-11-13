@@ -1,13 +1,11 @@
 import React, { useEffect } from "react";
 import "../stylesheets/App.css";
 import { Box, IconButton, Tab, Tabs } from "@mui/material";
-import CloseIcon from "@mui/icons-material/Close";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { popTab, setCurrentTab } from "../redux/tabsList";
-import MenuBookIcon from "@mui/icons-material/MenuBook";
-import PostAddIcon from "@mui/icons-material/PostAdd";
+import { Close, MenuBook, PostAdd, ShoppingCart } from "@mui/icons-material";
 
 interface IProps {
   navBarVisible: boolean;
@@ -36,6 +34,8 @@ export default function NavBar({ navBarVisible }: IProps) {
       dispatch(setCurrentTab(0));
     } else if (pathname == "/add") {
       dispatch(setCurrentTab(1));
+    } else if (pathname == "/grocery") {
+      dispatch(setCurrentTab(2));
     }
   }, [pathname]);
 
@@ -58,20 +58,20 @@ export default function NavBar({ navBarVisible }: IProps) {
                     <div className="side-by-side-container">
                       <span className="nav-tab-label">
                         {tab.link == "/view" && (
-                          <MenuBookIcon
-                            fontSize="small"
-                            sx={{ marginRight: 1 }}
-                          />
+                          <MenuBook fontSize="small" sx={{ marginRight: 1 }} />
                         )}
                         {tab.link == "/add" && (
-                          <PostAddIcon
+                          <PostAdd fontSize="small" sx={{ marginRight: 1 }} />
+                        )}
+                        {tab.link == "/grocery" && (
+                          <ShoppingCart
                             fontSize="small"
                             sx={{ marginRight: 1 }}
                           />
                         )}
                         {tab.label}
                       </span>
-                      {tab.link != "/view" && tab.link != "/add" && (
+                      {!["/view", "/add", "/grocery"].includes(tab.link) && (
                         <div className="nav-tab-close-button">
                           <IconButton
                             size="small"
@@ -86,7 +86,7 @@ export default function NavBar({ navBarVisible }: IProps) {
                               dispatch(popTab(tab));
                             }}
                           >
-                            <CloseIcon fontSize="small" />
+                            <Close fontSize="small" />
                           </IconButton>
                         </div>
                       )}

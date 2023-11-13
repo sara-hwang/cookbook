@@ -45,7 +45,10 @@ export const Login = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
           disableRipple
           onClick={() => {
             setIsLoginOpen(false);
-            if (pathname.startsWith("/add")) {
+            if (
+              pathname.startsWith("/add") ||
+              pathname.startsWith("/grocery")
+            ) {
               navigate(-1);
             }
           }}

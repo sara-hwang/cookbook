@@ -31,6 +31,7 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getRecipeDetails } from "../helpers";
 import TagInput from "../components/TagInput";
 import "../stylesheets/AddRecipe.css";
+import "../stylesheets/App.css";
 import { setRecipesList } from "../redux/recipesList";
 
 const AddRecipe = () => {
@@ -526,13 +527,7 @@ const AddRecipe = () => {
                 </div>
               </Grid>
               <Grid item xs={12}>
-                <div
-                  style={{
-                    display: "flex",
-                    justifyContent: "space-between",
-                    alignItems: "center",
-                  }}
-                >
+                <div className="spaced-apart">
                   <div>
                     <Button
                       variant="contained"
