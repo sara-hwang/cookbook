@@ -3,6 +3,7 @@ import {
   Button,
   Grid,
   IconButton,
+  TextField,
   Tooltip,
   Typography,
 } from "@mui/material";
@@ -32,6 +33,7 @@ const RecipeDetails = () => {
   const isAuthenticated = useIsAuthenticated();
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
+  const [servings, setServings] = useState(recipe.servings);
   const [groceryMode, setGroceryMode] = useState(false);
   const [prepareMode, setPrepareMode] = useState(false);
   const navigate = useNavigate();
@@ -59,6 +61,7 @@ const RecipeDetails = () => {
       };
       dispatch(pushTab(newTab));
     }
+    setServings(recipe.servings);
   }, [recipe]);
 
   const addToGrocery = async () => {
@@ -72,7 +75,13 @@ const RecipeDetails = () => {
         const items: Ingredient[] = response.data.grocery;
         const formData = new FormData(checkboxElement as HTMLFormElement);
         for (const [index, _] of formData.entries()) {
-          items.push(recipe.ingredients[+index]);
+          items.push({
+            ...recipe.ingredients[+index],
+            amount: +(
+              (recipe.ingredients[+index].amount * servings) /
+              recipe.servings
+            ).toFixed(2),
+          });
         }
         updateGroceryList(auth()?.username, items);
       } else {
@@ -85,123 +94,144 @@ const RecipeDetails = () => {
     <Box className="containers">
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
-          <div>
-            <div className="side-by-side-container">
-              <div className="h5">{recipe.title}</div>
-              <Button
-                variant="contained"
-                onClick={() => navigate(`/add/${id}`)}
-              >
-                <Edit />
-                &nbsp;Edit Recipe
-              </Button>
-            </div>
-            {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
-            <p>Servings: {recipe.servings}</p>
-            <Typography
-              variant="h6"
-              className="centre-vertically"
-              sx={{
-                color: "var(--ThemeBlue) !important",
-              }}
-            >
-              Ingredients
-              <Tooltip
-                arrow
-                disableInteractive
-                title={
-                  isAuthenticated()
-                    ? groceryMode &&
-                      "Click to add selected ingredients to grocery list"
-                    : "Log in to add to grocery list"
-                }
-              >
-                <IconButton
-                  disableRipple
-                  sx={{
-                    padding: 0,
-                    "&:hover": { color: "var(--ThemeBlue)" },
-                  }}
-                  onClick={() => {
-                    groceryMode && isAuthenticated() && addToGrocery();
-                    isAuthenticated() && setGroceryMode(!groceryMode);
-                  }}
-                >
-                  {groceryMode ? (
-                    <AddShoppingCartOutlined fontSize="large" />
-                  ) : (
-                    <ShoppingCartOutlined fontSize="large" />
-                  )}
-                </IconButton>
-              </Tooltip>
-              {groceryMode && (
-                <Button
-                  color="error"
-                  variant="contained"
-                  sx={{
-                    marginLeft: "auto",
-                  }}
-                  onClick={() => {
-                    setGroceryMode(!groceryMode);
-                  }}
-                >
-                  Cancel
-                </Button>
-              )}
-            </Typography>
-            {groceryMode ? (
-              <form id="grocery-checklist">
-                {recipe?.ingredients.map((ing, index) =>
-                  ing.unit ? (
-                    <div
-                      key={index}
-                      style={{
-                        width: "100%",
-                        margin: "8px 0px 20px 10px",
-                      }}
-                    >
-                      <input
-                        type="checkbox"
-                        name={"" + index}
-                        id={`ingredient-checkbox-${index}`}
-                        style={{
-                          width: "20px",
-                          height: "20px",
-                          marginRight: "10px",
-                        }}
-                      />
-                      <label
-                        htmlFor={`ingredient-checkbox-${index}`}
-                        style={{ fontSize: "large", textDecoration: "none" }}
-                      >
-                        {ing.amount} {ing.unit} {ing.element}
-                      </label>
-                    </div>
-                  ) : (
-                    <Typography variant="h6" key={index}>
-                      {ing.element}
-                    </Typography>
-                  ),
-                )}
-              </form>
-            ) : (
-              <ul>
-                {recipe?.ingredients.map((ing, index) =>
-                  ing.unit ? (
-                    <Fragment key={index}>
-                      <li style={{ width: "fit-content" }}>
-                        {ing.amount} {ing.unit} {ing.element}
-                      </li>
-                    </Fragment>
-                  ) : (
-                    <Typography variant="h6" marginLeft={"-30px"} key={index}>
-                      {ing.element}
-                    </Typography>
-                  ),
-                )}
-              </ul>
-            )}
+          <div className="side-by-side-container">
+            <div className="h5">{recipe.title}</div>
+            <Button variant="contained" onClick={() => navigate(`/add/${id}`)}>
+              <Edit />
+              &nbsp;Edit Recipe
+            </Button>
           </div>
+          {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
+        </Grid>
+        <Grid item xs={12}>
+          <div className="side-by-side-container">
+            <p>Servings: &nbsp;</p>
+            <TextField
+              value={servings}
+              id="servings"
+              variant="outlined"
+              type="number"
+              InputProps={{
+                inputProps: { min: 1, step: 1 },
+              }}
+              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                setServings(+event.target.value);
+              }}
+            />
+          </div>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography
+            variant="h6"
+            className="centre-vertically"
+            sx={{
+              color: "var(--ThemeBlue) !important",
+            }}
+          >
+            Ingredients
+            <Tooltip
+              arrow
+              disableInteractive
+              title={
+                isAuthenticated()
+                  ? groceryMode &&
+                    "Click to add selected ingredients to grocery list"
+                  : "Log in to add to grocery list"
+              }
+            >
+              <IconButton
+                disableRipple
+                sx={{
+                  padding: 0,
+                  "&:hover": { color: "var(--ThemeBlue)" },
+                }}
+                onClick={() => {
+                  groceryMode && isAuthenticated() && addToGrocery();
+                  isAuthenticated() && setGroceryMode(!groceryMode);
+                }}
+              >
+                {groceryMode ? (
+                  <AddShoppingCartOutlined fontSize="large" />
+                ) : (
+                  <ShoppingCartOutlined fontSize="large" />
+                )}
+              </IconButton>
+            </Tooltip>
+            {groceryMode && (
+              <Button
+                color="error"
+                variant="contained"
+                sx={{
+                  marginLeft: "auto",
+                }}
+                onClick={() => {
+                  setGroceryMode(!groceryMode);
+                }}
+              >
+                Cancel
+              </Button>
+            )}
+          </Typography>
+          {groceryMode ? (
+            <form id="grocery-checklist">
+              {recipe?.ingredients.map((ing, index) =>
+                ing.unit ? (
+                  <div
+                    key={index}
+                    style={{
+                      width: "100%",
+                      margin: "8px 0px 20px 10px",
+                    }}
+                  >
+                    <input
+                      type="checkbox"
+                      name={"" + index}
+                      id={`ingredient-checkbox-${index}`}
+                      style={{
+                        width: "20px",
+                        height: "20px",
+                        marginRight: "10px",
+                      }}
+                    />
+                    <label
+                      htmlFor={`ingredient-checkbox-${index}`}
+                      style={{ fontSize: "large", textDecoration: "none" }}
+                    >
+                      {+((ing.amount * servings) / recipe.servings).toFixed(2)}
+                      &nbsp;
+                      {ing.unit}
+                      &nbsp;
+                      {ing.element}
+                    </label>
+                  </div>
+                ) : (
+                  <Typography variant="h6" key={index}>
+                    {ing.element}
+                  </Typography>
+                ),
+              )}
+            </form>
+          ) : (
+            <ul>
+              {recipe?.ingredients.map((ing, index) =>
+                ing.unit ? (
+                  <Fragment key={index}>
+                    <li style={{ width: "fit-content" }}>
+                      {+((ing.amount * servings) / recipe.servings).toFixed(2)}
+                      &nbsp;
+                      {ing.unit}
+                      &nbsp;
+                      {ing.element}
+                    </li>
+                  </Fragment>
+                ) : (
+                  <Typography variant="h6" marginLeft={"-30px"} key={index}>
+                    {ing.element}
+                  </Typography>
+                ),
+              )}
+            </ul>
+          )}
         </Grid>
         <Grid item xs={12}>
           <Typography
