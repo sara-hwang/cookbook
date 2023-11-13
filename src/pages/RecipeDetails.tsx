@@ -146,30 +146,33 @@ const RecipeDetails = () => {
             </Typography>
             {groceryMode ? (
               <form id="grocery-checklist">
-                {recipe?.ingredients.map(
-                  (ing, index) =>
-                    ing.unit && (
-                      <div
-                        key={index}
+                {recipe?.ingredients.map((ing, index) =>
+                  ing.unit ? (
+                    <div
+                      key={index}
+                      style={{
+                        width: "100%",
+                        margin: "8px 0px 8px 10px",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        name={"" + index}
                         style={{
-                          width: "100%",
-                          margin: "8px 0px 8px 10px",
+                          width: "20px",
+                          height: "20px",
+                          marginRight: "10px",
                         }}
-                      >
-                        <input
-                          type="checkbox"
-                          name={"" + index}
-                          style={{
-                            width: "20px",
-                            height: "20px",
-                            marginRight: "10px",
-                          }}
-                        />
-                        <label style={{ fontSize: "large" }}>
-                          {ing.amount} {ing.unit} {ing.element}
-                        </label>
-                      </div>
-                    ),
+                      />
+                      <label style={{ fontSize: "large" }}>
+                        {ing.amount} {ing.unit} {ing.element}
+                      </label>
+                    </div>
+                  ) : (
+                    <Typography variant="h6" key={index}>
+                      {ing.element}
+                    </Typography>
+                  ),
                 )}
               </form>
             ) : (
