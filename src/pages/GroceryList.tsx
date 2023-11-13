@@ -38,14 +38,11 @@ export const GroceryList = () => {
           items.splice(+index, 1);
         }
       }
+      updateGroceryList(auth()?.username, items);
       setGroceryList(items);
       (checkboxElement as HTMLFormElement).reset();
     }
   };
-
-  useEffect(() => {
-    updateGroceryList(auth()?.username, groceryList);
-  }, [groceryList]);
 
   return (
     <Box className="containers">
@@ -95,7 +92,10 @@ export const GroceryList = () => {
               <Button
                 variant="contained"
                 color="error"
-                onClick={() => setGroceryList([])}
+                onClick={() => {
+                  updateGroceryList(auth()?.username, []);
+                  setGroceryList([]);
+                }}
               >
                 Clear
               </Button>
