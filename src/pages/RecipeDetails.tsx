@@ -158,7 +158,7 @@ const RecipeDetails = () => {
                       key={index}
                       style={{
                         width: "100%",
-                        margin: "8px 0px 8px 10px",
+                        margin: "8px 0px 20px 10px",
                       }}
                     >
                       <input
