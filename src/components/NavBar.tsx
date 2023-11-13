@@ -16,7 +16,7 @@ interface IProps {
 export default function NavBar({ navBarVisible }: IProps) {
   const { pathname } = useLocation();
   const { tabsList, currentTab } = useAppSelector(
-    (state: RootState) => state.tabsList
+    (state: RootState) => state.tabsList,
   );
   const dispatch = useAppDispatch();
   const navigate = useNavigate();

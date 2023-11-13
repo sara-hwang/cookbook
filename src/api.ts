@@ -27,7 +27,7 @@ export const getGroceryList = async (user: string) => {
   }
 };
 
-export const appendGroceryList = async (user: string, item: Ingredient) => {
+export const appendGroceryList = async (user: string, item: Ingredient[]) => {
   try {
     const response = await axios.put(`${URI}/user/${user}/grocery`, item);
     return response;

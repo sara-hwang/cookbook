@@ -63,7 +63,7 @@ app.put("/user/:id/grocery", async (req, res) => {
     let response = await UserModel.updateOne(
       { username: req.params.id },
       {
-        grocery: [...original.grocery, obj],
+        grocery: [...original.grocery, ...obj],
       }
     );
     res.status(200);
