@@ -21,7 +21,7 @@ import { getGroceryList, updateGroceryList } from "../api";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,
-  CancelOutlined,
+  ChecklistOutlined,
   Edit,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
@@ -33,6 +33,7 @@ const RecipeDetails = () => {
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
   const [groceryMode, setGroceryMode] = useState(false);
+  const [prepareMode, setPrepareMode] = useState(false);
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList,
@@ -162,13 +163,17 @@ const RecipeDetails = () => {
                       <input
                         type="checkbox"
                         name={"" + index}
+                        id={`ingredient-checkbox-${index}`}
                         style={{
                           width: "20px",
                           height: "20px",
                           marginRight: "10px",
                         }}
                       />
-                      <label style={{ fontSize: "large" }}>
+                      <label
+                        htmlFor={`ingredient-checkbox-${index}`}
+                        style={{ fontSize: "large", textDecoration: "none" }}
+                      >
                         {ing.amount} {ing.unit} {ing.element}
                       </label>
                     </div>
@@ -204,23 +209,82 @@ const RecipeDetails = () => {
             sx={{ color: "var(--ThemeBlue) !important" }}
           >
             Steps
+            <Tooltip
+              arrow
+              disableInteractive
+              title={prepareMode ? "Exit prepare mode" : "Enter prepare mode"}
+            >
+              <IconButton
+                disableRipple
+                sx={{
+                  padding: 0,
+                  "&:hover": { color: "var(--ThemeBlue)" },
+                }}
+                onClick={() => {
+                  setPrepareMode(!prepareMode);
+                }}
+              >
+                <ChecklistOutlined fontSize="large" />
+              </IconButton>
+            </Tooltip>
           </Typography>
-          <ol>
-            {recipe?.steps.map((step, index) =>
-              step.stepNumber > 0 ? (
-                <Fragment key={index}>
-                  <li>
-                    {step.stepNumber > 0 ?? null}
-                    {step.text}
-                  </li>
-                </Fragment>
-              ) : (
-                <Typography variant="h6" marginLeft={"-30px"} key={index}>
-                  {step.text}
-                </Typography>
-              ),
+          <div>
+            {prepareMode ? (
+              <form>
+                {recipe?.steps.map((step, index) =>
+                  step.stepNumber > 0 ? (
+                    <div
+                      key={index}
+                      className="grocery-list"
+                      style={{
+                        width: "100%",
+                        margin: "8px 0px 20px 10px",
+                      }}
+                    >
+                      <input
+                        type="checkbox"
+                        name={"" + index}
+                        id={`step-checkbox-${index}`}
+                        style={{
+                          width: "20px",
+                          height: "20px",
+                          marginRight: "10px",
+                        }}
+                      />
+                      <label
+                        htmlFor={`step-checkbox-${index}`}
+                        style={{ fontSize: "large", textDecoration: "none" }}
+                      >
+                        {step.stepNumber > 0 ?? null}
+                        {step.text}
+                      </label>
+                    </div>
+                  ) : (
+                    <Typography variant="h6" key={index}>
+                      {step.text}
+                    </Typography>
+                  ),
+                )}
+              </form>
+            ) : (
+              <ol>
+                {recipe?.steps.map((step, index) =>
+                  step.stepNumber > 0 ? (
+                    <Fragment key={index}>
+                      <li>
+                        {step.stepNumber > 0 ?? null}
+                        {step.text}
+                      </li>
+                    </Fragment>
+                  ) : (
+                    <Typography variant="h6" marginLeft={"-30px"} key={index}>
+                      {step.text}
+                    </Typography>
+                  ),
+                )}
+              </ol>
             )}
-          </ol>
+          </div>
         </Grid>
         <Grid item xs={12}>
           {recipe?.photo && (
