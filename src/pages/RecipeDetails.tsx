@@ -65,7 +65,7 @@ const RecipeDetails = () => {
   }, [recipe]);
 
   const calculateAmount = (num: number) => {
-    return +((num * servings) / recipe.servings).toFixed(2);
+    return !servings ? 0 : +((num * servings) / recipe.servings).toFixed(2);
   };
 
   const addToGrocery = async () => {
@@ -108,7 +108,7 @@ const RecipeDetails = () => {
           <div className="side-by-side-container">
             <p>Servings: &nbsp;</p>
             <TextField
-              value={servings}
+              value={servings.toString()}
               id="servings"
               variant="outlined"
               type="number"
@@ -116,7 +116,7 @@ const RecipeDetails = () => {
                 inputProps: { min: 1, step: 1 },
               }}
               onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setServings(+event.target.value);
+                setServings(parseInt(event.target.value));
               }}
             />
           </div>
