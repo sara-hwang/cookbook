@@ -22,14 +22,20 @@ export default function SearchBar() {
   );
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
 
-  const suggestions = recipesList.reduce(
-    (accumulator: string[], currentValue: Recipe) => [
-      ...accumulator,
-      ...currentValue.tags,
-      ...currentValue.ingredients.map((ing) => ing.element),
-    ],
-    [],
-  );
+  const suggestions = [
+    ...new Set(
+      recipesList
+        .reduce(
+          (accumulator: string[], currentValue: Recipe) => [
+            ...accumulator,
+            ...currentValue.tags,
+            ...currentValue.ingredients.map((ing) => ing.element),
+          ],
+          []
+        )
+        .map((word) => word.toLowerCase().trim())
+    ),
+  ].sort();
 
   const search = (event: AutoCompleteCompleteEvent) => {
     let filteredSuggestions;
