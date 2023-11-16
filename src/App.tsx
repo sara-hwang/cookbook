@@ -186,6 +186,7 @@ export default function ResponsiveDrawer() {
                   component="span"
                   disableRipple
                   sx={{
+                    marginRight: "-5px",
                     "&:hover": { color: "red" },
                   }}
                   onClick={(event) => {
@@ -199,6 +200,7 @@ export default function ResponsiveDrawer() {
               <ListItemButton
                 selected={currentTab === index}
                 onClick={(event) => handleListItemClick(event, index)}
+                sx={{ paddingRight: "5px !important" }}
               >
                 <ListItemText primary={tab.label} />
               </ListItemButton>
