@@ -138,6 +138,9 @@ const AddRecipe = () => {
       canvas.height = canvas.width / aspectRatio;
 
       const ctx = canvas.getContext("2d");
+      if (ctx) {
+        ctx.imageSmoothingQuality = "high";
+      }
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
 
       const blob = await new Promise<Blob | null>((resolve) => {
