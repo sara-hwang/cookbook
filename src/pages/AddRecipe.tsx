@@ -141,7 +141,7 @@ const AddRecipe = () => {
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
 
       const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((result) => resolve(result));
+        canvas.toBlob((result) => resolve(result), undefined, 1);
       });
 
       if (blob) {
