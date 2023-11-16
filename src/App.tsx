@@ -76,6 +76,7 @@ export default function ResponsiveDrawer() {
     index: number
   ) => {
     dispatch(setCurrentTab(index));
+    setMobileOpen(false);
   };
 
   useEffect(() => {
@@ -151,7 +152,7 @@ export default function ResponsiveDrawer() {
           height="60"
           style={{ cursor: "pointer" }}
           onClick={() => {
-            dispatch(setCurrentTab(-3));
+            dispatch(setCurrentTab(-defaultTabs.length));
             dispatch(setSearchTags([]));
           }}
         />
@@ -175,7 +176,6 @@ export default function ResponsiveDrawer() {
       <Divider />
       <List>
         {tabsList.map((tab, index) => {
-          console.log(defaultTabs.length);
           return (
             <ListItem
               key={index}
