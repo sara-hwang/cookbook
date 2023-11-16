@@ -399,7 +399,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}

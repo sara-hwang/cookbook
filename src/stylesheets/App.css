@@ -8,18 +8,6 @@
   flex-direction: row;
 }
 
-.top-bar-container {
-  display: flex;
-  flex-direction: row;
-  position: sticky;
-  top: 0px;
-  z-index: 9;
-  background-color: white;
-  padding-right: 15px;
-  width: 100%;
-  height: 100%;
-}
-
 .side-by-side-container .MuiButton-root {
   margin-left: auto;
   height: fit-content;

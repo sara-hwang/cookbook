@@ -46,14 +46,13 @@ export default function SearchBar() {
   return (
     <div className="card p-fluid">
       <AutoComplete
-        placeholder="Start typing ingredients or tags..."
+        placeholder="🔍 Start typing ingredients or tags..."
         onFocus={() => dispatch(setCurrentTab(-3))}
-        // color="blue"
         multiple
         value={searchTags}
         suggestions={filtered}
         completeMethod={search}
-        style={{ fontSize: "small" }}
+        style={{ fontSize: "small", padding: "0 5px" }}
         onChange={(e) => dispatch(setSearchTags(e.value))}
       />
     </div>

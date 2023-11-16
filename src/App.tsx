@@ -222,15 +222,16 @@ export default function ResponsiveDrawer() {
             backgroundColor: "#83b6b9",
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
+            zIndex: 1,
           }}
         >
-          <Toolbar>
+          <Toolbar sx={{ padding: "10px !important" }}>
             <IconButton
               color="inherit"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
-              sx={{ mr: 2, display: { sm: "none" } }}
+              sx={{ display: { sm: "none" } }}
             >
               <Menu />
             </IconButton>
