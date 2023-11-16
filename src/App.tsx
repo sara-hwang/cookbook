@@ -200,7 +200,7 @@ export default function ResponsiveDrawer() {
               <ListItemButton
                 selected={currentTab === index}
                 onClick={(event) => handleListItemClick(event, index)}
-                sx={{ paddingRight: "5px !important" }}
+                sx={{ paddingRight: "40px !important" }}
               >
                 <ListItemText primary={tab.label} />
               </ListItemButton>
