@@ -92,7 +92,7 @@ const RecipeDetails = () => {
   };
 
   return (
-    <Box className="containers">
+    <Box sx={{ display: "flex" }}>
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
           <div className="side-by-side-container">
@@ -209,7 +209,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" key={index}>
                     {ing.element}
                   </Typography>
-                ),
+                )
               )}
             </form>
           ) : (
@@ -229,7 +229,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" marginLeft={"-30px"} key={index}>
                     {ing.element}
                   </Typography>
-                ),
+                )
               )}
             </ul>
           )}
@@ -293,7 +293,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" key={index}>
                     {step.text}
                   </Typography>
-                ),
+                )
               )}
             </form>
           ) : (
@@ -310,7 +310,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" marginLeft={"-30px"} key={index}>
                     {step.text}
                   </Typography>
-                ),
+                )
               )}
             </ol>
           )}

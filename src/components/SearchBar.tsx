@@ -48,7 +48,7 @@ export default function SearchBar() {
       <AutoComplete
         placeholder="Start typing ingredients or tags..."
         onFocus={() => dispatch(setCurrentTab(-3))}
-        color="blue"
+        // color="blue"
         multiple
         value={searchTags}
         suggestions={filtered}

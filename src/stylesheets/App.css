@@ -1,43 +1,6 @@
-.containers {
-  margin: 15px 30px;
-}
-
 .text-field-input {
   margin-right: 10px;
   margin-left: 10px;
-}
-
-.nav-tabs {
-  border-top: 2.5px solid white;
-  width: 200px;
-}
-
-.nav-tabs .MuiTab-root {
-  font-family: inherit;
-  font-size: small;
-  border-bottom: 2.5px solid white;
-  border-top: 2.55px solid white;
-  background-color: rgb(221, 246, 255);
-  padding: 0 10px 0 5px;
-}
-
-.nav-tab-label {
-  padding: 10px 15px 10px 0;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  width: 100%;
-}
-
-.nav-tab-close-button {
-  position: absolute;
-  top: 50%;
-  right: 0;
-  transform: translateY(-50%); 
-}
-
-.nav-tab-close-button:hover {
-  color: red;
 }
 
 .side-by-side-container {

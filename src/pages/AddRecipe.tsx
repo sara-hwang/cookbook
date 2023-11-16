@@ -195,7 +195,7 @@ const AddRecipe = () => {
             event.key === "Enter" ? event.preventDefault() : null
           }
         >
-          <Box className="containers">
+          <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Field
@@ -399,7 +399,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
