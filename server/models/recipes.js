@@ -33,10 +33,7 @@ const RecipeSchema = new mongoose.Schema({
   photo: String,
   tags: [String],
   url: String,
-  dateAdded: {
-    type: Number,
-    default: Date.now(),
-  },
+  dateAdded: Number,
 });
 
 const RecipeModel = mongoose.model("recipes", RecipeSchema);
