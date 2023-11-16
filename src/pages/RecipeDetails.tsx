@@ -96,16 +96,12 @@ const RecipeDetails = () => {
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
           <div className="side-by-side-container">
-            <Tooltip
-              disableInteractive
-              title={
-                recipe.dateAdded
-                  ? new Date(recipe.dateAdded).toLocaleString()
-                  : ""
-              }
-            >
+            <div>
               <div className="h5">{recipe.title}</div>
-            </Tooltip>
+              {recipe.dateAdded
+                ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
+                : undefined}
+            </div>
             <Button variant="contained" onClick={() => navigate(`/add/${id}`)}>
               <Edit />
               &nbsp;Edit Recipe
@@ -218,7 +214,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" key={index}>
                     {ing.element}
                   </Typography>
-                ),
+                )
               )}
             </form>
           ) : (
@@ -238,7 +234,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" marginLeft={"-30px"} key={index}>
                     {ing.element}
                   </Typography>
-                ),
+                )
               )}
             </ul>
           )}
@@ -302,7 +298,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" key={index}>
                     {step.text}
                   </Typography>
-                ),
+                )
               )}
             </form>
           ) : (
@@ -319,7 +315,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" marginLeft={"-30px"} key={index}>
                     {step.text}
                   </Typography>
-                ),
+                )
               )}
             </ol>
           )}
