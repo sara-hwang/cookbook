@@ -3,17 +3,13 @@ import type { PayloadAction } from "@reduxjs/toolkit";
 import { TabItem } from "../constants/types";
 
 const initialState: { tabsList: TabItem[]; currentTab: number } = {
-  tabsList: [
-    { label: "View Recipes", link: "/view" },
-    { label: "Add Recipe", link: "/add" },
-    { label: "Grocery List", link: "/grocery" },
-  ],
+  tabsList: [],
   currentTab:
     window.location.pathname == "/add"
-      ? 1
+      ? -2
       : window.location.pathname == "/grocery"
-      ? 2
-      : 0,
+      ? -1
+      : -3,
 };
 
 const findIndex = (tabs: TabItem[], newTab: TabItem) => {
@@ -27,10 +23,8 @@ export const tabsListSlice = createSlice({
     popTab: (state, action: PayloadAction<TabItem>) => {
       const index = findIndex(state.tabsList, action.payload);
       if (index > -1) {
-        if (index == state.currentTab) {
-          state.currentTab = 0;
-        } else if (index < state.currentTab) {
-          state.currentTab -= 1;
+        if (index <= state.currentTab) {
+          state.currentTab = state.currentTab == 0 ? -3 : state.currentTab - 1;
         }
         state.tabsList = [
           ...state.tabsList.slice(0, index),

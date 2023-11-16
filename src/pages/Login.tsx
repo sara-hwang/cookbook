@@ -22,7 +22,7 @@ interface IProps {
   setIsLoginOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-export const Login = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
+export const LoginDialog = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
   const signIn = useSignIn();
   const [errorMessage, setErrorMessage] = useState("");
   const [showPassword, setShowPassword] = useState(false);
@@ -155,4 +155,4 @@ export const Login = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
   );
 };
 
-export default Login;
+export default LoginDialog;
