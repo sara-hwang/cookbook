@@ -330,7 +330,7 @@ const RecipeDetails = () => {
             tags={recipe.tags}
             onChipClick={(tag) => {
               dispatch(setSearchTags([tag]));
-              dispatch(setCurrentTab(0));
+              dispatch(setCurrentTab(-3));
             }}
           />
         </Grid>
