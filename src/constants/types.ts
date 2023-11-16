@@ -7,6 +7,7 @@ export type Recipe = {
   photo: string | undefined;
   tags: string[];
   url: string;
+  dateAdded?: number;
 };
 
 export type Ingredient = {

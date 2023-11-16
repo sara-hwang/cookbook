@@ -96,7 +96,16 @@ const RecipeDetails = () => {
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
           <div className="side-by-side-container">
-            <div className="h5">{recipe.title}</div>
+            <Tooltip
+              disableInteractive
+              title={
+                recipe.dateAdded
+                  ? new Date(recipe.dateAdded).toLocaleString()
+                  : ""
+              }
+            >
+              <div className="h5">{recipe.title}</div>
+            </Tooltip>
             <Button variant="contained" onClick={() => navigate(`/add/${id}`)}>
               <Edit />
               &nbsp;Edit Recipe
