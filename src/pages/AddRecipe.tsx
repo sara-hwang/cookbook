@@ -192,12 +192,8 @@ const AddRecipe = () => {
         }
       }}
     >
-      {({ values, errors, isValid, isSubmitting }) => (
-        <Form
-          onKeyDown={(event) =>
-            event.key === "Enter" ? event.preventDefault() : null
-          }
-        >
+      {({ values, errors, isValid, isSubmitting, submitForm }) => (
+        <Form>
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
@@ -402,7 +398,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -535,7 +531,7 @@ const AddRecipe = () => {
                     <Button
                       variant="contained"
                       disabled={!isValid || isSubmitting}
-                      type="submit"
+                      onClick={submitForm}
                     >
                       {id ? "Save" : "Submit"}
                     </Button>
