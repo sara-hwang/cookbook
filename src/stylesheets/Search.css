@@ -39,6 +39,9 @@ body {
 
 .p-autocomplete-token {
   color: var(--ThemeBlue);
+  border: 2px solid;
+  border-color: var(--ThemeBlue);
+  background-color: #F4FAFA;
   margin: 0 0 0 -5px;
   padding: 5px 5px;
 }

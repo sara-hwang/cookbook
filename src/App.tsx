@@ -219,7 +219,7 @@ export default function ResponsiveDrawer() {
         <AppBar
           position="fixed"
           sx={{
-            backgroundColor: "#83b6b9",
+            // backgroundColor: "#83b6b9",
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
             zIndex: 1,

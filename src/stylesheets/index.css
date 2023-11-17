@@ -13,7 +13,8 @@ code {
 }
 
 :root {
-  --ThemeBlue: #1876d2;
-  --ThemeBlueHover: #60afff;
-  --TabBlue: #e1f7fe;
+  --ThemeBlue: #4D7A7A;
+  --ThemeBlueHover: #385959;
+  --TabBlue: #afd0d2;
+  --LogoTeal: #83b6b9;
 }

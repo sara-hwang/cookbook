@@ -6,6 +6,8 @@ import { Provider } from "react-redux";
 import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "react-auth-kit";
+import { ThemeProvider } from "@mui/material/styles";
+import theme from "./theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement
@@ -15,7 +17,9 @@ root.render(
     <Provider store={store}>
       <AuthProvider authType={"localstorage"} authName={"_auth"}>
         <BrowserRouter>
-          <App />
+          <ThemeProvider theme={theme}>
+            <App />
+          </ThemeProvider>
         </BrowserRouter>
       </AuthProvider>
     </Provider>
