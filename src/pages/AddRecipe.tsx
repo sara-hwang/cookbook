@@ -146,13 +146,13 @@ const AddRecipe = () => {
       const img = await loadImage(URL.createObjectURL(selectedImage));
       const aspectRatio = img.width / img.height;
       const canvas = document.createElement("canvas");
-      canvas.width = Math.min(img.width, 150);
+      canvas.width = Math.min(img.width, 300);
       canvas.height = canvas.width / aspectRatio;
 
       const ctx = canvas.getContext("2d");
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
       const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((result) => resolve(result), "image/jpeg", 1);
+        canvas.toBlob((result) => resolve(result), "image/jpeg", 0.7);
       });
       // upload both images
       const original = await uploadToImgur(selectedImage);

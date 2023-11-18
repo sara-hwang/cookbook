@@ -60,7 +60,7 @@ const ViewRecipes = () => {
                   <img
                     className="recipe-photo"
                     loading="lazy"
-                    src={recipe.photo ?? DEFAULT_PHOTO}
+                    src={recipe.thumbnail ?? DEFAULT_PHOTO}
                     alt={recipe.title}
                   />
                   <div
