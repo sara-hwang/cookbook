@@ -163,11 +163,11 @@ const AddRecipe = () => {
       });
       // upload original
       let url = await uploadToImgur(selectedImage);
-      setFieldValue("photo", url);
+      await setFieldValue("photo", url);
       // upload thumbnail
       if (blob) {
         url = await uploadToImgur(blob);
-        setFieldValue("thumbnail", url);
+        await setFieldValue("thumbnail", url);
       }
     } catch (error) {
       console.error("Error during image processing:", error);
