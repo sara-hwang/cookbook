@@ -152,12 +152,11 @@ const AddRecipe = () => {
       const ctx = canvas.getContext("2d");
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
       const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((result) => resolve(result), undefined, 1);
+        canvas.toBlob((result) => resolve(result), "image/jpeg", 1);
       });
       // upload both images
       const original = await uploadToImgur(selectedImage);
       const thumbnail = blob ? await uploadToImgur(blob) : undefined;
-      console.log(original, thumbnail);
       return { original: original, thumbnail: thumbnail };
     } catch (error) {
       console.error("Error during image processing:", error);
@@ -169,14 +168,16 @@ const AddRecipe = () => {
       initialValues={initialValues}
       enableReinitialize={true}
       validationSchema={validationSchema}
-      onSubmit={async (data: Recipe, { resetForm, setFieldValue }) => {
-        const key = slugify(data.title, { lower: true });
-        data = { ...data, key: key, tags: editTags };
+      onSubmit={async (data: Recipe, { resetForm }) => {
         const images = await handlePhotoField();
-        console.log(images);
-        setFieldValue("photo", images?.original);
-        setFieldValue("thumbnail", images?.thumbnail);
-        console.log(data);
+        const key = slugify(data.title, { lower: true });
+        data = {
+          ...data,
+          key: key,
+          tags: editTags,
+          photo: images?.original,
+          thumbnail: images?.thumbnail,
+        };
         let response;
         if (id === undefined) {
           response = await addRecipe(data);
@@ -399,7 +400,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}
