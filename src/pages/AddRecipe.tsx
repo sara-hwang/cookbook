@@ -137,17 +137,10 @@ const AddRecipe = () => {
     });
   };
 
-  const handlePhotoField = async (
-    setFieldValue: (
-      field: string,
-      value: string,
-      shouldValidate?: boolean | undefined,
-    ) => Promise<void | FormikErrors<Recipe>>,
-  ) => {
+  const handlePhotoField = async () => {
     if (!selectedImage) {
       return null;
     }
-
     try {
       // create thumbnail
       const img = await loadImage(URL.createObjectURL(selectedImage));
@@ -161,14 +154,10 @@ const AddRecipe = () => {
       const blob = await new Promise<Blob | null>((resolve) => {
         canvas.toBlob((result) => resolve(result), undefined, 1);
       });
-      // upload original
-      let url = await uploadToImgur(selectedImage);
-      await setFieldValue("photo", url);
-      // upload thumbnail
-      if (blob) {
-        url = await uploadToImgur(blob);
-        await setFieldValue("thumbnail", url);
-      }
+      // upload both images
+      const original = await uploadToImgur(selectedImage);
+      const thumbnail = blob ? await uploadToImgur(blob) : undefined;
+      return { original: original, thumbnail: thumbnail };
     } catch (error) {
       console.error("Error during image processing:", error);
     }
@@ -180,7 +169,11 @@ const AddRecipe = () => {
       enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={async (data: Recipe, { resetForm, setFieldValue }) => {
-        await handlePhotoField(setFieldValue);
+        const images = await handlePhotoField();
+        if (images) {
+          setFieldValue("photo", images.original);
+          setFieldValue("thumbnail", images.thumbnail);
+        }
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
         let response;
