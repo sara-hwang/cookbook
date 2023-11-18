@@ -152,7 +152,7 @@ const AddRecipe = () => {
       const ctx = canvas.getContext("2d");
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
       const blob = await new Promise<Blob | null>((resolve) => {
-        canvas.toBlob((result) => resolve(result), "image/jpeg", 0.1);
+        canvas.toBlob((result) => resolve(result), "image/jpeg", 0.2);
       });
       // upload both images
       const original = await uploadToImgur(selectedImage);
