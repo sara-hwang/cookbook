@@ -116,48 +116,58 @@ const AddRecipe = () => {
     alert("Draft saved!");
   };
 
-  const uploadToImgur = async () => {
+  const uploadToImgur = async (image: Blob | File) => {
+    const formData = new FormData();
+    formData.append("image", image);
+    const photoResponse = await upload(formData);
+    if (photoResponse && photoResponse.status === 200) {
+      return photoResponse.data.data.link;
+    } else {
+      alert("Could not upload image.");
+      return undefined;
+    }
+  };
+
+  const loadImage = (src: string): Promise<HTMLImageElement> => {
+    return new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = () => resolve(img);
+      img.onerror = (error) => reject(error);
+      img.src = src;
+    });
+  };
+
+  const handlePhotoField = async (
+    setFieldValue: (
+      field: string,
+      value: string,
+      shouldValidate?: boolean | undefined,
+    ) => Promise<void | FormikErrors<Recipe>>,
+  ) => {
     if (!selectedImage) {
       return null;
     }
 
-    const loadImage = (src: string): Promise<HTMLImageElement> => {
-      return new Promise((resolve, reject) => {
-        const img = new Image();
-        img.onload = () => resolve(img);
-        img.onerror = (error) => reject(error);
-        img.src = src;
-      });
-    };
-
     try {
+      // create thumbnail
       const img = await loadImage(URL.createObjectURL(selectedImage));
       const aspectRatio = img.width / img.height;
       const canvas = document.createElement("canvas");
-      canvas.width = Math.min(img.width, 600);
+      canvas.width = Math.min(img.width, 150);
       canvas.height = canvas.width / aspectRatio;
 
       const ctx = canvas.getContext("2d");
-      if (ctx) {
-        ctx.imageSmoothingQuality = "high";
-      }
       ctx?.drawImage(img, 0, 0, canvas.width, canvas.height);
-
       const blob = await new Promise<Blob | null>((resolve) => {
         canvas.toBlob((result) => resolve(result), undefined, 1);
       });
-
+      // upload original
+      let url = await uploadToImgur(selectedImage);
+      setFieldValue("photo", url);
+      // upload thumbnail
       if (blob) {
-        const formData = new FormData();
-        formData.append("image", blob);
-
-        const photoResponse = await upload(formData);
-        if (photoResponse && photoResponse.status === 200) {
-          return photoResponse.data.data.link;
-        } else {
-          alert("Could not upload photo.");
-          return null;
-        }
+        url = await uploadToImgur(blob);
+        setFieldValue("thumbnail", url);
       }
     } catch (error) {
       console.error("Error during image processing:", error);
@@ -169,14 +179,11 @@ const AddRecipe = () => {
       initialValues={initialValues}
       enableReinitialize={true}
       validationSchema={validationSchema}
-      onSubmit={async (data: Recipe, { resetForm }) => {
+      onSubmit={async (data: Recipe, { resetForm, setFieldValue }) => {
+        await handlePhotoField(setFieldValue);
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
         let response;
-        const imgUrl = await uploadToImgur();
-        if (imgUrl) {
-          data["photo"] = imgUrl;
-        }
         if (id === undefined) {
           response = await addRecipe(data);
         } else {
@@ -398,7 +405,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}

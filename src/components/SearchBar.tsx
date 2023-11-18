@@ -31,9 +31,9 @@ export default function SearchBar() {
             ...currentValue.tags,
             ...currentValue.ingredients.map((ing) => ing.element),
           ],
-          []
+          [],
         )
-        .map((word) => word.toLowerCase().trim())
+        .map((word) => word.toLowerCase().trim()),
     ),
   ].sort();
 
