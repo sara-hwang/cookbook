@@ -157,6 +157,7 @@ const AddRecipe = () => {
       // upload both images
       const original = await uploadToImgur(selectedImage);
       const thumbnail = blob ? await uploadToImgur(blob) : undefined;
+      console.log(original, thumbnail);
       return { original: original, thumbnail: thumbnail };
     } catch (error) {
       console.error("Error during image processing:", error);
@@ -169,13 +170,13 @@ const AddRecipe = () => {
       enableReinitialize={true}
       validationSchema={validationSchema}
       onSubmit={async (data: Recipe, { resetForm, setFieldValue }) => {
-        const images = await handlePhotoField();
-        if (images) {
-          setFieldValue("photo", images.original);
-          setFieldValue("thumbnail", images.thumbnail);
-        }
         const key = slugify(data.title, { lower: true });
         data = { ...data, key: key, tags: editTags };
+        const images = await handlePhotoField();
+        console.log(images);
+        setFieldValue("photo", images?.original);
+        setFieldValue("thumbnail", images?.thumbnail);
+        console.log(data);
         let response;
         if (id === undefined) {
           response = await addRecipe(data);
@@ -398,7 +399,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
