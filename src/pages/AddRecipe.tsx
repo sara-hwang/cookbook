@@ -146,7 +146,7 @@ const AddRecipe = () => {
       const img = await loadImage(URL.createObjectURL(selectedImage));
       const aspectRatio = img.width / img.height;
       const canvas = document.createElement("canvas");
-      canvas.width = Math.min(img.width, 300);
+      canvas.width = Math.min(img.width, 500);
       canvas.height = canvas.width / aspectRatio;
 
       const ctx = canvas.getContext("2d");
