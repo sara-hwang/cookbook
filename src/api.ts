@@ -45,7 +45,7 @@ export const upload = async (file: FormData) => {
     return response;
   } catch (e) {
     const error = e as AxiosError;
-    console.log(error.response);
+    console.log(error.message);
     return error.response;
   }
 };
