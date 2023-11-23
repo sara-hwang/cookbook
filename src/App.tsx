@@ -239,6 +239,7 @@ export default function ResponsiveDrawer() {
             <Button
               color="inherit"
               disableRipple
+              sx={{ marginLeft: 1 }}
               onClick={() => {
                 isAuthenticated() ? signOut() : setIsLoginOpen(true);
               }}
