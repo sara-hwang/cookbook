@@ -32,6 +32,7 @@ const SearchBar = () => {
     <Autocomplete
       multiple
       freeSolo
+      limitTags={2}
       options={suggestions}
       value={searchTags}
       fullWidth
