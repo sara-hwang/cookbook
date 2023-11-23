@@ -384,7 +384,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        },
+                        }
                       )}
                     </div>
                   )}
@@ -504,6 +504,7 @@ const AddRecipe = () => {
                   freeSolo
                   options={allTags}
                   value={values.tags}
+                  size="small"
                   renderTags={(value: readonly string[], getTagProps) =>
                     value.map((option: string, index: number) => (
                       <Chip

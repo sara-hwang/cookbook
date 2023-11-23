@@ -1,24 +1,15 @@
-import { useState } from "react";
-import {
-  AutoComplete,
-  AutoCompleteCompleteEvent,
-} from "primereact/autocomplete";
-import "../stylesheets/Search.css";
-import "primereact/resources/themes/lara-light-indigo/theme.css"; // theme
-import "primeflex/primeflex.css"; // css utility
-import "primeicons/primeicons.css";
-import "primereact/resources/primereact.css"; // core css
+import { Autocomplete, Chip, InputAdornment, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { Recipe } from "../constants/types";
+import SearchIcon from "@mui/icons-material/Search";
 import { setSearchTags } from "../redux/searchTags";
-import { setCurrentTab } from "../redux/tabsList";
 
-export default function SearchBar() {
+const SearchBar = () => {
   const dispatch = useAppDispatch();
-  const [filtered, setFiltered] = useState<string[]>();
+
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
 
@@ -31,36 +22,55 @@ export default function SearchBar() {
             ...currentValue.tags,
             ...currentValue.ingredients.map((ing) => ing.element),
           ],
-          [],
+          []
         )
-        .map((word) => word.toLowerCase().trim()),
+        .map((word) => word.toLowerCase().trim())
     ),
   ].sort();
 
-  const search = (event: AutoCompleteCompleteEvent) => {
-    let filteredSuggestions;
-    if (!event.query.trim().length) {
-      filteredSuggestions = [...suggestions];
-    } else {
-      filteredSuggestions = suggestions.filter((s) =>
-        s.toLowerCase().startsWith(event.query.toLowerCase()),
-      );
-    }
-    setFiltered(filteredSuggestions);
-  };
-
   return (
-    <div className="card p-fluid">
-      <AutoComplete
-        placeholder="🔍 Start typing ingredients or tags..."
-        onFocus={() => dispatch(setCurrentTab(-3))}
-        multiple
-        value={searchTags}
-        suggestions={filtered}
-        completeMethod={search}
-        style={{ fontSize: "small", padding: "0 5px" }}
-        onChange={(e) => dispatch(setSearchTags(e.value))}
-      />
-    </div>
+    <Autocomplete
+      multiple
+      freeSolo
+      options={suggestions}
+      value={searchTags}
+      fullWidth
+      onChange={(e, value) => dispatch(setSearchTags(value))}
+      renderTags={(value: readonly string[], getTagProps) =>
+        value.map((option: string, index: number) => (
+          <Chip
+            {...getTagProps({ index })}
+            key={index}
+            variant="outlined"
+            label={option}
+            sx={{ backgroundColor: "var(--TabBlue)" }}
+          />
+        ))
+      }
+      renderInput={(params) => (
+        <TextField
+          {...params}
+          size="small"
+          sx={{ backgroundColor: "white" }}
+          hiddenLabel
+          variant="outlined"
+          InputProps={{
+            ...params.InputProps,
+            sx: { borderRadius: 0 },
+            startAdornment: (
+              <>
+                <InputAdornment position="start">
+                  <SearchIcon />
+                </InputAdornment>
+                {params.InputProps.startAdornment}
+              </>
+            ),
+          }}
+          placeholder="Press enter to search for a tag"
+        />
+      )}
+    />
   );
-}
+};
+
+export default SearchBar;
