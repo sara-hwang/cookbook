@@ -1,7 +1,8 @@
 import {
+  Autocomplete,
   Box,
   Button,
-  CircularProgress,
+  Chip,
   Grid,
   IconButton,
   LinearProgress,
@@ -23,13 +24,12 @@ import {
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import UploadImage from "../components/UploadImage";
 import { useNavigate, useParams } from "react-router-dom";
-import { getRecipeDetails } from "../helpers";
-import TagInput from "../components/TagInput";
+import { getAllTags, getRecipeDetails } from "../helpers";
 import "../stylesheets/AddRecipe.css";
 import "../stylesheets/App.css";
 import { setRecipesList } from "../redux/recipesList";
@@ -38,13 +38,18 @@ const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const [editTags, setEditTags] = useState<string[]>(draft.tags);
   const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
   const [numDividers, setNumDividers] = useState(0);
+  const [allTags, setAllTags] = useState<string[]>([]);
 
-  const inputRef = useRef<HTMLInputElement | null>(null);
+  useEffect(() => {
+    const initTags = async () => {
+      setAllTags(await getAllTags());
+    };
+    initTags();
+  }, []);
 
   useEffect(() => {
     if (id !== undefined) {
@@ -62,7 +67,6 @@ const AddRecipe = () => {
       }
     });
     setNumDividers(dividers);
-    setEditTags(initialValues.tags);
   }, [initialValues]);
 
   const validationSchema = yup.object({
@@ -84,32 +88,6 @@ const AddRecipe = () => {
       }),
     ),
   });
-
-  const parentElement: HTMLDivElement | null =
-    document.querySelector(".tag-input");
-  const inputElement: HTMLInputElement | null = parentElement
-    ? parentElement.querySelector("input")
-    : null;
-
-  if (parentElement && inputElement) {
-    parentElement.addEventListener("click", () => {
-      inputElement.focus();
-    });
-  }
-
-  const addTag = (event: React.KeyboardEvent<HTMLInputElement>) => {
-    if (
-      (event.target as HTMLInputElement).value !== "" &&
-      !editTags.includes((event.target as HTMLInputElement).value)
-    ) {
-      setEditTags([...editTags, (event.target as HTMLInputElement).value]);
-      (event.target as HTMLInputElement).value = "";
-    }
-  };
-
-  const removeTag = (indexToRemove: number) => {
-    setEditTags([...editTags.filter((_, index) => index !== indexToRemove)]);
-  };
 
   const saveDraft = (values: Recipe) => {
     dispatch(setRecipeDraft(values));
@@ -174,7 +152,6 @@ const AddRecipe = () => {
         data = {
           ...data,
           key: key,
-          tags: editTags,
           photo: images?.original,
           thumbnail: images?.thumbnail,
         };
@@ -194,7 +171,14 @@ const AddRecipe = () => {
         }
       }}
     >
-      {({ values, errors, isValid, isSubmitting, submitForm }) => (
+      {({
+        values,
+        errors,
+        isValid,
+        isSubmitting,
+        setFieldValue,
+        submitForm,
+      }) => (
         <Form>
           <Box sx={{ display: "flex" }}>
             <Grid container spacing={2}>
@@ -515,17 +499,33 @@ const AddRecipe = () => {
               </Grid>
               <Grid item xs={12} md={9}>
                 <Typography variant="h6">Tags</Typography>
-                <div className="tag-input">
-                  <Field
-                    name="tags"
-                    type="input"
-                    as={TagInput}
-                    tags={editTags}
-                    inputRef={inputRef}
-                    addTag={addTag}
-                    removeTag={removeTag}
-                  />
-                </div>
+                <Autocomplete
+                  multiple
+                  freeSolo
+                  options={allTags}
+                  value={values.tags}
+                  renderTags={(value: readonly string[], getTagProps) =>
+                    value.map((option: string, index: number) => (
+                      <Chip
+                        {...getTagProps({ index })}
+                        key={index}
+                        variant="outlined"
+                        label={option}
+                        sx={{ backgroundColor: "var(--TabBlue)" }}
+                      />
+                    ))
+                  }
+                  renderInput={(params) => (
+                    <TextField
+                      {...params}
+                      InputLabelProps={{ shrink: false }}
+                      placeholder="Press enter to add a tag"
+                    />
+                  )}
+                  onChange={(e, value) => {
+                    setFieldValue("tags", value);
+                  }}
+                />
               </Grid>
               <Grid item xs={12}>
                 <div className="spaced-apart">
@@ -552,7 +552,7 @@ const AddRecipe = () => {
                   <div>
                     <Button
                       variant="outlined"
-                      onClick={() => saveDraft({ ...values, tags: editTags })}
+                      onClick={() => saveDraft(values)}
                       disabled={values === EmptyRecipe}
                     >
                       Save Draft

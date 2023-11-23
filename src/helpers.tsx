@@ -22,3 +22,17 @@ export async function getRecipesList() {
     return [];
   }
 }
+
+export async function getAllTags() {
+  const response = await getAllRecipes();
+  if (response && response.status === 200) {
+    const tags = new Set<string>();
+    response.data.forEach((recipe: Recipe) => {
+      recipe.tags.forEach((tag) => tags.add(tag));
+    });
+    return Array.from(tags).sort();
+  } else {
+    alert("Tags returned " + response?.data + ", server may be down.");
+    return [];
+  }
+}
