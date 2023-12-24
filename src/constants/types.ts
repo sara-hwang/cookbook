@@ -15,6 +15,7 @@ export type Ingredient = {
   amount: number;
   unit: Unit;
   element: string;
+  usdaCode: number;
 };
 
 export type Step = {
@@ -46,6 +47,32 @@ export const EmptyRecipe = {
   thumbnail: undefined,
   tags: [],
   url: "",
+};
+
+export type UsdaFoodItem = {
+  fdcId: number;
+  dataType: string;
+  description: string;
+  foodCode: string;
+  foodNutrients: UsdaFoodNutrient[];
+  publicationDate: string;
+  scientificName: string;
+  brandOwner: string;
+  gtinUpc: string;
+  ingredients: string;
+  ndbNumber: number;
+  additionalDescriptions: string;
+  allHighlightFields: string;
+  score: number;
+};
+
+export type UsdaFoodNutrient = {
+  number: number;
+  name: string;
+  amount: number;
+  unitName: string;
+  derivationCode: string;
+  derivationDescription: string;
 };
 
 export const DEFAULT_PHOTO =

@@ -16,13 +16,14 @@ import * as yup from "yup";
 import slugify from "slugify";
 import {
   EmptyRecipe,
+  UsdaFoodItem,
   Ingredient,
   Recipe,
   Step,
   Unit,
 } from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
-import { addRecipe, updateRecipe, upload } from "../api";
+import { addRecipe, getIngredientSearch, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
@@ -43,6 +44,10 @@ const AddRecipe = () => {
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
   const [numDividers, setNumDividers] = useState(0);
   const [allTags, setAllTags] = useState<string[]>([]);
+  const [suggestions, setSuggestions] = useState<
+    { label: string; code: number }[]
+  >([]);
+  const [query, setQuery] = useState<string>("");
 
   useEffect(() => {
     const initTags = async () => {
@@ -69,6 +74,49 @@ const AddRecipe = () => {
     setNumDividers(dividers);
   }, [initialValues]);
 
+  // useEffect(() => {
+  //   // make api call and set suggestions
+  //   const queryIngredient = async () => {
+  //     if (search && search.length > 3) {
+  //       const resp = await getIngredientSearch(search);
+  //       // console.log(
+  //       //   resp?.data.foods.map((entry: FdaFoodItem) => entry.description)
+  //       // );
+  //       setSuggestions(
+  //         resp?.data.foods.map((entry: FdaFoodItem) => entry.description)
+  //       );
+  //       console.log(suggestions);
+  //     }
+  //   };
+
+  //   queryIngredient();
+  // }, [search]);
+
+  useEffect(() => {
+    // setSuggestions(
+    //   [...Array(10).keys()].map((item) => event.query + "-" + item)
+    // );
+
+    const queryIngredient = async (search: string) => {
+      if (search) {
+        const resp = await getIngredientSearch(search);
+        console.log(resp?.data);
+        setSuggestions(
+          resp?.data?.foods?.map((entry: UsdaFoodItem) => {
+            return {
+              label: `${entry.description.substring(0, 50)}: ${
+                entry.additionalDescriptions
+              }`,
+              code: entry.fdcId,
+            };
+          }),
+        );
+      }
+    };
+
+    queryIngredient(query);
+  }, [query]);
+
   const validationSchema = yup.object({
     title: yup.string().required("Required").max(250),
     servings: yup.number().required("Required").min(0),
@@ -80,6 +128,7 @@ const AddRecipe = () => {
           .min(0, "Must be greater than 0"),
         // unit: yup.string().required("Required"),
         element: yup.string().required("Required"),
+        // usdaCode: yup.number(),
       }),
     ),
     steps: yup.array().of(
@@ -237,6 +286,7 @@ const AddRecipe = () => {
                               amount: "",
                               unit: "g",
                               element: "",
+                              usdaCode: undefined,
                             });
                           }}
                         >
@@ -249,6 +299,7 @@ const AddRecipe = () => {
                               amount: "1",
                               unit: undefined,
                               element: "",
+                              usdaCode: undefined,
                             });
                           }}
                         >
@@ -302,89 +353,123 @@ const AddRecipe = () => {
                                   </IconButton>
                                 </div>
                               ) : (
-                                <Typography variant="h6">
-                                  <Field
-                                    name={`ingredients.${index}.amount`}
-                                    type="number"
-                                    as={TextField}
-                                    placeholder="Amount *"
-                                    size="small"
-                                    sx={{ width: "25%" }}
-                                    InputProps={{
-                                      inputProps: { min: "0", step: "any" },
-                                    }}
-                                    error={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).amount !== undefined
-                                    }
-                                    helperText={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).amount
-                                    }
-                                  />
-                                  <Field
-                                    name={`ingredients.${index}.unit`}
-                                    type="number"
-                                    as={Select}
-                                    size="small"
-                                    sx={{ width: "90px" }}
-                                    className="text-field-input"
-                                  >
-                                    {Object.values(Unit)
-                                      .filter((unit) => typeof unit == "string")
-                                      .map((unit) => (
-                                        <MenuItem key={unit} value={unit}>
-                                          {unit}
-                                        </MenuItem>
-                                      ))}
-                                  </Field>
-                                  <Field
-                                    name={`ingredients.${index}.element`}
-                                    as={TextField}
-                                    placeholder="Ingredient *"
-                                    size="small"
-                                    sx={{ width: "65%" }}
-                                    error={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).element !== undefined
-                                    }
-                                    helperText={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).element
-                                    }
-                                  />
-                                  <IconButton
-                                    onClick={() => {
-                                      arrayHelpers.remove(index);
-                                    }}
-                                  >
-                                    <Delete />
-                                  </IconButton>
-                                </Typography>
+                                <div
+                                  style={{
+                                    width: "100%",
+                                  }}
+                                >
+                                  <span>
+                                    <Field
+                                      name={`ingredients.${index}.amount`}
+                                      type="number"
+                                      as={TextField}
+                                      placeholder="Amount *"
+                                      size="small"
+                                      sx={{
+                                        width: "25%",
+                                        display: "inline-flex",
+                                      }}
+                                      InputProps={{
+                                        inputProps: { min: "0", step: "any" },
+                                      }}
+                                      error={
+                                        errors.ingredients &&
+                                        errors.ingredients[index] &&
+                                        (
+                                          errors.ingredients[
+                                            index
+                                          ] as FormikErrors<Ingredient>
+                                        ).amount !== undefined
+                                      }
+                                      helperText={
+                                        errors.ingredients &&
+                                        errors.ingredients[index] &&
+                                        (
+                                          errors.ingredients[
+                                            index
+                                          ] as FormikErrors<Ingredient>
+                                        ).amount
+                                      }
+                                    />
+                                  </span>
+                                  <span>
+                                    <Field
+                                      name={`ingredients.${index}.unit`}
+                                      type="number"
+                                      as={Select}
+                                      size="small"
+                                      sx={{
+                                        width: "90px",
+                                        display: "inline-flex",
+                                      }}
+                                      className="text-field-input"
+                                    >
+                                      {Object.values(Unit)
+                                        .filter(
+                                          (unit) => typeof unit == "string",
+                                        )
+                                        .map((unit) => (
+                                          <MenuItem key={unit} value={unit}>
+                                            {unit}
+                                          </MenuItem>
+                                        ))}
+                                    </Field>
+                                  </span>
+                                  <span>
+                                    <Autocomplete
+                                      freeSolo
+                                      size="small"
+                                      value={{
+                                        label:
+                                          values.ingredients[index].element,
+                                        code: values.ingredients[index]
+                                          .usdaCode,
+                                      }}
+                                      sx={{
+                                        width: "65%",
+                                        display: "inline-flex",
+                                      }}
+                                      options={suggestions}
+                                      // key={index}
+                                      // getOptionLabel={(option) => option.label}
+                                      onChange={(e, value) => {
+                                        console.log(value);
+                                        if (typeof value === "object") {
+                                          setFieldValue(
+                                            `ingredients.${index}.usdaCode`,
+                                            value?.code,
+                                          );
+                                        }
+                                      }}
+                                      renderInput={(params) => (
+                                        <TextField
+                                          {...params}
+                                          InputLabelProps={{ shrink: false }}
+                                          onChange={(e) => {
+                                            console.log(e.target.value);
+                                            if (e.target.value) {
+                                              setQuery(e.target.value);
+                                            }
+                                          }}
+                                        />
+                                      )}
+                                    />
+                                  </span>
+                                  <span>
+                                    <IconButton
+                                      sx={{ display: "inline-flex" }}
+                                      onClick={() => {
+                                        arrayHelpers.remove(index);
+                                      }}
+                                    >
+                                      <Delete />
+                                    </IconButton>
+                                  </span>
+                                </div>
                               )}
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}

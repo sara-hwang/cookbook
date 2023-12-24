@@ -18,6 +18,7 @@ const RecipeSchema = new mongoose.Schema({
         lowercase: true,
       },
       unit: String,
+      usdaCode: Number,
     },
   ],
   steps: [
