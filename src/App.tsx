@@ -180,15 +180,12 @@ export default function ResponsiveDrawer() {
             <ListItem
               key={index}
               disablePadding
+              className="tab-item"
               secondaryAction={
                 <IconButton
                   size="small"
                   component="span"
                   disableRipple
-                  sx={{
-                    marginRight: "-5px",
-                    "&:hover": { color: "red" },
-                  }}
                   onClick={(event) => {
                     dispatch(popTab(tab));
                   }}
@@ -200,7 +197,6 @@ export default function ResponsiveDrawer() {
               <ListItemButton
                 selected={currentTab === index}
                 onClick={(event) => handleListItemClick(event, index)}
-                sx={{ paddingRight: "40px !important" }}
               >
                 <ListItemText primary={tab.label} />
               </ListItemButton>

@@ -23,3 +23,21 @@
   align-items: center;
   justify-content: space-between;
 }
+
+.tab-item .MuiListItemButton-root {
+  padding-right: 16px !important;
+}
+
+.tab-item:hover .MuiListItemButton-root {
+  padding-right: 40px !important;
+}
+
+.tab-item .MuiIconButton-root {
+  visibility: hidden;
+  margin-right: -5px;
+}
+
+.tab-item:hover .MuiIconButton-root {
+  visibility: visible;
+  color: red;
+}
