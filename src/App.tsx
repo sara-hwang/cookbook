@@ -184,6 +184,9 @@ export default function ResponsiveDrawer() {
                         ? undefined
                         : () => {
                             setRandomDisabled(true);
+                            setTimeout(() => {
+                              setRandomDisabled(false);
+                            }, 1000);
                             const randomIndex = Math.floor(
                               Math.random() * recipesList.length
                             );
@@ -193,9 +196,6 @@ export default function ResponsiveDrawer() {
                                 link: `/view/${recipesList[randomIndex].key}`,
                               })
                             );
-                            setTimeout(() => {
-                              setRandomDisabled(false);
-                            }, 1000);
                           }
                     }
                   >
