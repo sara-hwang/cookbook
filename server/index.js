@@ -127,6 +127,10 @@ app.put("/recipes/:id", async (req, res) => {
   }
 });
 
+app.put("/healthcheck", async (req, res) => {
+  res.status(200).json({ status: "ok" });
+});
+
 app.listen(3001, () => {
   console.log("server is running");
 });
