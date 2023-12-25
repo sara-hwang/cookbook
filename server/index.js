@@ -132,6 +132,6 @@ app.put("/healthcheck", async (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.listen(3001, () => {
+app.listen(3000, () => {
   console.log("server is running");
 });
