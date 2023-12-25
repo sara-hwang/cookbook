@@ -128,7 +128,7 @@ app.put("/recipes/:id", async (req, res) => {
   }
 });
 
-app.put("/healthcheck", async (req, res) => {
+app.get("/healthcheck", async (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
