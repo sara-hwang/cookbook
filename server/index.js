@@ -75,6 +75,7 @@ app.put("/user/:id/grocery", async (req, res) => {
 });
 
 app.get("/recipes/getAll", async (req, res) => {
+  console.log("getting all");
   try {
     let response = await RecipeModel.find();
     res.status(200).json(response);
