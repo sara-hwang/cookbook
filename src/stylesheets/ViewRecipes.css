@@ -27,20 +27,20 @@
 img.MuiCardMedia-root {
   object-fit: cover;
   height: 140px;
-  filter: brightness(0.8);
+  /* filter: brightness(0.8); */
 }
 
 .MuiCard-root:hover {
   transform: scale(1.05);
 }
 
-.MuiCardActionArea-root:hover img.MuiCardMedia-root {
+/* .MuiCardActionArea-root:hover img.MuiCardMedia-root {
   filter: brightness(1.1);
-}
+} */
 
-.MuiCardActionArea-root:hover .card-content .MuiTypography-root {
+/* .MuiCardActionArea-root:hover .card-content .MuiTypography-root {
   color: black;
-}
+} */
 
 .MuiCardMedia-root .MuiSkeleton-root {
   width: 100%;
