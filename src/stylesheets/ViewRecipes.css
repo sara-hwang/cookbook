@@ -54,26 +54,31 @@ img.MuiCardMedia-root {
   align-items: flex-start;
 }
 
-.card-content {
+.MuiCardContent-root.card-content {
   flex: 1;
   width: 100%;
+  padding: 10px;
+  height: 100%;
 }
 
-.card-content > * {
-  margin: -10px;
-  margin-top: 10px;
+.MuiChip-root.card-chips {
+  margin: 0 5px 5px 0;
+  padding: 0;
+  height: 22px;
+}
+
+.MuiChip-root.card-chips .MuiChip-label {
+  padding: 0 8px;
 }
 
 .card-content .MuiTypography-root {
+  text-overflow: ellipsis;
   overflow: hidden;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: 2;
+  white-space: nowrap;
 }
 
 .MuiCardActionArea-root:hover .card-content .MuiTypography-root {
+  text-overflow: none;
   overflow: visible;
-  display: -webkit-box;
-  -webkit-box-orient: vertical;
-  -webkit-line-clamp: none;
+  white-space: normal;
 }

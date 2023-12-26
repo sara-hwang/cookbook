@@ -4,6 +4,7 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Chip,
   Skeleton,
   Typography,
 } from "@mui/material";
@@ -25,7 +26,7 @@ const ViewRecipes = () => {
   const [width, setWidth] = useState(0);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
 
   useEffect(() => {
@@ -54,10 +55,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag),
-              ),
+                recipe.ingredients.map((ing) => ing.element).includes(tag)
+              )
           )
-        : recipesList,
+        : recipesList
     );
   }, [searchTags, recipesList]);
 
@@ -111,7 +112,7 @@ const ViewRecipes = () => {
                     pushTab({
                       label: recipe.title,
                       link: `/view/${recipe.key}`,
-                    }),
+                    })
                   );
                   sessionStorage.setItem("scrollpos", "" + window.scrollY);
                 }}
@@ -124,13 +125,20 @@ const ViewRecipes = () => {
                   <Typography gutterBottom variant="h6" component="div">
                     {recipe.title}
                   </Typography>
-                  <ChipDisplay
-                    tags={recipe.tags}
-                    onChipClick={(tag) => {
-                      if (!searchTags.includes(tag))
-                        dispatch(setSearchTags([...searchTags, tag]));
-                    }}
-                  />
+                  <Typography style={{ position: "relative" }}>
+                    {recipe.tags.map((tag, index) => (
+                      <Chip
+                        key={index}
+                        label={tag}
+                        onClick={(event) => {
+                          event.stopPropagation();
+                          if (!searchTags.includes(tag))
+                            dispatch(setSearchTags([...searchTags, tag]));
+                        }}
+                        className="card-chips"
+                      />
+                    ))}
+                  </Typography>
                 </CardContent>
               </CardActionArea>
             </Card>
