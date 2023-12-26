@@ -1,71 +1,65 @@
-.loading-text {
-  opacity: 0;
-  animation: fadeInOut 2s infinite;
-  animation-delay: 1s;
-  position: absolute;
-  margin-top: 15px;
-}
-
-@keyframes fadeInOut {
-  0% {
-    opacity: 0;
-  }
-  50% {
-    opacity: 1;
-  }
-  100% {
-    opacity: 0;
-  }
-}
-
 .recipe-grid-container .MuiGrid-container {
   display: flex;
   justify-content: center;
 }
 
-.image-container {
-  position: relative;
-  transition: transform 0.2s;
-  width: 150px;
-  height: 150px;
-  max-width: 100%;
-  max-height: 100%;
+.card-content-skeleton {
+  display: inline-flex;
 }
 
-.image-container:hover {
-  cursor: pointer;
-  transform: scale(1.1);
+.card-content-skeleton .MuiSkeleton-root {
+  height: 60px;
+  margin: 0 5px 6px 0;
+  border-radius: 30px;
 }
 
-.image-container:hover .overlay {
-  opacity: 1;
+.card-content-container-skeleton {
+  flex: 1;
+  margin: 0;
 }
 
-.overlay {
-  position: absolute;
-  background: rgba(0, 0, 0, 0.5);
-  color: white;
-  width: inherit;
-  height: inherit;
-  max-width: 100%;
-  max-height: 100%;
-  transition: 0.5s ease;
-  opacity: 0;
-  top: 0;
-  left: 0;
-  font-size: 90%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  padding: 0;
-  text-align: center;
-  box-sizing: border-box;
+.card-content-container-skeleton .MuiSkeleton-root {
+  width: 100%;
+  height: 50px;
+  margin-top: -10px;
 }
 
-.recipe-photo {
+img.MuiCardMedia-root {
   object-fit: cover;
-  width: inherit;
-  height: inherit;
-  max-width: 100%;
-  max-height: 100%;
+  height: 140px;
+  filter: brightness(0.8);
+}
+
+.MuiCard-root:hover {
+  transform: scale(1.05);
+}
+
+.MuiCardActionArea-root:hover img.MuiCardMedia-root {
+  filter: brightness(1.1);
+}
+
+.MuiCardActionArea-root:hover .card-content .MuiTypography-root {
+  color: black;
+}
+
+.MuiCardMedia-root .MuiSkeleton-root {
+  width: 100%;
+  height: 140px;
+}
+
+.MuiCard-root .MuiCardActionArea-root {
+  display: flex;
+  flex-direction: column;
+  height: 100%;
+  align-items: flex-start;
+}
+
+.card-content {
+  flex: 1;
+  width: 100%;
+}
+
+.card-content > * {
+  margin: -10px;
+  margin-top: 10px;
 }

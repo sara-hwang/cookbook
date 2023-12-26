@@ -4,11 +4,11 @@ import {
   CardActionArea,
   CardContent,
   CardMedia,
+  Skeleton,
   Typography,
 } from "@mui/material";
 import { Recipe, DEFAULT_PHOTO } from "../constants/types";
 import { useEffect, useState } from "react";
-import "../stylesheets/App.css";
 import "../stylesheets/ViewRecipes.css";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
@@ -25,15 +25,15 @@ const ViewRecipes = () => {
   const [width, setWidth] = useState(0);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
 
   useEffect(() => {
     async function getRecipes() {
       setLoading(true);
       const recipes = await getRecipesList();
-      setLoading(false);
       dispatch(setRecipesList(recipes.toReversed()));
+      setLoading(false);
     }
     if (recipesList.length === 0) {
       getRecipes();
@@ -47,10 +47,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag),
-              ),
+                recipe.ingredients.map((ing) => ing.element).includes(tag)
+              )
           )
-        : recipesList,
+        : recipesList
     );
   }, [searchTags, recipesList]);
 
@@ -70,11 +70,26 @@ const ViewRecipes = () => {
       style={{ display: "flex", flexWrap: "wrap", padding: `${cardSpacing}px` }}
       id="view-recipes-box"
     >
-      {loading && (
-        <div className="loading-text">
-          loading (may take up to 1 minute on first render)...
-        </div>
-      )}
+      {loading &&
+        [...Array(20).keys()].map((key) => {
+          return (
+            <Card
+              sx={{ width: cardWidth, margin: `${cardSpacing}px` }}
+              key={key}
+            >
+              <CardMedia>
+                <Skeleton animation="wave" variant="rectangular" />
+              </CardMedia>
+              <CardContent className="card-content-container-skeleton">
+                <Skeleton animation="wave" />
+                <span className="card-content-skeleton">
+                  <Skeleton animation="wave" width="50px" />
+                  <Skeleton animation="wave" width="80px" />
+                </span>
+              </CardContent>
+            </Card>
+          );
+        })}
       {recipes &&
         recipes.map((recipe) => {
           return (
@@ -84,40 +99,30 @@ const ViewRecipes = () => {
             >
               <CardActionArea
                 disableRipple
-                style={{
-                  display: "flex",
-                  flexDirection: "column",
-                  height: "100%",
-                  alignItems: "flex-start",
-                }}
                 onClick={() => {
                   dispatch(
                     pushTab({
                       label: recipe.title,
                       link: `/view/${recipe.key}`,
-                    }),
+                    })
                   );
                 }}
               >
                 <CardMedia
                   component="img"
-                  style={{ objectFit: "cover", height: 140 }}
                   image={recipe.thumbnail ?? DEFAULT_PHOTO}
-                  alt={recipe.title}
                 />
-                <CardContent style={{ flex: 1 }}>
+                <CardContent className="card-content">
                   <Typography gutterBottom variant="h6" component="div">
                     {recipe.title}
                   </Typography>
-                  <div style={{ margin: "-10px", marginTop: "10px" }}>
-                    <ChipDisplay
-                      tags={recipe.tags}
-                      onChipClick={(tag) => {
-                        if (!searchTags.includes(tag))
-                          dispatch(setSearchTags([...searchTags, tag]));
-                      }}
-                    />
-                  </div>
+                  <ChipDisplay
+                    tags={recipe.tags}
+                    onChipClick={(tag) => {
+                      if (!searchTags.includes(tag))
+                        dispatch(setSearchTags([...searchTags, tag]));
+                    }}
+                  />
                 </CardContent>
               </CardActionArea>
             </Card>
