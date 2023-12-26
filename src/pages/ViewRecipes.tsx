@@ -38,6 +38,13 @@ const ViewRecipes = () => {
     if (recipesList.length === 0) {
       getRecipes();
     }
+    const scrollpos = sessionStorage.getItem("scrollpos");
+    if (scrollpos) {
+      setTimeout(function () {
+        window.scrollTo({ top: +scrollpos });
+        localStorage.setItem("scrollpos", "" + "0");
+      }, 50);
+    }
   }, []);
 
   useEffect(() => {
@@ -71,7 +78,7 @@ const ViewRecipes = () => {
       id="view-recipes-box"
     >
       {loading &&
-        [...Array(20).keys()].map((key) => {
+        [...Array(100).keys()].map((key) => {
           return (
             <Card
               sx={{ width: cardWidth, margin: `${cardSpacing}px` }}
@@ -106,6 +113,7 @@ const ViewRecipes = () => {
                       link: `/view/${recipe.key}`,
                     })
                   );
+                  sessionStorage.setItem("scrollpos", "" + window.scrollY);
                 }}
               >
                 <CardMedia
