@@ -92,7 +92,7 @@ const RecipeDetails = () => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", padding: "24px" }}>
       <Grid container rowSpacing={2}>
         <Grid item xs={12}>
           <div className="side-by-side-container">

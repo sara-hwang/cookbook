@@ -292,7 +292,7 @@ export default function ResponsiveDrawer() {
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
-        aria-label="mailbox folders"
+        aria-label="sidebar container"
       >
         <Drawer
           variant="temporary"
@@ -331,6 +331,7 @@ export default function ResponsiveDrawer() {
           flexGrow: 1,
           p: 3,
           width: { sm: `calc(100% - ${drawerWidth}px)` },
+          padding: 0,
         }}
       >
         <Toolbar />

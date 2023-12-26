@@ -14,7 +14,10 @@ const ChipDisplay = ({ tags, onChipClick, onChipDelete }: IProps) => {
         <Chip
           key={index}
           label={tag}
-          onClick={() => onChipClick(tag, index)}
+          onClick={(event) => {
+            event.stopPropagation();
+            onChipClick(tag, index);
+          }}
           onDelete={onChipDelete ? () => onChipDelete(index) : undefined}
           sx={chipStyle}
         />

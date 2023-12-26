@@ -45,7 +45,7 @@ export const GroceryList = () => {
   };
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", padding: "24px" }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
           <div className="h5">Grocery List</div>

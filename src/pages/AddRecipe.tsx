@@ -180,7 +180,7 @@ const AddRecipe = () => {
         submitForm,
       }) => (
         <Form>
-          <Box sx={{ display: "flex" }}>
+          <Box sx={{ display: "flex", padding: "24px" }}>
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Field
@@ -384,7 +384,7 @@ const AddRecipe = () => {
                               )}
                             </Grid>
                           );
-                        }
+                        },
                       )}
                     </div>
                   )}
