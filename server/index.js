@@ -75,7 +75,7 @@ app.put("/user/:id/grocery", async (req, res) => {
 });
 
 app.get("/recipes/getAll", async (req, res) => {
-  console.log("getting all");
+  console.log("Getting all recipes");
   try {
     let response = await RecipeModel.find();
     res.status(200).json(response);
@@ -128,10 +128,23 @@ app.put("/recipes/:id", async (req, res) => {
   }
 });
 
+app.delete("/recipes/:id", async (req, res) => {
+  console.log(`Deleting ${req.params.id}`);
+  try {
+    let response = await RecipeModel.deleteOne({ key: req.params.id });
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
+});
+
 app.get("/healthcheck", async (req, res) => {
   res.status(200).json({ status: "ok" });
 });
 
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log("server is running");
 });

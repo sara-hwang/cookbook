@@ -94,3 +94,13 @@ export const getRecipe = async (key: string | undefined) => {
     return error.response;
   }
 };
+
+export const deleteRecipe = async (key: string | undefined) => {
+  try {
+    const response = await axios.delete(`${URI}/recipes/${key}`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};

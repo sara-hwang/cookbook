@@ -25,7 +25,7 @@ const ViewRecipes = () => {
   const [width, setWidth] = useState(0);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList
+    (state: RootState) => state.recipesList,
   );
 
   useEffect(() => {
@@ -54,10 +54,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag)
-              )
+                recipe.ingredients.map((ing) => ing.element).includes(tag),
+              ),
           )
-        : recipesList
+        : recipesList,
     );
   }, [searchTags, recipesList]);
 
@@ -111,7 +111,7 @@ const ViewRecipes = () => {
                     pushTab({
                       label: recipe.title,
                       link: `/view/${recipe.key}`,
-                    })
+                    }),
                   );
                   sessionStorage.setItem("scrollpos", "" + window.scrollY);
                 }}
