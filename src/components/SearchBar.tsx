@@ -9,7 +9,7 @@ const SearchBar = () => {
   const dispatch = useAppDispatch();
 
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
 
@@ -22,9 +22,9 @@ const SearchBar = () => {
             ...currentValue.tags,
             ...currentValue.ingredients.map((ing) => ing.element),
           ],
-          [],
+          []
         )
-        .map((word) => word.toLowerCase().trim()),
+        .map((word) => word.toLowerCase().trim())
     ),
   ].sort();
 

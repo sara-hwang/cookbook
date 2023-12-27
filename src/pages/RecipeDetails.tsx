@@ -38,7 +38,7 @@ const RecipeDetails = () => {
   const [prepareMode, setPrepareMode] = useState(false);
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
 
   useEffect(() => {
@@ -47,7 +47,7 @@ const RecipeDetails = () => {
         getRecipeDetails(id, setRecipe);
       } else {
         setRecipe(
-          recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe,
+          recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe
         );
       }
     }
@@ -214,7 +214,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" key={index}>
                     {ing.element}
                   </Typography>
-                ),
+                )
               )}
             </form>
           ) : (
@@ -234,7 +234,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" marginLeft={"-30px"} key={index}>
                     {ing.element}
                   </Typography>
-                ),
+                )
               )}
             </ul>
           )}
@@ -298,7 +298,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" key={index}>
                     {step.text}
                   </Typography>
-                ),
+                )
               )}
             </form>
           ) : (
@@ -315,7 +315,7 @@ const RecipeDetails = () => {
                   <Typography variant="h6" marginLeft={"-30px"} key={index}>
                     {step.text}
                   </Typography>
-                ),
+                )
               )}
             </ol>
           )}

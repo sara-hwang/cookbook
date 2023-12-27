@@ -25,7 +25,7 @@ const ViewRecipes = () => {
   const [width, setWidth] = useState(0);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList,
+    (state: RootState) => state.recipesList
   );
 
   useEffect(() => {
@@ -54,10 +54,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag),
-              ),
+                recipe.ingredients.map((ing) => ing.element).includes(tag)
+              )
           )
-        : recipesList,
+        : recipesList
     );
   }, [searchTags, recipesList]);
 
@@ -72,18 +72,18 @@ const ViewRecipes = () => {
   const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
 
   const handleCardHover = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const card = event.currentTarget;
     const cardActionArea = card.querySelector(
-      ".MuiCardActionArea-root",
+      ".MuiCardActionArea-root"
     ) as HTMLElement;
     const cardContent = card.querySelector(".card-content") as HTMLElement;
     const cardContentText = card.querySelector(
-      ".card-content .MuiTypography-root",
+      ".card-content .MuiTypography-root"
     ) as HTMLElement;
     const cardContentChips = card.querySelector(
-      ".card-content .MuiTypography-root.chips-container",
+      ".card-content .MuiTypography-root.chips-container"
     ) as HTMLElement;
 
     if (
@@ -108,17 +108,17 @@ const ViewRecipes = () => {
   };
 
   const handleCardLeave = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const card = event.currentTarget;
     const cardContent = event.currentTarget.querySelector(
-      ".card-content",
+      ".card-content"
     ) as HTMLElement;
     const cardContentText = card.querySelector(
-      ".card-content .MuiTypography-root",
+      ".card-content .MuiTypography-root"
     ) as HTMLElement;
     const cardContentChips = card.querySelector(
-      ".card-content .MuiTypography-root.chips-container",
+      ".card-content .MuiTypography-root.chips-container"
     ) as HTMLElement;
     if (
       cardContent === null ||
@@ -174,7 +174,7 @@ const ViewRecipes = () => {
                     pushTab({
                       label: recipe.title,
                       link: `/view/${recipe.key}`,
-                    }),
+                    })
                   );
                   sessionStorage.setItem("scrollpos", "" + window.scrollY);
                 }}
