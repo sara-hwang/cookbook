@@ -187,7 +187,7 @@ const ViewRecipes = () => {
                   <Typography gutterBottom variant="h6" component="div">
                     {recipe.title}
                   </Typography>
-                  <Typography className="chips-container">
+                  <Typography className="chips-container" component="div">
                     {recipe.tags.map((tag, index) => (
                       <Chip
                         key={index}
