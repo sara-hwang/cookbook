@@ -27,8 +27,17 @@ const ViewRecipes = () => {
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
   );
+  const cardSpacing = 10;
+  const cardsPerRow = width > 800 ? 4 : width > 600 ? 3 : 2;
+  const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
+  const cardWidthPixels = width / cardsPerRow - cardSpacing * 2;
 
   useEffect(() => {
+    const recipeGridContainer = document.getElementById("view-recipes-box");
+    if (recipeGridContainer)
+      new ResizeObserver(() => {
+        setWidth(recipeGridContainer?.offsetWidth ?? 0);
+      }).observe(recipeGridContainer);
     async function getRecipes() {
       setLoading(true);
       const recipes = await getRecipesList();
@@ -60,16 +69,6 @@ const ViewRecipes = () => {
         : recipesList
     );
   }, [searchTags, recipesList]);
-
-  const recipeGridContainer = document.getElementById("view-recipes-box");
-  if (recipeGridContainer)
-    new ResizeObserver(() => {
-      setWidth(recipeGridContainer?.offsetWidth ?? 0);
-    }).observe(recipeGridContainer);
-
-  const cardSpacing = 10;
-  const cardsPerRow = width > 800 ? 4 : width > 500 ? 3 : 2;
-  const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
 
   const handleCardHover = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
@@ -184,10 +183,23 @@ const ViewRecipes = () => {
                   image={recipe.thumbnail ?? DEFAULT_PHOTO}
                 />
                 <CardContent className="card-content">
-                  <Typography gutterBottom variant="h6" component="div">
+                  <Typography
+                    gutterBottom
+                    variant="h6"
+                    component="div"
+                    sx={{
+                      width: `${cardWidthPixels - 30}px`,
+                    }}
+                  >
                     {recipe.title}
                   </Typography>
-                  <Typography className="chips-container" component="div">
+                  <Typography
+                    className="chips-container"
+                    component="div"
+                    sx={{
+                      width: `${cardWidthPixels - 30}px`, // 30 for margin and padding
+                    }}
+                  >
                     {recipe.tags.map((tag, index) => (
                       <Chip
                         key={index}
