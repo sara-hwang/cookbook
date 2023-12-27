@@ -16,7 +16,6 @@ import { RootState } from "../redux/store";
 import { getRecipesList } from "../helpers";
 import { setRecipesList } from "../redux/recipesList";
 import { pushTab } from "../redux/tabsList";
-import ChipDisplay from "../components/ChipDisplay";
 import { setSearchTags } from "../redux/searchTags";
 
 const ViewRecipes = () => {
@@ -26,7 +25,7 @@ const ViewRecipes = () => {
   const [width, setWidth] = useState(0);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList
+    (state: RootState) => state.recipesList,
   );
 
   useEffect(() => {
@@ -55,10 +54,10 @@ const ViewRecipes = () => {
             (recipe: Recipe) =>
               searchTags.every((tag) => recipe.tags.includes(tag)) ||
               searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag)
-              )
+                recipe.ingredients.map((ing) => ing.element).includes(tag),
+              ),
           )
-        : recipesList
+        : recipesList,
     );
   }, [searchTags, recipesList]);
 
@@ -71,6 +70,67 @@ const ViewRecipes = () => {
   const cardSpacing = 10;
   const cardsPerRow = width > 800 ? 4 : width > 500 ? 3 : 2;
   const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
+
+  const handleCardHover = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const card = event.currentTarget;
+    const cardActionArea = card.querySelector(
+      ".MuiCardActionArea-root",
+    ) as HTMLElement;
+    const cardContent = card.querySelector(".card-content") as HTMLElement;
+    const cardContentText = card.querySelector(
+      ".card-content .MuiTypography-root",
+    ) as HTMLElement;
+    const cardContentChips = card.querySelector(
+      ".card-content .MuiTypography-root.chips-container",
+    ) as HTMLElement;
+
+    if (
+      cardActionArea === null ||
+      cardContent === null ||
+      cardContentText === null ||
+      cardContentChips === null
+    )
+      return;
+    const cardActionAreaHeight = cardActionArea.offsetHeight;
+    const originalHeight = cardContent.offsetHeight;
+    cardContentText.style.whiteSpace = "normal";
+    cardContentText.style.overflow = "visible";
+    cardContentChips.style.whiteSpace = "normal";
+    cardContentChips.style.overflow = "visible";
+    const newHeight = cardContent.offsetHeight;
+
+    const translateY = newHeight - originalHeight;
+    cardContent.style.transform = `translateY(${-translateY}px)`;
+    cardContent.style.height = originalHeight + "px";
+    cardActionArea.style.height = cardActionAreaHeight + "px";
+  };
+
+  const handleCardLeave = (
+    event: React.MouseEvent<HTMLDivElement, MouseEvent>,
+  ) => {
+    const card = event.currentTarget;
+    const cardContent = event.currentTarget.querySelector(
+      ".card-content",
+    ) as HTMLElement;
+    const cardContentText = card.querySelector(
+      ".card-content .MuiTypography-root",
+    ) as HTMLElement;
+    const cardContentChips = card.querySelector(
+      ".card-content .MuiTypography-root.chips-container",
+    ) as HTMLElement;
+    if (
+      cardContent === null ||
+      cardContentText === null ||
+      cardContentChips === null
+    )
+      return;
+    cardContent.style.transform = "";
+    cardContent.style.height = "100%";
+    cardContentText.style.cssText = "";
+    cardContentChips.style.cssText = "";
+  };
 
   return (
     <Box
@@ -104,6 +164,8 @@ const ViewRecipes = () => {
             <Card
               sx={{ width: cardWidth, margin: `${cardSpacing}px` }}
               key={recipe.key}
+              onMouseEnter={handleCardHover}
+              onMouseLeave={handleCardLeave}
             >
               <CardActionArea
                 disableRipple
@@ -112,7 +174,7 @@ const ViewRecipes = () => {
                     pushTab({
                       label: recipe.title,
                       link: `/view/${recipe.key}`,
-                    })
+                    }),
                   );
                   sessionStorage.setItem("scrollpos", "" + window.scrollY);
                 }}
@@ -125,7 +187,7 @@ const ViewRecipes = () => {
                   <Typography gutterBottom variant="h6" component="div">
                     {recipe.title}
                   </Typography>
-                  <Typography style={{ position: "relative" }}>
+                  <Typography className="chips-container">
                     {recipe.tags.map((tag, index) => (
                       <Chip
                         key={index}
