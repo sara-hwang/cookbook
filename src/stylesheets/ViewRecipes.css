@@ -41,6 +41,7 @@ img.MuiCardMedia-root {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
+  height: 100%;
 }
 
 .MuiChip-root.card-chips {
