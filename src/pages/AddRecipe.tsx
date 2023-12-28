@@ -3,9 +3,6 @@ import {
   Box,
   Button,
   Chip,
-  Dialog,
-  DialogContent,
-  DialogTitle,
   Grid,
   IconButton,
   LinearProgress,
@@ -25,7 +22,7 @@ import {
   Unit,
 } from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
-import { addRecipe, deleteRecipe, updateRecipe, upload } from "../api";
+import { addRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
@@ -36,6 +33,7 @@ import { getAllTags, getRecipeDetails } from "../helpers";
 import "../stylesheets/AddRecipe.css";
 import "../stylesheets/App.css";
 import { setRecipesList } from "../redux/recipesList";
+import DeleteRecipeDialog from "./DeleteRecipeDialog";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
@@ -185,43 +183,10 @@ const AddRecipe = () => {
       }) => (
         <Form>
           <Box sx={{ display: "flex", padding: "24px" }}>
-            <Dialog open={popupOpen}>
-              <DialogContent>
-                <Grid
-                  container
-                  direction="column"
-                  justifyContent="flex-start"
-                  spacing={2}
-                >
-                  <Grid item>Are you sure you want to delete this recipe?</Grid>
-                  <Grid item>
-                    <div className="spaced-apart">
-                      <Button
-                        variant="outlined"
-                        onClick={() => setPopupOpen(false)}
-                      >
-                        Cancel
-                      </Button>
-                      <Button
-                        variant="contained"
-                        onClick={async () => {
-                          setPopupOpen(false);
-                          const response = await deleteRecipe(id);
-                          if (response && response.status === 200) {
-                            dispatch(setRecipesList([]));
-                            navigate("/view");
-                          } else {
-                            alert(response?.data);
-                          }
-                        }}
-                      >
-                        Yes
-                      </Button>
-                    </div>
-                  </Grid>
-                </Grid>
-              </DialogContent>
-            </Dialog>
+            <DeleteRecipeDialog
+              popupOpen={popupOpen}
+              setPopupOpen={setPopupOpen}
+            />
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <div className="side-by-side-container">
