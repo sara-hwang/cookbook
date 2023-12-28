@@ -179,7 +179,7 @@ const ViewRecipes = () => {
                   component="img"
                   image={recipe.thumbnail ?? DEFAULT_PHOTO}
                 />
-                <CardContent className="card-content">
+                <CardContent className="card-content disable-scrollbars">
                   <Typography
                     gutterBottom
                     variant="h6"

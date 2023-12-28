@@ -75,4 +75,17 @@ img.MuiCardMedia-root {
   background-color: white;
   transition: transform 0.3s ease;
   overflow: scroll;
+  box-sizing: border-box;
+}
+
+.disable-scrollbars::-webkit-scrollbar {
+  background: transparent; /* Chrome/Safari/Webkit */
+  display: none;
+  width: 0px;
+  height: 0px;
+}
+
+.disable-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
 }
