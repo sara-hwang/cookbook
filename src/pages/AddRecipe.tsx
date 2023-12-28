@@ -285,122 +285,96 @@ const AddRecipe = () => {
                               marginLeft={1}
                               style={{ whiteSpace: "nowrap" }}
                             >
-                              {ingredient.unit === undefined ? (
-                                <div>
-                                  <Field
-                                    name={`ingredients.${index}.element`}
-                                    as={TextField}
-                                    placeholder="Section name *"
-                                    size="small"
-                                    sx={{ width: "65%" }}
-                                    error={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).element !== undefined
-                                    }
-                                    helperText={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).element
-                                    }
-                                  />
-                                  <IconButton
-                                    onClick={() => {
-                                      arrayHelpers.remove(index);
-                                    }}
-                                  >
-                                    <Delete />
-                                  </IconButton>
-                                </div>
-                              ) : (
-                                <Typography variant="h6">
-                                  <Field
-                                    name={`ingredients.${index}.amount`}
-                                    type="number"
-                                    as={TextField}
-                                    placeholder="Amount *"
-                                    size="small"
-                                    sx={{ width: "25%" }}
-                                    InputProps={{
-                                      inputProps: { min: "0", step: "any" },
-                                    }}
-                                    error={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).amount !== undefined
-                                    }
-                                    helperText={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).amount
-                                    }
-                                  />
-                                  <Field
-                                    name={`ingredients.${index}.unit`}
-                                    type="number"
-                                    as={Select}
-                                    size="small"
-                                    sx={{ width: "90px" }}
-                                    className="text-field-input"
-                                  >
-                                    {Object.values(Unit)
-                                      .filter((unit) => typeof unit == "string")
-                                      .map((unit) => (
-                                        <MenuItem key={unit} value={unit}>
-                                          {unit}
-                                        </MenuItem>
-                                      ))}
-                                  </Field>
-                                  <Field
-                                    name={`ingredients.${index}.element`}
-                                    as={TextField}
-                                    placeholder="Ingredient *"
-                                    size="small"
-                                    sx={{ width: "65%" }}
-                                    error={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).element !== undefined
-                                    }
-                                    helperText={
-                                      errors.ingredients &&
-                                      errors.ingredients[index] &&
-                                      (
-                                        errors.ingredients[
-                                          index
-                                        ] as FormikErrors<Ingredient>
-                                      ).element
-                                    }
-                                  />
-                                  <IconButton
-                                    onClick={() => {
-                                      arrayHelpers.remove(index);
-                                    }}
-                                  >
-                                    <Delete />
-                                  </IconButton>
-                                </Typography>
-                              )}
+                              <div>
+                                {ingredient.unit !== undefined && (
+                                  <>
+                                    <Field
+                                      name={`ingredients.${index}.amount`}
+                                      type="number"
+                                      as={TextField}
+                                      placeholder="Amount *"
+                                      size="small"
+                                      sx={{ width: "25%" }}
+                                      InputProps={{
+                                        inputProps: { min: "0", step: "any" },
+                                      }}
+                                      error={
+                                        errors.ingredients &&
+                                        errors.ingredients[index] &&
+                                        (
+                                          errors.ingredients[
+                                            index
+                                          ] as FormikErrors<Ingredient>
+                                        ).amount !== undefined
+                                      }
+                                      helperText={
+                                        errors.ingredients &&
+                                        errors.ingredients[index] &&
+                                        (
+                                          errors.ingredients[
+                                            index
+                                          ] as FormikErrors<Ingredient>
+                                        ).amount
+                                      }
+                                    />
+                                    <Field
+                                      name={`ingredients.${index}.unit`}
+                                      type="number"
+                                      as={Select}
+                                      size="small"
+                                      label="Unit"
+                                      sx={{ width: "90px" }}
+                                      className="text-field-input"
+                                    >
+                                      {Object.values(Unit)
+                                        .filter(
+                                          (unit) => typeof unit == "string"
+                                        )
+                                        .map((unit) => (
+                                          <MenuItem key={unit} value={unit}>
+                                            {unit}
+                                          </MenuItem>
+                                        ))}
+                                    </Field>
+                                  </>
+                                )}
+                                <Field
+                                  name={`ingredients.${index}.element`}
+                                  as={TextField}
+                                  placeholder={
+                                    ingredient.unit === undefined
+                                      ? "Section name *"
+                                      : "Ingredient *"
+                                  }
+                                  size="small"
+                                  sx={{ width: "65%" }}
+                                  error={
+                                    errors.ingredients &&
+                                    errors.ingredients[index] &&
+                                    (
+                                      errors.ingredients[
+                                        index
+                                      ] as FormikErrors<Ingredient>
+                                    ).element !== undefined
+                                  }
+                                  helperText={
+                                    errors.ingredients &&
+                                    errors.ingredients[index] &&
+                                    (
+                                      errors.ingredients[
+                                        index
+                                      ] as FormikErrors<Ingredient>
+                                    ).element
+                                  }
+                                />
+                                <IconButton
+                                  onClick={() => {
+                                    arrayHelpers.remove(index);
+                                  }}
+                                >
+                                  <Delete />
+                                </IconButton>
+                              </div>
                             </Grid>
                           );
                         }
