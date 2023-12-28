@@ -74,9 +74,6 @@ const ViewRecipes = () => {
     event: React.MouseEvent<HTMLDivElement, MouseEvent>
   ) => {
     const card = event.currentTarget;
-    const cardActionArea = card.querySelector(
-      ".MuiCardActionArea-root"
-    ) as HTMLElement;
     const cardContent = card.querySelector(".card-content") as HTMLElement;
     const cardContentText = card.querySelector(
       ".card-content .MuiTypography-root"
@@ -86,24 +83,22 @@ const ViewRecipes = () => {
     ) as HTMLElement;
 
     if (
-      cardActionArea === null ||
       cardContent === null ||
       cardContentText === null ||
       cardContentChips === null
     )
       return;
-    const cardActionAreaHeight = cardActionArea.offsetHeight;
-    const originalHeight = cardContent.offsetHeight;
+
+    cardContent.style.bottom = "0";
+    cardContent.style.top = "";
     cardContentText.style.whiteSpace = "normal";
     cardContentText.style.overflow = "visible";
     cardContentChips.style.whiteSpace = "normal";
     cardContentChips.style.overflow = "visible";
     const newHeight = cardContent.offsetHeight;
 
-    const translateY = newHeight - originalHeight;
+    const translateY = newHeight - 86;
     cardContent.style.transform = `translateY(${-translateY}px)`;
-    cardContent.style.height = originalHeight + "px";
-    cardActionArea.style.height = cardActionAreaHeight + "px";
   };
 
   const handleCardLeave = (
@@ -125,8 +120,10 @@ const ViewRecipes = () => {
       cardContentChips === null
     )
       return;
+
     cardContent.style.transform = "";
-    cardContent.style.height = "100%";
+    cardContent.style.bottom = "";
+    cardContent.style.top = "140px";
     cardContentText.style.cssText = "";
     cardContentChips.style.cssText = "";
   };
@@ -148,10 +145,10 @@ const ViewRecipes = () => {
                 <Skeleton animation="wave" variant="rectangular" />
               </CardMedia>
               <CardContent className="card-content-container-skeleton">
-                <Skeleton animation="wave" />
+                <Skeleton animation="wave" height="45px" />
                 <span className="card-content-skeleton">
-                  <Skeleton animation="wave" width="50px" />
-                  <Skeleton animation="wave" width="80px" />
+                  <Skeleton animation="wave" height="35px" width="50px" />
+                  <Skeleton animation="wave" height="35px" width="80px" />
                 </span>
               </CardContent>
             </Card>
