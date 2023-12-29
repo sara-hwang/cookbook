@@ -13,11 +13,6 @@
   height: fit-content;
 }
 
-.centre-vertically {
-  display: flex;
-  align-items: center;
-}
-
 .spaced-apart {
   display: flex;
   align-items: center;

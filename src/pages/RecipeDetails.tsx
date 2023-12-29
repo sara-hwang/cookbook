@@ -116,7 +116,9 @@ const RecipeDetails = () => {
           alignItems="flex-start"
         >
           <Grid item>
-            <Typography variant="h4">{recipe.title}</Typography>
+            <Typography variant="h4" className="recipe-title">
+              {recipe.title}
+            </Typography>
             <div>
               {recipe.dateAdded
                 ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
@@ -173,13 +175,7 @@ const RecipeDetails = () => {
           </div>
         </Grid>
         <Grid item xs={12}>
-          <Typography
-            variant="h6"
-            className="centre-vertically"
-            sx={{
-              color: "var(--ThemeBlue) !important",
-            }}
-          >
+          <Typography variant="h6">
             Ingredients
             <Tooltip
               arrow
@@ -196,7 +192,7 @@ const RecipeDetails = () => {
                 disableRipple
                 sx={{
                   padding: 0,
-                  "&:hover": { color: "var(--ThemeBlue)" },
+                  "&:hover": { color: "var(--ThemeColour)" },
                 }}
                 onClick={() => {
                   groceryMode && isAuthenticated() && addToGrocery();
@@ -287,10 +283,7 @@ const RecipeDetails = () => {
           )}
         </Grid>
         <Grid item xs={12}>
-          <Typography
-            variant="h6"
-            sx={{ color: "var(--ThemeBlue) !important" }}
-          >
+          <Typography variant="h6">
             Steps
             <Tooltip
               arrow
@@ -301,7 +294,7 @@ const RecipeDetails = () => {
                 disableRipple
                 sx={{
                   padding: 0,
-                  "&:hover": { color: "var(--ThemeBlue)" },
+                  "&:hover": { color: "var(--ThemeColour)" },
                 }}
                 onClick={() => {
                   setPrepareMode(!prepareMode);

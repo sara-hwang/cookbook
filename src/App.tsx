@@ -154,16 +154,15 @@ export default function ResponsiveDrawer() {
       <Toolbar>
         <img
           src="/logo.png"
-          width="180"
+          width="200"
           height="60"
-          style={{ cursor: "pointer" }}
+          style={{ cursor: "pointer", marginTop: "10px" }}
           onClick={() => {
             dispatch(setCurrentTab(-defaultTabs.length));
             dispatch(setSearchTags([]));
           }}
         />
       </Toolbar>
-      <Divider />
       <List>
         {defaultTabs.map(({ label, icon, link }, index) => (
           <ListItem

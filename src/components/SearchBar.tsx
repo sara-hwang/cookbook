@@ -43,7 +43,6 @@ const SearchBar = () => {
             key={index}
             variant="outlined"
             label={option}
-            sx={{ backgroundColor: "var(--TabBlue)" }}
           />
         ))
       }
