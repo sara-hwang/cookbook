@@ -17,6 +17,7 @@ import { getRecipesList } from "../helpers";
 import { setRecipesList } from "../redux/recipesList";
 import { pushTab } from "../redux/tabsList";
 import { setSearchTags } from "../redux/searchTags";
+import ChipDisplay from "../components/ChipDisplay";
 
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
@@ -197,18 +198,14 @@ const ViewRecipes = () => {
                       width: `${cardWidthPixels - 30}px`, // 30 for margin and padding
                     }}
                   >
-                    {recipe.tags.map((tag, index) => (
-                      <Chip
-                        key={index}
-                        label={tag}
-                        onClick={(event) => {
-                          event.stopPropagation();
-                          if (!searchTags.includes(tag))
-                            dispatch(setSearchTags([...searchTags, tag]));
-                        }}
-                        className="card-chips"
-                      />
-                    ))}
+                    <ChipDisplay
+                      tags={recipe.tags}
+                      size="small"
+                      onChipClick={(tag) => {
+                        if (!searchTags.includes(tag))
+                          dispatch(setSearchTags([...searchTags, tag]));
+                      }}
+                    />
                   </Typography>
                 </CardContent>
               </CardActionArea>

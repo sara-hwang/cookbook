@@ -9,11 +9,17 @@ const theme = createTheme({
       contrastText: "#fff",
     },
     secondary: {
-      light: "#ffe9e1",
-      main: "#bc8e86",
-      dark: "#562d2e",
+      light: "#FFE6D7",
+      main: "#306B00",
+      dark: "#e6cfc2",
       contrastText: "#000",
     },
+    // action: {
+    // selectedOpacity: 0.3,
+    // selected: "#562d2e",
+    // hover: "#306B00",
+    // focus: "#d92a02",
+    // },
   },
 });
 

@@ -1,12 +1,13 @@
 import { Chip, useTheme } from "@mui/material";
 
 interface IProps {
-  tags: string[];
-  onChipClick: (tag: string, index: number) => void;
+  tags: readonly string[];
+  size: "small" | "medium";
+  onChipClick?: (tag: string, index: number) => void;
   onChipDelete?: (index: number) => void;
 }
 
-const ChipDisplay = ({ tags, onChipClick, onChipDelete }: IProps) => {
+const ChipDisplay = ({ tags, size, onChipClick, onChipDelete }: IProps) => {
   const theme = useTheme();
   return (
     <div>
@@ -14,18 +15,22 @@ const ChipDisplay = ({ tags, onChipClick, onChipDelete }: IProps) => {
         <Chip
           key={index}
           label={tag}
-          onClick={(event) => {
-            event.stopPropagation();
-            onChipClick(tag, index);
-          }}
+          onClick={
+            onChipClick
+              ? (event) => {
+                  event.stopPropagation();
+                  onChipClick(tag, index);
+                }
+              : undefined
+          }
           onDelete={onChipDelete ? () => onChipDelete(index) : undefined}
+          size={size}
           sx={{
-            margin: "0px 0px 4px 4px",
-            color: "white",
+            margin: "2px",
             "&:hover": {
-              backgroundColor: theme.palette.primary.dark,
+              backgroundColor: theme.palette.secondary.dark,
             },
-            backgroundColor: theme.palette.primary.main,
+            backgroundColor: theme.palette.secondary.light,
           }}
         />
       ))}

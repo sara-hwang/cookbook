@@ -1,18 +1,12 @@
-import {
-  Autocomplete,
-  Chip,
-  InputAdornment,
-  TextField,
-  useTheme,
-} from "@mui/material";
+import { Autocomplete, InputAdornment, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { Recipe } from "../constants/types";
 import SearchIcon from "@mui/icons-material/Search";
 import { setSearchTags } from "../redux/searchTags";
+import ChipDisplay from "./ChipDisplay";
 
 const SearchBar = () => {
-  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const { recipesList } = useAppSelector(
@@ -43,17 +37,13 @@ const SearchBar = () => {
       value={searchTags}
       fullWidth
       onChange={(e, value) => dispatch(setSearchTags(value))}
-      renderTags={(value: readonly string[], getTagProps) =>
-        value.map((option: string, index: number) => (
-          <Chip
-            {...getTagProps({ index })}
-            key={index}
-            label={option}
-            size="small"
-            sx={{ backgroundColor: theme.palette.primary.light }}
-          />
-        ))
-      }
+      renderTags={(value: readonly string[], getTagProps) => (
+        <ChipDisplay
+          tags={value}
+          size="small"
+          onChipDelete={getTagProps({ index: 0 }).onDelete}
+        />
+      )}
       renderInput={(params) => (
         <TextField
           {...params}

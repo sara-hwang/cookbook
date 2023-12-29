@@ -373,6 +373,7 @@ const RecipeDetails = () => {
           <Typography variant="h6">Tags</Typography>
           <ChipDisplay
             tags={recipe.tags}
+            size="medium"
             onChipClick={(tag) => {
               dispatch(setSearchTags([tag]));
               dispatch(setCurrentTab(-3));

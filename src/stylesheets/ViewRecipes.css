@@ -47,16 +47,6 @@ img.MuiCardMedia-root {
   height: 100%;
 }
 
-.MuiChip-root.card-chips {
-  margin: 0 5px 5px 0;
-  padding: 0;
-  height: 22px;
-}
-
-.MuiChip-root.card-chips .MuiChip-label {
-  padding: 0 8px;
-}
-
 .card-content .MuiTypography-root {
   text-overflow: clip;
   overflow: hidden;

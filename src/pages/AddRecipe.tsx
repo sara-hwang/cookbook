@@ -2,14 +2,12 @@ import {
   Autocomplete,
   Box,
   Button,
-  Chip,
   CircularProgress,
   Grid,
   IconButton,
   MenuItem,
   TextField,
   Typography,
-  useTheme,
 } from "@mui/material";
 import { Field, FieldArray, Form, Formik, FormikErrors } from "formik";
 import * as yup from "yup";
@@ -32,12 +30,12 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getAllTags, getRecipeDetails } from "../helpers";
 import "../stylesheets/AddRecipe.css";
 import { setRecipesList } from "../redux/recipesList";
+import ChipDisplay from "../components/ChipDisplay";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
-  const theme = useTheme();
   const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
@@ -500,17 +498,13 @@ const AddRecipe = () => {
                   options={allTags}
                   value={values.tags}
                   size="small"
-                  renderTags={(value: readonly string[], getTagProps) =>
-                    value.map((option: string, index: number) => (
-                      <Chip
-                        {...getTagProps({ index })}
-                        key={index}
-                        label={option}
-                        size="small"
-                        sx={{ backgroundColor: theme.palette.primary.light }}
-                      />
-                    ))
-                  }
+                  renderTags={(value: readonly string[], getTagProps) => (
+                    <ChipDisplay
+                      tags={value}
+                      size="small"
+                      onChipDelete={getTagProps({ index: 0 }).onDelete}
+                    />
+                  )}
                   renderInput={(params) => (
                     <TextField
                       {...params}
