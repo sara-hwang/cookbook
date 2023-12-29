@@ -8,7 +8,6 @@ interface IProps {
 const UploadImage = ({ selectedImage, setSelectedImage }: IProps) => {
   return (
     <div>
-      <Typography variant="h6">Photo</Typography>
       <input
         type="file"
         accept="image/*"

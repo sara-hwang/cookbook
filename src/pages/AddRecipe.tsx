@@ -30,7 +30,6 @@ import UploadImage from "../components/UploadImage";
 import { useNavigate, useParams } from "react-router-dom";
 import { getAllTags, getRecipeDetails } from "../helpers";
 import "../stylesheets/AddRecipe.css";
-import "../stylesheets/App.css";
 import { setRecipesList } from "../redux/recipesList";
 import DeleteRecipeDialog from "./DeleteRecipeDialog";
 
@@ -193,35 +192,22 @@ const AddRecipe = () => {
             />
             <Grid container spacing={2}>
               <Grid item xs={12}>
-                <div className="side-by-side-container">
-                  <Field
-                    placeholder="My Recipe Title"
-                    name="title"
-                    type="input"
-                    as={TextField}
-                    label="Title"
-                    fullWidth
-                    required
-                    disabled={id !== undefined}
-                    error={errors.title !== undefined}
-                    helperText={
-                      id
-                        ? "You cannot edit a recipe title after creation."
-                        : errors.title
-                    }
-                    sx={{ marginRight: "20px" }}
-                  />
-                  {id && (
-                    <Button
-                      variant="contained"
-                      onClick={() => setPopupOpen(true)}
-                      color="error"
-                    >
-                      <Delete />
-                      &nbsp;Delete Recipe
-                    </Button>
-                  )}
-                </div>
+                <Field
+                  placeholder="My Recipe Title"
+                  name="title"
+                  type="input"
+                  as={TextField}
+                  label="Title"
+                  fullWidth
+                  required
+                  disabled={id !== undefined}
+                  error={errors.title !== undefined}
+                  helperText={
+                    id
+                      ? "You cannot edit a recipe title after creation."
+                      : errors.title
+                  }
+                />
               </Grid>
               <Grid item xs={12} md={9}>
                 <Field
@@ -234,7 +220,7 @@ const AddRecipe = () => {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12}>
+              <Grid item>
                 <Field
                   name="servings"
                   type="number"
@@ -248,10 +234,10 @@ const AddRecipe = () => {
                   helperText={errors.servings}
                 />
               </Grid>
-              <Grid item container>
-                <FieldArray name="ingredients">
-                  {(arrayHelpers) => (
-                    <div>
+              <FieldArray name="ingredients">
+                {(arrayHelpers) => (
+                  <>
+                    <Grid item xs={12}>
                       <Typography variant="h6">
                         Ingredients
                         <IconButton
@@ -274,152 +260,149 @@ const AddRecipe = () => {
                           Add Divider
                         </Button>
                       </Typography>
-                      {values.ingredients?.map(
-                        (ingredient: Ingredient, index) => {
-                          return (
-                            <Grid
-                              item
-                              key={index}
-                              xs={12}
-                              padding={0.5}
-                              marginLeft={1}
-                              style={{ whiteSpace: "nowrap" }}
-                            >
-                              <div>
-                                {!ingredient.isDivider && (
-                                  <>
-                                    <Field
-                                      name={`ingredients.${index}.amount`}
-                                      type="number"
-                                      as={TextField}
-                                      placeholder="Amount *"
-                                      size="small"
-                                      sx={{ width: "25%" }}
-                                      InputProps={{
-                                        inputProps: { min: "0", step: "any" },
-                                      }}
-                                      error={
-                                        errors.ingredients &&
-                                        errors.ingredients[index] &&
-                                        (
-                                          errors.ingredients[
-                                            index
-                                          ] as FormikErrors<Ingredient>
-                                        ).amount !== undefined
-                                      }
-                                      helperText={
-                                        errors.ingredients &&
-                                        errors.ingredients[index] &&
-                                        (
-                                          errors.ingredients[
-                                            index
-                                          ] as FormikErrors<Ingredient>
-                                        ).amount
-                                      }
-                                    />
-                                    <Field
-                                      name={`ingredients.${index}.unit`}
-                                      type="number"
-                                      as={TextField}
-                                      select
-                                      size="small"
-                                      label={!ingredient.unit ? "Unit" : ""}
-                                      InputLabelProps={{
-                                        shrink: false,
-                                      }}
-                                      sx={{ width: "90px" }}
-                                      className="text-field-input"
-                                      error={
-                                        errors.ingredients &&
-                                        errors.ingredients[index] &&
-                                        (
-                                          errors.ingredients[
-                                            index
-                                          ] as FormikErrors<Ingredient>
-                                        ).unit !== undefined
-                                      }
-                                      helperText={
-                                        errors.ingredients &&
-                                        errors.ingredients[index] &&
-                                        (
-                                          errors.ingredients[
-                                            index
-                                          ] as FormikErrors<Ingredient>
-                                        ).unit
-                                      }
-                                    >
-                                      {Object.values(UnitMenuItem)
-                                        .filter(
-                                          (unitMenuItem) =>
-                                            typeof unitMenuItem == "string"
-                                        )
-                                        .map((unitMenuItem) => (
-                                          <MenuItem
-                                            key={unitMenuItem}
-                                            value={unitMenuItem}
-                                          >
-                                            {unitMenuItem}
-                                          </MenuItem>
-                                        ))}
-                                    </Field>
-                                  </>
-                                )}
-                                <Field
-                                  name={`ingredients.${index}.element`}
-                                  as={TextField}
-                                  placeholder={
-                                    ingredient.isDivider
-                                      ? "Section name *"
-                                      : "Ingredient *"
-                                  }
-                                  size="small"
-                                  sx={{ width: "65%" }}
-                                  error={
-                                    errors.ingredients &&
-                                    errors.ingredients[index] &&
-                                    (
-                                      errors.ingredients[
-                                        index
-                                      ] as FormikErrors<Ingredient>
-                                    ).element !== undefined
-                                  }
-                                  helperText={
-                                    errors.ingredients &&
-                                    errors.ingredients[index] &&
-                                    (
-                                      errors.ingredients[
-                                        index
-                                      ] as FormikErrors<Ingredient>
-                                    ).element
-                                  }
-                                />
-                                <IconButton
-                                  onClick={() => {
-                                    arrayHelpers.remove(index);
-                                  }}
-                                >
-                                  <Delete />
-                                </IconButton>
-                              </div>
+                    </Grid>
+                    {values.ingredients?.map(
+                      (ingredient: Ingredient, index) => {
+                        return (
+                          <Grid item container key={index} xs={12} spacing={1}>
+                            {!ingredient.isDivider && (
+                              <>
+                                <Grid item>
+                                  <Field
+                                    name={`ingredients.${index}.amount`}
+                                    type="number"
+                                    as={TextField}
+                                    placeholder="Amount *"
+                                    size="small"
+                                    InputProps={{
+                                      inputProps: { min: "0", step: "any" },
+                                    }}
+                                    error={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).amount !== undefined
+                                    }
+                                    helperText={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).amount
+                                    }
+                                  />
+                                </Grid>
+                                <Grid item>
+                                  <Field
+                                    name={`ingredients.${index}.unit`}
+                                    type="number"
+                                    as={TextField}
+                                    select
+                                    size="small"
+                                    label={!ingredient.unit ? "Unit *" : ""}
+                                    InputLabelProps={{
+                                      shrink: false,
+                                    }}
+                                    error={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).unit !== undefined
+                                    }
+                                    helperText={
+                                      errors.ingredients &&
+                                      errors.ingredients[index] &&
+                                      (
+                                        errors.ingredients[
+                                          index
+                                        ] as FormikErrors<Ingredient>
+                                      ).unit
+                                    }
+                                  >
+                                    {Object.values(UnitMenuItem)
+                                      .filter(
+                                        (unitMenuItem) =>
+                                          typeof unitMenuItem == "string"
+                                      )
+                                      .map((unitMenuItem) => (
+                                        <MenuItem
+                                          key={unitMenuItem}
+                                          value={unitMenuItem}
+                                        >
+                                          {unitMenuItem}
+                                        </MenuItem>
+                                      ))}
+                                  </Field>
+                                </Grid>
+                              </>
+                            )}
+                            <Grid item xs>
+                              <Field
+                                name={`ingredients.${index}.element`}
+                                as={TextField}
+                                placeholder={
+                                  ingredient.isDivider
+                                    ? "Section name *"
+                                    : "Ingredient *"
+                                }
+                                size="small"
+                                fullWidth
+                                error={
+                                  errors.ingredients &&
+                                  errors.ingredients[index] &&
+                                  (
+                                    errors.ingredients[
+                                      index
+                                    ] as FormikErrors<Ingredient>
+                                  ).element !== undefined
+                                }
+                                helperText={
+                                  errors.ingredients &&
+                                  errors.ingredients[index] &&
+                                  (
+                                    errors.ingredients[
+                                      index
+                                    ] as FormikErrors<Ingredient>
+                                  ).element
+                                }
+                              />
                             </Grid>
-                          );
-                        }
-                      )}
-                    </div>
-                  )}
-                </FieldArray>
-              </Grid>
-              <Grid item xs={12}>
-                <FieldArray name="steps">
-                  {(arrayHelpers) => (
-                    <div>
+                            <Grid item>
+                              <IconButton
+                                onClick={() => {
+                                  arrayHelpers.remove(index);
+                                }}
+                                disableRipple
+                                className="delete-element-button"
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+                        );
+                      }
+                    )}
+                  </>
+                )}
+              </FieldArray>
+              <FieldArray name="steps">
+                {(arrayHelpers) => (
+                  <>
+                    <Grid item>
                       <Typography variant="h6">
                         Steps
                         <IconButton
                           onClick={() => {
                             arrayHelpers.push({
                               stepNumber: values.steps.length + 1 - numDividers,
-                              text: "",
                             });
                           }}
                         >
@@ -430,7 +413,6 @@ const AddRecipe = () => {
                           onClick={() => {
                             arrayHelpers.push({
                               stepNumber: 0,
-                              text: "",
                             });
                             setNumDividers(numDividers + 1);
                           }}
@@ -438,76 +420,72 @@ const AddRecipe = () => {
                           Add Divider
                         </Button>
                       </Typography>
-                      {values.steps?.map((step, index) => {
-                        return (
-                          <Grid
-                            item
-                            xs={12}
-                            key={index}
-                            padding={0.5}
-                            marginLeft={1}
-                            whiteSpace={"nowrap"}
-                          >
-                            <Typography variant="h6">
-                              {step.stepNumber > 0 && (
-                                <>{step.stepNumber}.&nbsp;</>
-                              )}
-                              <Field
-                                name={`steps.${index}.text`}
-                                placeholder={
-                                  step.stepNumber > 0
-                                    ? "Instructions..."
-                                    : "Section name..."
-                                }
-                                as={TextField}
-                                size="small"
-                                multiline={step.stepNumber > 0 ?? undefined}
-                                rows={2}
-                                sx={{
-                                  width:
-                                    step.stepNumber > 0 ? "80%" : undefined,
-                                }}
-                                error={
-                                  errors.steps &&
-                                  errors.steps[index] &&
-                                  (errors.steps[index] as FormikErrors<Step>)
-                                    .text !== undefined
-                                }
-                                helperText={
-                                  errors.steps &&
-                                  errors.steps[index] &&
-                                  (errors.steps[index] as FormikErrors<Step>)
-                                    .text
-                                }
-                              />
-                              <IconButton
-                                onClick={() => {
-                                  if (step.stepNumber === 0) {
-                                    setNumDividers(numDividers - 1);
-                                  } else {
-                                    values.steps.forEach((step) => {
-                                      if (
-                                        step.stepNumber > 0 &&
-                                        values.steps.indexOf(step) > index
-                                      ) {
-                                        step.stepNumber -= 1;
-                                      }
-                                    });
-                                  }
-                                  arrayHelpers.remove(index);
-                                }}
-                              >
-                                <Delete />
-                              </IconButton>
+                    </Grid>
+                    {values.steps?.map((step, index) => {
+                      return (
+                        <Grid item container xs={12} key={index} spacing={1}>
+                          <Grid item>
+                            <Typography key={index} variant="h6">
+                              {step.stepNumber > 0 && step.stepNumber + "."}
                             </Typography>
                           </Grid>
-                        );
-                      })}
-                    </div>
-                  )}
-                </FieldArray>
-              </Grid>
+                          <Grid item xs>
+                            <Field
+                              name={`steps.${index}.text`}
+                              placeholder={
+                                step.stepNumber > 0
+                                  ? "Instructions..."
+                                  : "Section name..."
+                              }
+                              as={TextField}
+                              size="small"
+                              fullWidth
+                              multiline={step.stepNumber > 0 ?? undefined}
+                              rows={2}
+                              error={
+                                errors.steps &&
+                                errors.steps[index] &&
+                                (errors.steps[index] as FormikErrors<Step>)
+                                  .text !== undefined
+                              }
+                              helperText={
+                                errors.steps &&
+                                errors.steps[index] &&
+                                (errors.steps[index] as FormikErrors<Step>).text
+                              }
+                            />
+                          </Grid>
+                          <Grid item>
+                            <IconButton
+                              disableRipple
+                              className="delete-element-button"
+                              onClick={() => {
+                                if (step.stepNumber === 0) {
+                                  setNumDividers(numDividers - 1);
+                                } else {
+                                  values.steps.forEach((step) => {
+                                    if (
+                                      step.stepNumber > 0 &&
+                                      values.steps.indexOf(step) > index
+                                    ) {
+                                      step.stepNumber -= 1;
+                                    }
+                                  });
+                                }
+                                arrayHelpers.remove(index);
+                              }}
+                            >
+                              <Delete />
+                            </IconButton>
+                          </Grid>
+                        </Grid>
+                      );
+                    })}
+                  </>
+                )}
+              </FieldArray>
               <Grid item xs={12}>
+                <Typography variant="h6">Photo</Typography>
                 <Field
                   name="photo"
                   type="input"

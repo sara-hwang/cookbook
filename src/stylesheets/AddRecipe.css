@@ -6,3 +6,13 @@
   position: absolute;
   left: 10px;
 }
+
+.MuiIconButton-root.delete-element-button {
+  padding-left: 0;
+  color: none;
+  transition: color 0.2s ease;
+}
+
+.MuiIconButton-root.delete-element-button:hover {
+  color: red;
+}
