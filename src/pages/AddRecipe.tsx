@@ -231,9 +231,18 @@ const AddRecipe = () => {
               <FieldArray name="ingredients">
                 {(arrayHelpers) => (
                   <>
-                    <Grid item xs={12}>
-                      <Typography variant="h6">
-                        Ingredients
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      spacing={1}
+                      direction="row"
+                      alignItems="center"
+                    >
+                      <Grid item>
+                        <Typography variant="h6">Ingredients</Typography>
+                      </Grid>
+                      <Grid item>
                         <IconButton
                           onClick={() => {
                             arrayHelpers.push({
@@ -243,6 +252,8 @@ const AddRecipe = () => {
                         >
                           <Add />
                         </IconButton>
+                      </Grid>
+                      <Grid item>
                         <Button
                           variant="outlined"
                           onClick={() => {
@@ -253,7 +264,17 @@ const AddRecipe = () => {
                         >
                           Add Divider
                         </Button>
-                      </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            // to do
+                          }}
+                        >
+                          Bulk Entry
+                        </Button>
+                      </Grid>
                     </Grid>
                     {values.ingredients?.map(
                       (ingredient: Ingredient, index) => {
@@ -392,9 +413,18 @@ const AddRecipe = () => {
               <FieldArray name="steps">
                 {(arrayHelpers) => (
                   <>
-                    <Grid item>
-                      <Typography variant="h6">
-                        Steps
+                    <Grid
+                      item
+                      container
+                      xs={12}
+                      spacing={1}
+                      direction="row"
+                      alignItems="center"
+                    >
+                      <Grid item>
+                        <Typography variant="h6">Steps </Typography>
+                      </Grid>
+                      <Grid item>
                         <IconButton
                           onClick={() => {
                             arrayHelpers.push({
@@ -404,6 +434,8 @@ const AddRecipe = () => {
                         >
                           <Add />
                         </IconButton>
+                      </Grid>
+                      <Grid item>
                         <Button
                           variant="outlined"
                           onClick={() => {
@@ -415,7 +447,17 @@ const AddRecipe = () => {
                         >
                           Add Divider
                         </Button>
-                      </Typography>
+                      </Grid>
+                      <Grid item>
+                        <Button
+                          variant="outlined"
+                          onClick={() => {
+                            // to do
+                          }}
+                        >
+                          Bulk Entry
+                        </Button>
+                      </Grid>
                     </Grid>
                     {values.steps?.map((step, index) => {
                       return (
