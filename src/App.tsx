@@ -37,6 +37,8 @@ import { popTab, pushTab, setCurrentTab } from "./redux/tabsList";
 import { RootState } from "./redux/store";
 import { setSearchTags } from "./redux/searchTags";
 import SearchBar from "./components/SearchBar";
+import { getRecipesList } from "./helpers";
+import { setRecipesList } from "./redux/recipesList";
 
 const drawerWidth = 240;
 
@@ -181,18 +183,22 @@ export default function ResponsiveDrawer() {
                     onClick={
                       randomDisabled
                         ? undefined
-                        : () => {
+                        : async () => {
                             setRandomDisabled(true);
                             setTimeout(() => {
                               setRandomDisabled(false);
                             }, 1000);
+                            let recipes = [];
+                            if (recipesList.length == 0)
+                              recipes = await getRecipesList();
+                            else recipes = recipesList;
                             const randomIndex = Math.floor(
-                              Math.random() * recipesList.length
+                              Math.random() * recipes.length
                             );
                             dispatch(
                               pushTab({
-                                label: recipesList[randomIndex].title,
-                                link: `/view/${recipesList[randomIndex].key}`,
+                                label: recipes[randomIndex].title,
+                                link: `/view/${recipes[randomIndex].key}`,
                               })
                             );
                           }
