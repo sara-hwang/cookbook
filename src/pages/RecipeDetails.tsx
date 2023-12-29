@@ -186,8 +186,9 @@ const RecipeDetails = () => {
               disableInteractive
               title={
                 isAuthenticated()
-                  ? groceryMode &&
-                    "Click to add selected ingredients to grocery list"
+                  ? groceryMode
+                    ? "Add selected ingredients to grocery list"
+                    : "Enter grocery mode"
                   : "Log in to add to grocery list"
               }
             >
