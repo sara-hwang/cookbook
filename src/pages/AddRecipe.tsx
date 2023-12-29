@@ -31,7 +31,6 @@ import { useNavigate, useParams } from "react-router-dom";
 import { getAllTags, getRecipeDetails } from "../helpers";
 import "../stylesheets/AddRecipe.css";
 import { setRecipesList } from "../redux/recipesList";
-import DeleteRecipeDialog from "./DeleteRecipeDialog";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
@@ -42,7 +41,6 @@ const AddRecipe = () => {
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
   const [numDividers, setNumDividers] = useState(0);
   const [allTags, setAllTags] = useState<string[]>([]);
-  const [popupOpen, setPopupOpen] = useState(false);
 
   useEffect(() => {
     const initTags = async () => {
@@ -186,10 +184,6 @@ const AddRecipe = () => {
       }) => (
         <Form>
           <Box sx={{ display: "flex", padding: "24px" }}>
-            <DeleteRecipeDialog
-              popupOpen={popupOpen}
-              setPopupOpen={setPopupOpen}
-            />
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Field

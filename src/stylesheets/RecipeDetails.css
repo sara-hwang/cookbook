@@ -1,7 +1,8 @@
-h6 + ul,
-h6 + ol {
-  margin-top: 0px;
-  margin-bottom: 0px;
+.MuiTypography-root.MuiTypography-h4 {
+  font-family: var(--font-family);
+  font-weight: bold;
+  font-size: xx-large;
+  color: var(--ThemeBlue);
 }
 
 .MuiTypography-root.MuiTypography-h6 {
@@ -9,13 +10,12 @@ h6 + ol {
   color: grey;
 }
 
-.h5 {
-  font-family: var(--font-family);
-  font-weight: bold;
-  font-size: xx-large;
-  color: var(--ThemeBlue);
-}
-
 h6 + div {
   margin-top: 5px;
+}
+
+h6 + ul,
+h6 + ol {
+  margin-top: 0px;
+  margin-bottom: 0px;
 }

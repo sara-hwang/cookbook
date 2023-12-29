@@ -3,6 +3,8 @@ import {
   Button,
   Grid,
   IconButton,
+  Menu,
+  MenuItem,
   TextField,
   Tooltip,
   Typography,
@@ -15,7 +17,6 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { setSearchTags } from "../redux/searchTags";
 import ChipDisplay from "../components/ChipDisplay";
 import "../stylesheets/RecipeDetails.css";
-import "../stylesheets/App.css";
 import { RootState } from "../redux/store";
 import { getRecipeDetails } from "../helpers";
 import { getGroceryList, updateGroceryList } from "../api";
@@ -23,9 +24,12 @@ import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,
   ChecklistOutlined,
+  Delete,
   Edit,
+  MoreVert,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
+import DeleteRecipeDialog from "./DeleteRecipeDialog";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
@@ -36,10 +40,16 @@ const RecipeDetails = () => {
   const [servings, setServings] = useState(recipe.servings);
   const [groceryMode, setGroceryMode] = useState(false);
   const [prepareMode, setPrepareMode] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
   );
+  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
+  const open = Boolean(anchorEl);
+  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
+    setAnchorEl(event.currentTarget);
+  };
 
   useEffect(() => {
     if (id !== undefined) {
@@ -95,21 +105,55 @@ const RecipeDetails = () => {
 
   return (
     <Box sx={{ display: "flex", padding: "24px" }}>
-      <Grid container rowSpacing={2}>
-        <Grid item xs={12}>
-          <div className="side-by-side-container">
+      <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+      <Grid container spacing={2}>
+        <Grid
+          item
+          container
+          xs={12}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
+          <Grid item>
+            <Typography variant="h4">{recipe.title}</Typography>
             <div>
-              <div className="h5">{recipe.title}</div>
               {recipe.dateAdded
                 ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
                 : undefined}
             </div>
-            <Button variant="contained" onClick={() => navigate(`/add/${id}`)}>
-              <Edit />
-              &nbsp;Edit Recipe
-            </Button>
-          </div>
-          {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
+            {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
+          </Grid>
+          <Grid item>
+            <IconButton disableTouchRipple onClick={handleClick}>
+              <MoreVert />
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => setAnchorEl(null)}
+            >
+              <MenuItem
+                onClick={() => {
+                  navigate(`/add/${id}`);
+                  setAnchorEl(null);
+                }}
+              >
+                <Edit fontSize="small" color="action" />
+                &nbsp;Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setPopupOpen(true);
+                  setAnchorEl(null);
+                }}
+              >
+                <Delete fontSize="small" color="action" />
+                &nbsp;Delete
+              </MenuItem>
+            </Menu>
+          </Grid>
         </Grid>
         <Grid item xs={12}>
           <div className="side-by-side-container">
