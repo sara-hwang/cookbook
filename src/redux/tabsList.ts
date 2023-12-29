@@ -12,15 +12,15 @@ const initialState: { tabsList: TabItem[]; currentTab: number } = {
       : -3,
 };
 
-const findIndex = (tabs: TabItem[], newTab: TabItem) => {
-  return tabs.map((tab) => tab.label).indexOf(newTab.label);
+const findIndex = (tabs: TabItem[], tabLink: string) => {
+  return tabs.map((tab) => tab.link).indexOf(tabLink);
 };
 
 export const tabsListSlice = createSlice({
   name: "tabsList",
   initialState,
   reducers: {
-    popTab: (state, action: PayloadAction<TabItem>) => {
+    popTab: (state, action: PayloadAction<string>) => {
       const index = findIndex(state.tabsList, action.payload);
       if (index > -1) {
         if (index <= state.currentTab) {
@@ -33,7 +33,7 @@ export const tabsListSlice = createSlice({
       }
     },
     pushTab: (state, action: PayloadAction<TabItem>) => {
-      const index = findIndex(state.tabsList, action.payload);
+      const index = findIndex(state.tabsList, action.payload.link);
       if (index == -1) {
         state.tabsList = [...state.tabsList, action.payload];
         state.currentTab = state.tabsList.length - 1;

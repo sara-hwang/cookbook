@@ -231,7 +231,7 @@ export default function ResponsiveDrawer() {
                   component="span"
                   disableRipple
                   onClick={(event) => {
-                    dispatch(popTab(tab));
+                    dispatch(popTab(tab.link));
                   }}
                 >
                   <Close fontSize="small" />

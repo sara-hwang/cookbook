@@ -3,6 +3,7 @@ import { deleteRecipe } from "../api";
 import { setRecipesList } from "../redux/recipesList";
 import { useNavigate, useParams } from "react-router-dom";
 import { useAppDispatch } from "../redux/hooks";
+import { popTab } from "../redux/tabsList";
 
 interface DeleteRecipeDialogProps {
   popupOpen: boolean;
@@ -38,6 +39,7 @@ const DeleteRecipeDialog = ({
                   setPopupOpen(false);
                   const response = await deleteRecipe(id);
                   if (response && response.status === 200) {
+                    dispatch(popTab(`/view/${id}`));
                     dispatch(setRecipesList([]));
                     navigate("/view");
                   } else {
