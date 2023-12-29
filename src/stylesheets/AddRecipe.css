@@ -1,4 +1,11 @@
+.submit-button {
+  width: 123px;
+}
 
+.submit-button .MuiCircularProgress-root {
+  position: absolute;
+  left: 10px;
+}
 
 .tag-input {
   background: transparent;
@@ -12,9 +19,9 @@
 }
 
 .tag-input:active,
-.tag-input:focus-within{
+.tag-input:focus-within {
   border-color: var(--ThemeBlue);
-  border-width : 2px;
+  border-width: 2px;
   padding: 0px;
 }
 

@@ -3,9 +3,9 @@ import {
   Box,
   Button,
   Chip,
+  CircularProgress,
   Grid,
   IconButton,
-  LinearProgress,
   MenuItem,
   TextField,
   Typography,
@@ -547,38 +547,29 @@ const AddRecipe = () => {
                   }}
                 />
               </Grid>
-              <Grid item xs={12}>
-                <div className="spaced-apart">
-                  <div>
-                    <Button
-                      variant="contained"
-                      disabled={!isValid || isSubmitting}
-                      onClick={submitForm}
-                    >
-                      {id ? "Save" : "Submit"}
-                    </Button>
-                  </div>
-                  <div
-                    style={{
-                      flex: 1,
-                      display: "flex",
-                      justifyContent: "center",
-                    }}
+              <Grid item container justifyContent="flex-end" spacing={1}>
+                <Grid item>
+                  <Button
+                    variant="outlined"
+                    onClick={() => saveDraft(values)}
+                    disabled={values === EmptyRecipe}
+                  >
+                    Save Draft
+                  </Button>
+                </Grid>
+                <Grid item>
+                  <Button
+                    variant="contained"
+                    disabled={!isValid || isSubmitting}
+                    onClick={submitForm}
+                    className="submit-button"
                   >
                     {isSubmitting && (
-                      <LinearProgress color="primary" sx={{ width: "90%" }} />
+                      <CircularProgress color="primary" size={"1rem"} />
                     )}
-                  </div>
-                  <div>
-                    <Button
-                      variant="outlined"
-                      onClick={() => saveDraft(values)}
-                      disabled={values === EmptyRecipe}
-                    >
-                      Save Draft
-                    </Button>
-                  </div>
-                </div>
+                    {id ? "Save" : "Submit"}
+                  </Button>
+                </Grid>
               </Grid>
             </Grid>
           </Box>
