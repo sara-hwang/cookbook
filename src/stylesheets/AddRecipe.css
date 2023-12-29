@@ -25,3 +25,7 @@
   position: absolute;
   left: 10px;
 }
+
+.MuiFormLabel-root.MuiInputLabel-root {
+  z-index: 0;
+}

@@ -1,4 +1,4 @@
-import { Box, Button, Grid } from "@mui/material";
+import { Box, Button, Grid, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { useLocation } from "react-router-dom";
@@ -48,7 +48,7 @@ export const GroceryList = () => {
     <Box sx={{ display: "flex", padding: "24px" }}>
       <Grid container spacing={3}>
         <Grid item xs={12}>
-          <div className="h5">Grocery List</div>
+          <Typography variant="h4">Grocery List</Typography>
         </Grid>
         <Grid item xs={12} sx={{ padding: "0 !important" }}>
           <form id="grocery-checklist">

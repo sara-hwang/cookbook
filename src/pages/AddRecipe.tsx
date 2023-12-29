@@ -214,7 +214,7 @@ const AddRecipe = () => {
                   size="small"
                 />
               </Grid>
-              <Grid item>
+              <Grid item xs={12}>
                 <Field
                   name="servings"
                   type="number"

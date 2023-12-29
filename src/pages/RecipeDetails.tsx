@@ -115,10 +115,8 @@ const RecipeDetails = () => {
           justifyContent="space-between"
           alignItems="flex-start"
         >
-          <Grid item>
-            <Typography variant="h4" className="recipe-title">
-              {recipe.title}
-            </Typography>
+          <Grid item xs={11}>
+            <Typography variant="h4">{recipe.title}</Typography>
             <div>
               {recipe.dateAdded
                 ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
@@ -126,7 +124,7 @@ const RecipeDetails = () => {
             </div>
             {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
           </Grid>
-          <Grid item>
+          <Grid item xs={1}>
             <IconButton disableTouchRipple onClick={handleClick}>
               <MoreVert />
             </IconButton>

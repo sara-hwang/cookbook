@@ -17,6 +17,12 @@ code {
   --ThemeColourHover: #b82402;
 }
 
+.MuiTypography-root.MuiTypography-h4 {
+  font-family: var(--font-family);
+  font-weight: bold;
+  font-size: xx-large;
+}
+
 .MuiTypography-root.MuiTypography-h6 {
   font-family: var(--font-family);
 }
