@@ -12,6 +12,7 @@ const RecipeSchema = new mongoose.Schema({
   },
   ingredients: [
     {
+      isDivider: Boolean,
       amount: Number,
       element: {
         type: String,

@@ -7,7 +7,6 @@ import {
   IconButton,
   LinearProgress,
   MenuItem,
-  Select,
   TextField,
   Typography,
 } from "@mui/material";
@@ -19,7 +18,7 @@ import {
   Ingredient,
   Recipe,
   Step,
-  Unit,
+  UnitMenuItem,
 } from "../constants/types";
 import { Add, Delete } from "@mui/icons-material";
 import { addRecipe, updateRecipe, upload } from "../api";
@@ -76,11 +75,16 @@ const AddRecipe = () => {
     servings: yup.number().required("Required").min(0),
     ingredients: yup.array().of(
       yup.object().shape({
-        amount: yup
-          .number()
-          .required("Required")
-          .min(0, "Must be greater than 0"),
-        // unit: yup.string().required("Required"),
+        isDivider: yup.boolean().required("Required"),
+        amount: yup.number().when(["isDivider"], {
+          is: false,
+          then: (schema) =>
+            schema.required("Required").min(0, "Must be at least 0"),
+        }),
+        unit: yup.string().when(["isDivider"], {
+          is: false,
+          then: (schema) => schema.required("Required"),
+        }),
         element: yup.string().required("Required"),
       })
     ),
@@ -253,9 +257,7 @@ const AddRecipe = () => {
                         <IconButton
                           onClick={() => {
                             arrayHelpers.push({
-                              amount: "",
-                              unit: "g",
-                              element: "",
+                              isDivider: false,
                             });
                           }}
                         >
@@ -265,9 +267,7 @@ const AddRecipe = () => {
                           variant="outlined"
                           onClick={() => {
                             arrayHelpers.push({
-                              amount: "1",
-                              unit: undefined,
-                              element: "",
+                              isDivider: true,
                             });
                           }}
                         >
@@ -286,7 +286,7 @@ const AddRecipe = () => {
                               style={{ whiteSpace: "nowrap" }}
                             >
                               <div>
-                                {ingredient.unit !== undefined && (
+                                {!ingredient.isDivider && (
                                   <>
                                     <Field
                                       name={`ingredients.${index}.amount`}
@@ -320,19 +320,45 @@ const AddRecipe = () => {
                                     <Field
                                       name={`ingredients.${index}.unit`}
                                       type="number"
-                                      as={Select}
+                                      as={TextField}
+                                      select
                                       size="small"
-                                      label="Unit"
+                                      label={!ingredient.unit ? "Unit" : ""}
+                                      InputLabelProps={{
+                                        shrink: false,
+                                      }}
                                       sx={{ width: "90px" }}
                                       className="text-field-input"
+                                      error={
+                                        errors.ingredients &&
+                                        errors.ingredients[index] &&
+                                        (
+                                          errors.ingredients[
+                                            index
+                                          ] as FormikErrors<Ingredient>
+                                        ).unit !== undefined
+                                      }
+                                      helperText={
+                                        errors.ingredients &&
+                                        errors.ingredients[index] &&
+                                        (
+                                          errors.ingredients[
+                                            index
+                                          ] as FormikErrors<Ingredient>
+                                        ).unit
+                                      }
                                     >
-                                      {Object.values(Unit)
+                                      {Object.values(UnitMenuItem)
                                         .filter(
-                                          (unit) => typeof unit == "string"
+                                          (unitMenuItem) =>
+                                            typeof unitMenuItem == "string"
                                         )
-                                        .map((unit) => (
-                                          <MenuItem key={unit} value={unit}>
-                                            {unit}
+                                        .map((unitMenuItem) => (
+                                          <MenuItem
+                                            key={unitMenuItem}
+                                            value={unitMenuItem}
+                                          >
+                                            {unitMenuItem}
                                           </MenuItem>
                                         ))}
                                     </Field>
@@ -342,7 +368,7 @@ const AddRecipe = () => {
                                   name={`ingredients.${index}.element`}
                                   as={TextField}
                                   placeholder={
-                                    ingredient.unit === undefined
+                                    ingredient.isDivider
                                       ? "Section name *"
                                       : "Ingredient *"
                                   }

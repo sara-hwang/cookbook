@@ -12,8 +12,9 @@ export type Recipe = {
 };
 
 export type Ingredient = {
-  amount: number;
-  unit: Unit;
+  isDivider: boolean;
+  amount?: number;
+  unit?: UnitMenuItem;
   element: string;
 };
 
@@ -27,7 +28,7 @@ export type TabItem = {
   link: string;
 };
 
-export enum Unit {
+export enum UnitMenuItem {
   g,
   mL,
   tsp,

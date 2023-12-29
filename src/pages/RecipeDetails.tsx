@@ -64,8 +64,10 @@ const RecipeDetails = () => {
     setServings(recipe.servings);
   }, [recipe]);
 
-  const calculateAmount = (num: number) => {
-    return !servings ? 0 : +((num * servings) / recipe.servings).toFixed(2);
+  const calculateAmount = (num?: number) => {
+    return !servings || !num
+      ? 0
+      : +((num * servings) / recipe.servings).toFixed(2);
   };
 
   const addToGrocery = async () => {
@@ -181,7 +183,11 @@ const RecipeDetails = () => {
           {groceryMode ? (
             <form id="grocery-checklist">
               {recipe?.ingredients.map((ing, index) =>
-                ing.unit ? (
+                ing.isDivider ? (
+                  <Typography variant="h6" key={index}>
+                    {ing.element}
+                  </Typography>
+                ) : (
                   <div
                     key={index}
                     style={{
@@ -210,17 +216,17 @@ const RecipeDetails = () => {
                       {ing.element}
                     </label>
                   </div>
-                ) : (
-                  <Typography variant="h6" key={index}>
-                    {ing.element}
-                  </Typography>
                 )
               )}
             </form>
           ) : (
             <ul>
               {recipe?.ingredients.map((ing, index) =>
-                ing.unit ? (
+                ing.isDivider ? (
+                  <Typography variant="h6" marginLeft={"-30px"} key={index}>
+                    {ing.element}
+                  </Typography>
+                ) : (
                   <Fragment key={index}>
                     <li style={{ width: "fit-content" }}>
                       {calculateAmount(ing.amount)}
@@ -230,10 +236,6 @@ const RecipeDetails = () => {
                       {ing.element}
                     </li>
                   </Fragment>
-                ) : (
-                  <Typography variant="h6" marginLeft={"-30px"} key={index}>
-                    {ing.element}
-                  </Typography>
                 )
               )}
             </ul>
