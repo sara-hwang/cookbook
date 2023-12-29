@@ -1,4 +1,10 @@
-import { Autocomplete, Chip, InputAdornment, TextField } from "@mui/material";
+import {
+  Autocomplete,
+  Chip,
+  InputAdornment,
+  TextField,
+  useTheme,
+} from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { Recipe } from "../constants/types";
@@ -6,6 +12,7 @@ import SearchIcon from "@mui/icons-material/Search";
 import { setSearchTags } from "../redux/searchTags";
 
 const SearchBar = () => {
+  const theme = useTheme();
   const dispatch = useAppDispatch();
 
   const { recipesList } = useAppSelector(
@@ -41,8 +48,9 @@ const SearchBar = () => {
           <Chip
             {...getTagProps({ index })}
             key={index}
-            variant="outlined"
             label={option}
+            size="small"
+            sx={{ backgroundColor: theme.palette.primary.light }}
           />
         ))
       }

@@ -8,6 +8,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { EmptyRecipe, Ingredient, Recipe, TabItem } from "../constants/types";
 import { useNavigate, useParams } from "react-router-dom";
@@ -35,6 +36,7 @@ const RecipeDetails = () => {
   const dispatch = useAppDispatch();
   const auth = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
+  const theme = useTheme();
   const { id } = useParams();
   const [recipe, setRecipe] = useState<Recipe>(EmptyRecipe);
   const [servings, setServings] = useState(recipe.servings);
@@ -190,7 +192,7 @@ const RecipeDetails = () => {
                 disableRipple
                 sx={{
                   padding: 0,
-                  "&:hover": { color: "var(--ThemeColour)" },
+                  "&:hover": { color: theme.palette.primary.main },
                 }}
                 onClick={() => {
                   groceryMode && isAuthenticated() && addToGrocery();
@@ -292,7 +294,7 @@ const RecipeDetails = () => {
                 disableRipple
                 sx={{
                   padding: 0,
-                  "&:hover": { color: "var(--ThemeColour)" },
+                  "&:hover": { color: theme.palette.primary.main },
                 }}
                 onClick={() => {
                   setPrepareMode(!prepareMode);

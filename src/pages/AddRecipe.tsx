@@ -9,6 +9,7 @@ import {
   MenuItem,
   TextField,
   Typography,
+  useTheme,
 } from "@mui/material";
 import { Field, FieldArray, Form, Formik, FormikErrors } from "formik";
 import * as yup from "yup";
@@ -36,6 +37,7 @@ const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
+  const theme = useTheme();
   const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
@@ -503,8 +505,9 @@ const AddRecipe = () => {
                       <Chip
                         {...getTagProps({ index })}
                         key={index}
-                        variant="outlined"
                         label={option}
+                        size="small"
+                        sx={{ backgroundColor: theme.palette.primary.light }}
                       />
                     ))
                   }

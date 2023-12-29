@@ -12,11 +12,6 @@ code {
     monospace;
 }
 
-:root {
-  --ThemeColour: #d92a02;
-  --ThemeColourHover: #b82402;
-}
-
 .MuiTypography-root.MuiTypography-h4 {
   font-family: var(--font-family);
   font-weight: bold;
