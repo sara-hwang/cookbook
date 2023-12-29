@@ -274,6 +274,7 @@ const AddRecipe = () => {
                                     as={TextField}
                                     placeholder="Amount *"
                                     size="small"
+                                    className="ingredient-amount-text-field"
                                     InputProps={{
                                       inputProps: { min: "0", step: "any" },
                                     }}
@@ -305,6 +306,7 @@ const AddRecipe = () => {
                                     select
                                     size="small"
                                     label={!ingredient.unit ? "Unit *" : ""}
+                                    className="ingredient-unit-select-field"
                                     InputLabelProps={{
                                       shrink: false,
                                     }}

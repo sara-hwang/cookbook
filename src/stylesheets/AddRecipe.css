@@ -1,10 +1,10 @@
-.submit-button {
-  width: 123px;
+.ingredient-amount-text-field {
+  width: 80px;
 }
 
-.submit-button .MuiCircularProgress-root {
-  position: absolute;
-  left: 10px;
+.ingredient-unit-select-field {
+  width: 86px;
+  box-sizing: border-box;
 }
 
 .MuiIconButton-root.delete-element-button {
@@ -15,4 +15,13 @@
 
 .MuiIconButton-root.delete-element-button:hover {
   color: red;
+}
+
+.submit-button {
+  width: 123px;
+}
+
+.submit-button .MuiCircularProgress-root {
+  position: absolute;
+  left: 10px;
 }
