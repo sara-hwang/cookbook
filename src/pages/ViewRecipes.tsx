@@ -1,23 +1,12 @@
-import {
-  Box,
-  Card,
-  CardActionArea,
-  CardContent,
-  CardMedia,
-  Chip,
-  Skeleton,
-  Typography,
-} from "@mui/material";
-import { Recipe, DEFAULT_PHOTO } from "../constants/types";
+import { Box } from "@mui/material";
+import { Recipe, EmptyRecipe } from "../constants/types";
 import { useEffect, useState } from "react";
 import "../stylesheets/ViewRecipes.css";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { getRecipesList } from "../helpers";
 import { setRecipesList } from "../redux/recipesList";
-import { pushTab } from "../redux/tabsList";
-import { setSearchTags } from "../redux/searchTags";
-import ChipDisplay from "../components/ChipDisplay";
+import RecipeCard from "./RecipeCard";
 
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
@@ -71,147 +60,40 @@ const ViewRecipes = () => {
     );
   }, [searchTags, recipesList]);
 
-  const handleCardHover = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    const card = event.currentTarget;
-    const cardContent = card.querySelector(".card-content") as HTMLElement;
-    const cardContentText = card.querySelector(
-      ".card-content .MuiTypography-root"
-    ) as HTMLElement;
-    const cardContentChips = card.querySelector(
-      ".card-content .MuiTypography-root.chips-container"
-    ) as HTMLElement;
-
-    if (
-      cardContent === null ||
-      cardContentText === null ||
-      cardContentChips === null
-    )
-      return;
-
-    cardContent.style.bottom = "0";
-    cardContent.style.top = "";
-    cardContentText.style.whiteSpace = "normal";
-    cardContentText.style.overflow = "visible";
-    cardContentChips.style.whiteSpace = "normal";
-    cardContentChips.style.overflow = "visible";
-    const newHeight = cardContent.offsetHeight;
-
-    const translateY = newHeight - 86;
-    cardContent.style.transform = `translateY(${-translateY}px)`;
-  };
-
-  const handleCardLeave = (
-    event: React.MouseEvent<HTMLDivElement, MouseEvent>
-  ) => {
-    const card = event.currentTarget;
-    const cardContent = event.currentTarget.querySelector(
-      ".card-content"
-    ) as HTMLElement;
-    const cardContentText = card.querySelector(
-      ".card-content .MuiTypography-root"
-    ) as HTMLElement;
-    const cardContentChips = card.querySelector(
-      ".card-content .MuiTypography-root.chips-container"
-    ) as HTMLElement;
-    if (
-      cardContent === null ||
-      cardContentText === null ||
-      cardContentChips === null
-    )
-      return;
-
-    cardContent.style.transform = "";
-    cardContent.style.bottom = "";
-    cardContent.style.top = "140px";
-    cardContentText.style.cssText = "";
-    cardContentChips.style.cssText = "";
-  };
-
   return (
     <Box
       className="recipe-grid-container"
-      style={{ display: "flex", flexWrap: "wrap", padding: `${cardSpacing}px` }}
+      style={{
+        display: "flex",
+        flexWrap: "wrap",
+        padding: `${cardSpacing}px`,
+      }}
       id="view-recipes-box"
     >
       {loading &&
-        [...Array(100).keys()].map((key) => {
-          return (
-            <Card
-              sx={{ width: cardWidth, margin: `${cardSpacing}px` }}
-              key={key}
-            >
-              <CardMedia>
-                <Skeleton animation="wave" variant="rectangular" />
-              </CardMedia>
-              <CardContent className="card-content-container-skeleton">
-                <Skeleton animation="wave" height="45px" />
-                <span className="card-content-skeleton">
-                  <Skeleton animation="wave" height="35px" width="50px" />
-                  <Skeleton animation="wave" height="35px" width="80px" />
-                </span>
-              </CardContent>
-            </Card>
-          );
-        })}
+        [...Array(100).keys()].map((key) => (
+          <RecipeCard
+            cardSpacing={cardSpacing}
+            cardWidth={cardWidth}
+            cardWidthPixels={cardWidthPixels}
+            isSkeleton={true}
+            key={key}
+            recipe={EmptyRecipe}
+          />
+        ))}
       {recipes &&
-        recipes.map((recipe) => {
-          return (
-            <Card
-              sx={{ width: cardWidth, margin: `${cardSpacing}px` }}
+        recipes
+          .filter((recipe) => recipe.tags.some((tag) => tag === "breakfast"))
+          .map((recipe) => (
+            <RecipeCard
+              cardSpacing={cardSpacing}
+              cardWidth={cardWidth}
+              cardWidthPixels={cardWidthPixels}
+              isSkeleton={false}
               key={recipe.key}
-              onMouseEnter={handleCardHover}
-              onMouseLeave={handleCardLeave}
-            >
-              <CardActionArea
-                disableRipple
-                onClick={() => {
-                  dispatch(
-                    pushTab({
-                      label: recipe.title,
-                      link: `/view/${recipe.key}`,
-                    })
-                  );
-                  sessionStorage.setItem("scrollpos", "" + window.scrollY);
-                }}
-              >
-                <CardMedia
-                  component="img"
-                  image={recipe.thumbnail ?? DEFAULT_PHOTO}
-                />
-                <CardContent className="card-content disable-scrollbars">
-                  <Typography
-                    gutterBottom
-                    variant="h6"
-                    component="div"
-                    sx={{
-                      width: `${cardWidthPixels - 30}px`,
-                    }}
-                  >
-                    {recipe.title}
-                  </Typography>
-                  <Typography
-                    className="chips-container"
-                    component="div"
-                    sx={{
-                      width: `${cardWidthPixels - 30}px`, // 30 for margin and padding
-                    }}
-                  >
-                    <ChipDisplay
-                      tags={recipe.tags}
-                      size="small"
-                      onChipClick={(tag) => {
-                        if (!searchTags.includes(tag))
-                          dispatch(setSearchTags([...searchTags, tag]));
-                      }}
-                    />
-                  </Typography>
-                </CardContent>
-              </CardActionArea>
-            </Card>
-          );
-        })}
+              recipe={recipe}
+            />
+          ))}
     </Box>
   );
 };

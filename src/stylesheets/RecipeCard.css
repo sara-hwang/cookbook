@@ -1,0 +1,76 @@
+.card-content-skeleton {
+  display: inline-flex;
+}
+
+.card-content-skeleton .MuiSkeleton-root {
+  border-radius: 25px;
+}
+
+.MuiCardContent-root.card-content-container-skeleton {
+  padding: 0 10px 0 5px;
+}
+
+.card-content-container-skeleton .MuiSkeleton-root {
+  margin: 0 0 -5px 5px;
+}
+
+img.MuiCardMedia-root {
+  position: absolute;
+  top: 0;
+  object-fit: cover;
+  height: 140px;
+}
+
+.MuiCard-root:hover {
+  transform: scale(1.05);
+  transition: transform 0.3s ease;
+}
+
+.MuiCard-root {
+  height: 226px;
+}
+
+.MuiCardMedia-root .MuiSkeleton-root {
+  height: 140px;
+}
+
+.MuiCard-root .MuiCardActionArea-root {
+  display: flex;
+  position: relative;
+  flex-direction: column;
+  align-items: flex-start;
+  height: 100%;
+}
+
+.card-content .MuiTypography-root {
+  text-overflow: clip;
+  overflow: hidden;
+  white-space: nowrap;
+}
+
+.MuiCardContent-root.card-content {
+  flex: 1;
+  position: absolute;
+  top: 140px;
+  width: 100%;
+  min-height: 86px;
+  height: fit-content;
+  max-height: 226px;
+  padding: 10px;
+  background-color: white;
+  transition: transform 0.3s ease;
+  overflow: scroll;
+  box-sizing: border-box;
+}
+
+.disable-scrollbars::-webkit-scrollbar {
+  background: transparent; /* Chrome/Safari/Webkit */
+  display: none;
+  width: 0px;
+  height: 0px;
+}
+
+.disable-scrollbars {
+  scrollbar-width: none; /* Firefox */
+  -ms-overflow-style: none; /* IE 10+ */
+}
