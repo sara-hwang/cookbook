@@ -250,6 +250,9 @@ const AddRecipe = () => {
                           onClick={() => {
                             arrayHelpers.push({
                               isDivider: false,
+                              amount: "",
+                              unit: "",
+                              element: "",
                             });
                           }}
                         >
@@ -413,22 +416,22 @@ const AddRecipe = () => {
                               />
                             </Grid>
                             <Grid item>
-                              <IconButton
-                                disableRipple
-                                className="move-up-button"
-                                onClick={() => {
-                                  if (index === 0) {
-                                    const lastElement = arrayHelpers.pop();
-                                    const firstElement = arrayHelpers.remove(0);
-                                    arrayHelpers.push(firstElement);
-                                    arrayHelpers.unshift(lastElement);
-                                    return;
-                                  }
-                                  arrayHelpers.swap(index, index - 1);
-                                }}
-                              >
-                                <MoveUp />
-                              </IconButton>
+                              {values.ingredients.length > 1 && (
+                                <IconButton
+                                  onClick={() => {
+                                    arrayHelpers.swap(
+                                      index,
+                                      index
+                                        ? index - 1
+                                        : values.ingredients.length - 1
+                                    );
+                                  }}
+                                  disableRipple
+                                  className="move-up-button"
+                                >
+                                  <MoveUp />
+                                </IconButton>
+                              )}
                             </Grid>
                             <Grid item>
                               <IconButton
@@ -469,6 +472,7 @@ const AddRecipe = () => {
                             onClick={() => {
                               arrayHelpers.push({
                                 isDivider: false,
+                                text: "",
                               });
                             }}
                           >
@@ -544,22 +548,22 @@ const AddRecipe = () => {
                               />
                             </Grid>
                             <Grid item>
-                              <IconButton
-                                onClick={() => {
-                                  if (index === 0) {
-                                    const lastElement = arrayHelpers.pop();
-                                    const firstElement = arrayHelpers.remove(0);
-                                    arrayHelpers.push(firstElement);
-                                    arrayHelpers.unshift(lastElement);
-                                    return;
-                                  }
-                                  arrayHelpers.swap(index, index - 1);
-                                }}
-                                disableRipple
-                                className="move-up-button"
-                              >
-                                <MoveUp />
-                              </IconButton>
+                              {values.steps.length > 1 && (
+                                <IconButton
+                                  onClick={() => {
+                                    arrayHelpers.swap(
+                                      index,
+                                      index
+                                        ? index - 1
+                                        : values.steps.length - 1
+                                    );
+                                  }}
+                                  disableRipple
+                                  className="move-up-button"
+                                >
+                                  <MoveUp />
+                                </IconButton>
+                              )}
                             </Grid>
                             <Grid item>
                               <IconButton
