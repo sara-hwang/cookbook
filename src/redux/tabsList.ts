@@ -4,12 +4,12 @@ import { TabItem } from "../constants/types";
 
 const initialState: { tabsList: TabItem[]; currentTab: number } = {
   tabsList: [],
-  currentTab:
-    window.location.pathname == "/add"
-      ? -2
-      : window.location.pathname == "/grocery"
-      ? -1
-      : -3,
+  currentTab: -4,
+  // window.location.pathname == "/add"
+  //   ? -2
+  //   : window.location.pathname == "/grocery"
+  //   ? -1
+  //   : -3,
 };
 
 const findIndex = (tabs: TabItem[], tabLink: string) => {

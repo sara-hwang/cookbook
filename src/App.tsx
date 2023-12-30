@@ -38,7 +38,6 @@ import { RootState } from "./redux/store";
 import { setSearchTags } from "./redux/searchTags";
 import SearchBar from "./components/SearchBar";
 import { getRecipesList } from "./helpers";
-import { setRecipesList } from "./redux/recipesList";
 
 const drawerWidth = 240;
 
@@ -88,7 +87,8 @@ export default function ResponsiveDrawer() {
   };
 
   useEffect(() => {
-    if (
+    if (currentTab === -4) navigate(pathname);
+    else if (
       currentTab < 0 &&
       pathname !== defaultTabs[currentTab + defaultTabs.length].link
     ) {
@@ -266,7 +266,6 @@ export default function ResponsiveDrawer() {
         <AppBar
           position="fixed"
           sx={{
-            // backgroundColor: "#83b6b9",
             width: { sm: `calc(100% - ${drawerWidth}px)` },
             ml: { sm: `${drawerWidth}px` },
             zIndex: 1,
