@@ -19,7 +19,7 @@ export type Ingredient = {
 };
 
 export type Step = {
-  stepNumber: number;
+  isDivider: boolean;
   text: string;
 };
 

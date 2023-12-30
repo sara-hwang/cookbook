@@ -40,7 +40,6 @@ const AddRecipe = () => {
   const [selectedImage, setSelectedImage] = useState<File>();
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
-  const [numDividers, setNumDividers] = useState(0);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [popupOpen, setPopupOpen] = useState(false);
   const [bulkEntryType, setBulkEntryType] = useState<"ingredient" | "step">(
@@ -64,16 +63,6 @@ const AddRecipe = () => {
       setInitialValues(draft);
     }
   }, [id]);
-
-  useEffect(() => {
-    let dividers = 0;
-    initialValues.steps.forEach((step) => {
-      if (step.stepNumber === 0) {
-        dividers += 1;
-      }
-    });
-    setNumDividers(dividers);
-  }, [initialValues]);
 
   const validationSchema = yup.object({
     title: yup.string().required("Required").max(250),
@@ -459,7 +448,7 @@ const AddRecipe = () => {
                         <IconButton
                           onClick={() => {
                             arrayHelpers.push({
-                              stepNumber: values.steps.length + 1 - numDividers,
+                              isDivider: false,
                             });
                           }}
                         >
@@ -471,9 +460,8 @@ const AddRecipe = () => {
                           variant="outlined"
                           onClick={() => {
                             arrayHelpers.push({
-                              stepNumber: 0,
+                              isDivider: true,
                             });
-                            setNumDividers(numDividers + 1);
                           }}
                         >
                           Add Divider
@@ -486,8 +474,7 @@ const AddRecipe = () => {
                             setBulkEntryType("step");
                             sethandleTokens(() => (token: string) => {
                               arrayHelpers.push({
-                                stepNumber:
-                                  values.steps.length + 1 - numDividers,
+                                isDivider: false,
                                 text: token,
                               });
                             });
@@ -499,25 +486,26 @@ const AddRecipe = () => {
                       </Grid>
                     </Grid>
                     {values.steps?.map((step, index) => {
+                      let numSteps = 1;
                       return (
                         <Grid item container xs={12} key={index} spacing={1}>
                           <Grid item>
                             <Typography key={index} variant="h6">
-                              {step.stepNumber > 0 && step.stepNumber + "."}
+                              {!step.isDivider && numSteps++ + "."}
                             </Typography>
                           </Grid>
                           <Grid item xs>
                             <Field
                               name={`steps.${index}.text`}
                               placeholder={
-                                step.stepNumber > 0
-                                  ? "Instructions..."
-                                  : "Section name..."
+                                step.isDivider
+                                  ? "Section name..."
+                                  : "Instructions..."
                               }
                               as={TextField}
                               size="small"
                               fullWidth
-                              multiline={step.stepNumber > 0 ?? undefined}
+                              multiline={!step.isDivider ?? undefined}
                               rows={2}
                               error={
                                 errors.steps &&
@@ -537,18 +525,6 @@ const AddRecipe = () => {
                               disableRipple
                               className="delete-element-button"
                               onClick={() => {
-                                if (step.stepNumber === 0) {
-                                  setNumDividers(numDividers - 1);
-                                } else {
-                                  values.steps.forEach((step) => {
-                                    if (
-                                      step.stepNumber > 0 &&
-                                      values.steps.indexOf(step) > index
-                                    ) {
-                                      step.stepNumber -= 1;
-                                    }
-                                  });
-                                }
                                 arrayHelpers.remove(index);
                               }}
                             >

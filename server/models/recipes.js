@@ -20,7 +20,7 @@ const RecipeSchema = new mongoose.Schema({
   ],
   steps: [
     {
-      stepNumber: Number,
+      isDivider: Boolean,
       text: String,
     },
   ],

@@ -307,7 +307,11 @@ const RecipeDetails = () => {
           {prepareMode ? (
             <form>
               {recipe?.steps.map((step, index) =>
-                step.stepNumber > 0 ? (
+                step.isDivider ? (
+                  <Typography variant="h6" key={index}>
+                    {step.text}
+                  </Typography>
+                ) : (
                   <div
                     key={index}
                     className="grocery-list"
@@ -330,33 +334,25 @@ const RecipeDetails = () => {
                       htmlFor={`step-checkbox-${index}`}
                       style={{ fontSize: "large", textDecoration: "none" }}
                     >
-                      {step.stepNumber > 0 ?? null}
                       {step.text}
                     </label>
                   </div>
-                ) : (
-                  <Typography variant="h6" key={index}>
-                    {step.text}
-                  </Typography>
                 )
               )}
             </form>
           ) : (
             <ol>
-              {recipe?.steps.map((step, index) =>
-                step.stepNumber > 0 ? (
-                  <Fragment key={index}>
-                    <li>
-                      {step.stepNumber > 0 ?? null}
-                      {step.text}
-                    </li>
-                  </Fragment>
-                ) : (
+              {recipe?.steps.map((step, index) => {
+                return step.isDivider ? (
                   <Typography variant="h6" marginLeft={"-30px"} key={index}>
                     {step.text}
                   </Typography>
-                )
-              )}
+                ) : (
+                  <Fragment key={index}>
+                    <li>{step.text}</li>
+                  </Fragment>
+                );
+              })}
             </ol>
           )}
         </Grid>
