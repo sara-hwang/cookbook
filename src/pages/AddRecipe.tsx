@@ -3,9 +3,11 @@ import {
   Box,
   Button,
   CircularProgress,
+  FormControlLabel,
   Grid,
   IconButton,
   MenuItem,
+  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -42,6 +44,7 @@ const AddRecipe = () => {
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [fdcMode, setFdcMode] = useState(false);
   const [bulkEntryType, setBulkEntryType] = useState<"ingredient" | "step">(
     "ingredient"
   );
@@ -297,6 +300,17 @@ const AddRecipe = () => {
                         >
                           Bulk Entry
                         </Button>
+                      </Grid>
+                      <Grid item>
+                        <FormControlLabel
+                          control={
+                            <Switch
+                              disableRipple
+                              onChange={(e) => setFdcMode(e.target.checked)}
+                            />
+                          }
+                          label="Edit FDC Info"
+                        />
                       </Grid>
                     </Grid>
                     {values.ingredients?.map(

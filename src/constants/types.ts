@@ -16,6 +16,7 @@ export type Ingredient = {
   amount?: number;
   unit?: UnitMenuItem;
   element: string;
+  fdcId?: string;
 };
 
 export type Step = {

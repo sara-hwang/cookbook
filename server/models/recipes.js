@@ -16,6 +16,7 @@ const RecipeSchema = new mongoose.Schema({
       amount: Number,
       element: String,
       unit: String,
+      fdcId: String,
     },
   ],
   steps: [
