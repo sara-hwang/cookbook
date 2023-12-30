@@ -156,9 +156,9 @@ export default function ResponsiveDrawer() {
       <Toolbar>
         <img
           src="/logo.png"
-          width="200"
-          height="60"
-          style={{ cursor: "pointer", marginTop: "10px" }}
+          width="220"
+          height="100"
+          style={{ cursor: "pointer", marginTop: "10px", marginLeft: "-10px" }}
           onClick={() => {
             dispatch(setCurrentTab(-defaultTabs.length));
             dispatch(setSearchTags([]));

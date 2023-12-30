@@ -28,7 +28,7 @@ const ChipDisplay = ({ tags, size, onChipClick, onChipDelete }: IProps) => {
           sx={{
             margin: "2px",
             "&:hover": {
-              backgroundColor: theme.palette.secondary.dark,
+              backgroundColor: theme.palette.secondary.main,
             },
             backgroundColor: theme.palette.secondary.light,
           }}
