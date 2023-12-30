@@ -12,7 +12,7 @@ const ViewRecipes = () => {
   const dispatch = useAppDispatch();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
-  const [width, setWidth] = useState(0);
+  const [width, setWidth] = useState(1000);
   const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
@@ -21,13 +21,13 @@ const ViewRecipes = () => {
   const cardsPerRow = width > 800 ? 4 : width > 600 ? 3 : 2;
   const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
   const cardWidthPixels = width / cardsPerRow - cardSpacing * 2;
+  const recipeGridContainer = document.getElementById("view-recipes-box");
+  if (recipeGridContainer)
+    new ResizeObserver(() => {
+      setWidth(recipeGridContainer?.offsetWidth ?? 0);
+    }).observe(recipeGridContainer);
 
   useEffect(() => {
-    const recipeGridContainer = document.getElementById("view-recipes-box");
-    if (recipeGridContainer)
-      new ResizeObserver(() => {
-        setWidth(recipeGridContainer?.offsetWidth ?? 0);
-      }).observe(recipeGridContainer);
     async function getRecipes() {
       setLoading(true);
       const recipes = await getRecipesList();
