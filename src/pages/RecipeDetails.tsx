@@ -368,9 +368,12 @@ const RecipeDetails = () => {
                   );
                 }
                 return (
-                  <Typography key={index}>
-                    {stepNumber + ". " + step.text}
-                  </Typography>
+                  <div key={index} style={{ display: "flex" }}>
+                    <Typography style={{ margin: "0 5px 0 10px" }}>
+                      {stepNumber + ". "}
+                    </Typography>
+                    <Typography>{step.text}</Typography>
+                  </div>
                 );
               })}
             </div>
