@@ -31,6 +31,7 @@ import { getAllTags, getRecipeDetails } from "../helpers";
 import "../stylesheets/AddRecipe.css";
 import { setRecipesList } from "../redux/recipesList";
 import ChipDisplay from "../components/ChipDisplay";
+import BulkEntryDialog from "./BulkEntryDialog";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
@@ -41,6 +42,13 @@ const AddRecipe = () => {
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
   const [numDividers, setNumDividers] = useState(0);
   const [allTags, setAllTags] = useState<string[]>([]);
+  const [popupOpen, setPopupOpen] = useState(false);
+  const [bulkEntryType, setBulkEntryType] = useState<"ingredient" | "step">(
+    "ingredient"
+  );
+  const [handleTokens, sethandleTokens] = useState(() => (token: string) => {
+    return;
+  });
 
   useEffect(() => {
     const initTags = async () => {
@@ -184,6 +192,12 @@ const AddRecipe = () => {
       }) => (
         <Form>
           <Box sx={{ display: "flex", padding: "24px" }}>
+            <BulkEntryDialog
+              type={bulkEntryType}
+              popupOpen={popupOpen}
+              setPopupOpen={setPopupOpen}
+              handleTokens={handleTokens}
+            />
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Field
@@ -269,7 +283,24 @@ const AddRecipe = () => {
                         <Button
                           variant="outlined"
                           onClick={() => {
-                            // to do
+                            setBulkEntryType("ingredient");
+                            sethandleTokens(() => (token: string) => {
+                              const words = token.split(" ");
+                              words.length === 1;
+                              arrayHelpers.push({
+                                isDivider: false,
+                                amount: Number.isNaN(+words[0])
+                                  ? words[0].includes("/")
+                                    ? eval("" + words[0])
+                                    : ""
+                                  : words[0],
+                                unit: words[1] in UnitMenuItem ? words[1] : "",
+                                element: words
+                                  .splice(words[1] in UnitMenuItem ? 2 : 1)
+                                  .join(" "),
+                              });
+                            });
+                            setPopupOpen(true);
                           }}
                         >
                           Bulk Entry
@@ -452,7 +483,15 @@ const AddRecipe = () => {
                         <Button
                           variant="outlined"
                           onClick={() => {
-                            // to do
+                            setBulkEntryType("step");
+                            sethandleTokens(() => (token: string) => {
+                              arrayHelpers.push({
+                                stepNumber:
+                                  values.steps.length + 1 - numDividers,
+                                text: token,
+                              });
+                            });
+                            setPopupOpen(true);
                           }}
                         >
                           Bulk Entry
