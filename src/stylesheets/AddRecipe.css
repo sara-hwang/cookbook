@@ -7,6 +7,13 @@
   box-sizing: border-box;
 }
 
+.MuiIconButton-root.move-up-button {
+  -moz-transform: scale(-1, 1);
+  -o-transform: scale(-1, 1);
+  -webkit-transform: scale(-1, 1);
+  transform: scale(-1, 1);
+}
+
 .MuiIconButton-root.delete-element-button {
   padding-left: 0;
   color: none;

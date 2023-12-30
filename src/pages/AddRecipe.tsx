@@ -19,7 +19,7 @@ import {
   Step,
   UnitMenuItem,
 } from "../constants/types";
-import { Add, Delete } from "@mui/icons-material";
+import { Add, Delete, MoveUp } from "@mui/icons-material";
 import { addRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
@@ -414,6 +414,24 @@ const AddRecipe = () => {
                             </Grid>
                             <Grid item>
                               <IconButton
+                                disableRipple
+                                className="move-up-button"
+                                onClick={() => {
+                                  if (index === 0) {
+                                    const lastElement = arrayHelpers.pop();
+                                    const firstElement = arrayHelpers.remove(0);
+                                    arrayHelpers.push(firstElement);
+                                    arrayHelpers.unshift(lastElement);
+                                    return;
+                                  }
+                                  arrayHelpers.swap(index, index - 1);
+                                }}
+                              >
+                                <MoveUp />
+                              </IconButton>
+                            </Grid>
+                            <Grid item>
+                              <IconButton
                                 onClick={() => {
                                   arrayHelpers.remove(index);
                                 }}
@@ -524,6 +542,24 @@ const AddRecipe = () => {
                                     .text
                                 }
                               />
+                            </Grid>
+                            <Grid item>
+                              <IconButton
+                                onClick={() => {
+                                  if (index === 0) {
+                                    const lastElement = arrayHelpers.pop();
+                                    const firstElement = arrayHelpers.remove(0);
+                                    arrayHelpers.push(firstElement);
+                                    arrayHelpers.unshift(lastElement);
+                                    return;
+                                  }
+                                  arrayHelpers.swap(index, index - 1);
+                                }}
+                                disableRipple
+                                className="move-up-button"
+                              >
+                                <MoveUp />
+                              </IconButton>
                             </Grid>
                             <Grid item>
                               <IconButton
