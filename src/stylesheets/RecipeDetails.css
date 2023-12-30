@@ -1,9 +1,4 @@
-h6 + div {
-  margin-top: 5px;
-}
-
-h6 + ul,
-h6 + ol {
+h6 + ul {
   margin-top: 0px;
   margin-bottom: 0px;
 }

@@ -52,6 +52,7 @@ const RecipeDetails = () => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  let stepNumber = 0;
 
   useEffect(() => {
     if (id !== undefined) {
@@ -341,19 +342,24 @@ const RecipeDetails = () => {
               )}
             </form>
           ) : (
-            <ol>
+            <div>
               {recipe?.steps.map((step, index) => {
-                return step.isDivider ? (
-                  <Typography variant="h6" marginLeft={"-30px"} key={index}>
-                    {step.text}
+                stepNumber++;
+                if (step.isDivider) {
+                  stepNumber = 0;
+                  return (
+                    <Typography variant="h6" key={index}>
+                      {step.text}
+                    </Typography>
+                  );
+                }
+                return (
+                  <Typography key={index}>
+                    {stepNumber + ". " + step.text}
                   </Typography>
-                ) : (
-                  <Fragment key={index}>
-                    <li>{step.text}</li>
-                  </Fragment>
                 );
               })}
-            </ol>
+            </div>
           )}
         </Grid>
         <Grid item xs={12}>
