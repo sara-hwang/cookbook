@@ -28,11 +28,19 @@ const DeleteRecipeDialog = ({
           spacing={2}
         >
           <Grid item>Are you sure you want to delete this recipe?</Grid>
-          <Grid item>
-            <div className="spaced-apart">
+          <Grid
+            item
+            container
+            direction="row"
+            justifyContent="flex-end"
+            spacing={1}
+          >
+            <Grid item>
               <Button variant="outlined" onClick={() => setPopupOpen(false)}>
                 Cancel
               </Button>
+            </Grid>
+            <Grid item>
               <Button
                 variant="contained"
                 onClick={async () => {
@@ -49,7 +57,7 @@ const DeleteRecipeDialog = ({
               >
                 Yes
               </Button>
-            </div>
+            </Grid>
           </Grid>
         </Grid>
       </DialogContent>
