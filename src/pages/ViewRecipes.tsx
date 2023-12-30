@@ -48,13 +48,13 @@ const ViewRecipes = () => {
     if (recipesList.length === 0) {
       getRecipes();
     }
-    const scrollpos = sessionStorage.getItem("scrollpos");
-    if (scrollpos) {
-      setTimeout(function () {
-        window.scrollTo({ top: +scrollpos });
-        localStorage.setItem("scrollpos", "" + "0");
-      }, 50);
-    }
+    // const scrollpos = sessionStorage.getItem("scrollpos");
+    // if (scrollpos) {
+    //   setTimeout(function () {
+    //     window.scrollTo({ top: +scrollpos });
+    //     localStorage.setItem("scrollpos", "" + "0");
+    //   }, 50);
+    // }
   }, []);
 
   useEffect(() => {
