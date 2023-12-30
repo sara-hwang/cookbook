@@ -35,6 +35,7 @@ import { setRecipesList } from "../redux/recipesList";
 import ChipDisplay from "../components/ChipDisplay";
 import BulkEntryDialog from "./BulkEntryDialog";
 import AddIngredientRow from "./AddIngredientRow";
+import AddStepRow from "./AddStepRow";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
@@ -390,71 +391,15 @@ const AddRecipe = () => {
                       {values.steps?.map((step, index) => {
                         if (!step.isDivider) currStep++;
                         return (
-                          <Grid item container xs={12} key={index} spacing={1}>
-                            {!step.isDivider && (
-                              <Grid item>
-                                <Typography key={index} variant="h6">
-                                  {currStep}.
-                                </Typography>
-                              </Grid>
-                            )}
-                            <Grid item xs>
-                              <Field
-                                name={`steps.${index}.text`}
-                                placeholder={
-                                  step.isDivider
-                                    ? "Section name..."
-                                    : "Instructions..."
-                                }
-                                as={TextField}
-                                size="small"
-                                fullWidth
-                                multiline={!step.isDivider ?? undefined}
-                                rows={2}
-                                error={
-                                  errors.steps &&
-                                  errors.steps[index] &&
-                                  (errors.steps[index] as FormikErrors<Step>)
-                                    .text !== undefined
-                                }
-                                helperText={
-                                  errors.steps &&
-                                  errors.steps[index] &&
-                                  (errors.steps[index] as FormikErrors<Step>)
-                                    .text
-                                }
-                              />
-                            </Grid>
-                            <Grid item>
-                              {values.steps.length > 1 && (
-                                <IconButton
-                                  onClick={() => {
-                                    arrayHelpers.swap(
-                                      index,
-                                      index
-                                        ? index - 1
-                                        : values.steps.length - 1
-                                    );
-                                  }}
-                                  disableRipple
-                                  className="move-up-button"
-                                >
-                                  <MoveUp />
-                                </IconButton>
-                              )}
-                            </Grid>
-                            <Grid item>
-                              <IconButton
-                                disableRipple
-                                className="delete-element-button"
-                                onClick={() => {
-                                  arrayHelpers.remove(index);
-                                }}
-                              >
-                                <Delete />
-                              </IconButton>
-                            </Grid>
-                          </Grid>
+                          <AddStepRow
+                            key={index}
+                            arrayHelpers={arrayHelpers}
+                            currStep={currStep}
+                            errors={errors}
+                            index={index}
+                            step={step}
+                            values={values}
+                          />
                         );
                       })}
                     </>
