@@ -94,10 +94,24 @@ const RecipeDetails = () => {
         const items: Ingredient[] = response.data.grocery;
         const formData = new FormData(checkboxElement as HTMLFormElement);
         for (const [index, _] of formData.entries()) {
-          items.push({
-            ...recipe.ingredients[+index],
-            amount: calculateAmount(recipe.ingredients[+index].amount),
-          });
+          const ingredient = recipe.ingredients[+index];
+          const dupElement = items.findIndex(
+            (ing) =>
+              ing.element === ingredient.element && ing.unit === ingredient.unit
+          );
+          if (dupElement === -1) {
+            items.push({
+              ...ingredient,
+              amount: calculateAmount(ingredient.amount),
+            });
+          } else {
+            items[dupElement] = {
+              ...items[dupElement],
+              amount:
+                (items[dupElement].amount ?? 0) +
+                calculateAmount(ingredient.amount),
+            };
+          }
         }
         updateGroceryList(auth()?.username, items);
       } else {
