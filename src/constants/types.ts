@@ -30,7 +30,7 @@ export type TabItem = {
 
 export enum UnitMenuItem {
   g,
-  mL,
+  ml,
   tsp,
   tbsp,
   cup,

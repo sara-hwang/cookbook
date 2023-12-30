@@ -10,10 +10,7 @@ const UserSchema = new mongoose.Schema({
     type: [
       {
         amount: Number,
-        element: {
-          type: String,
-          lowercase: true,
-        },
+        element: String,
         unit: String,
       },
     ],

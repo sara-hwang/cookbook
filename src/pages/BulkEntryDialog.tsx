@@ -68,7 +68,7 @@ const BulkEntryDialog = ({
                   value &&
                     value
                       .split("\n")
-                      .map((token) => token.trim().toLowerCase())
+                      .map((token) => token.trim())
                       .filter((token) => token)
                       .forEach(handleTokens);
                   setValue("");
