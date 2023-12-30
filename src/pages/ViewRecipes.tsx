@@ -1,4 +1,4 @@
-import { Box } from "@mui/material";
+import { Box, Typography } from "@mui/material";
 import { Recipe, EmptyRecipe } from "../constants/types";
 import { useEffect, useState } from "react";
 import "../stylesheets/ViewRecipes.css";
@@ -60,40 +60,65 @@ const ViewRecipes = () => {
     );
   }, [searchTags, recipesList]);
 
+  const defaultCategories =
+    searchTags.length > 0
+      ? ["All"]
+      : [
+          "Breakfast",
+          "Dessert",
+          "Vegetarian",
+          "Vegan",
+          "Korean",
+          "Indian",
+          "Noodles",
+          "Easy",
+          "Instant Pot",
+          "All",
+        ];
   return (
-    <Box
-      className="recipe-grid-container"
-      style={{
-        display: "flex",
-        flexWrap: "wrap",
-        padding: `${cardSpacing}px`,
-      }}
-      id="view-recipes-box"
-    >
-      {loading &&
-        [...Array(100).keys()].map((key) => (
-          <RecipeCard
-            cardSpacing={cardSpacing}
-            cardWidth={cardWidth}
-            cardWidthPixels={cardWidthPixels}
-            isSkeleton={true}
-            key={key}
-            recipe={EmptyRecipe}
-          />
-        ))}
-      {recipes &&
-        recipes
-          .filter((recipe) => recipe.tags.some((tag) => tag === "breakfast"))
-          .map((recipe) => (
-            <RecipeCard
-              cardSpacing={cardSpacing}
-              cardWidth={cardWidth}
-              cardWidthPixels={cardWidthPixels}
-              isSkeleton={false}
-              key={recipe.key}
-              recipe={recipe}
-            />
-          ))}
+    <Box>
+      {defaultCategories.map((category) => {
+        return (
+          <div className="recipe-grid-container" key={category}>
+            <Typography variant="h4">{category}</Typography>
+            <Box
+              style={{
+                padding: `${cardSpacing}px`,
+              }}
+              id="view-recipes-box"
+            >
+              {loading &&
+                [...Array(12).keys()].map((key) => (
+                  <RecipeCard
+                    cardSpacing={cardSpacing}
+                    cardWidth={cardWidth}
+                    cardWidthPixels={cardWidthPixels}
+                    isSkeleton={true}
+                    key={key}
+                    recipe={EmptyRecipe}
+                  />
+                ))}
+              {recipes &&
+                recipes
+                  .filter((recipe) =>
+                    recipe.tags.some((tag) =>
+                      category === "All" ? true : tag === category.toLowerCase()
+                    )
+                  )
+                  .map((recipe) => (
+                    <RecipeCard
+                      cardSpacing={cardSpacing}
+                      cardWidth={cardWidth}
+                      cardWidthPixels={cardWidthPixels}
+                      isSkeleton={false}
+                      key={recipe.key}
+                      recipe={recipe}
+                    />
+                  ))}
+            </Box>
+          </div>
+        );
+      })}
     </Box>
   );
 };
