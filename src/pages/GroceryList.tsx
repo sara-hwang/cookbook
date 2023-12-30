@@ -16,7 +16,11 @@ export const GroceryList = () => {
     const initGroceryList = async () => {
       const response = await getGroceryList(username);
       if (response && response.status === 200) {
-        setGroceryList(response.data.grocery);
+        setGroceryList(
+          response.data.grocery.sort((a: Ingredient, b: Ingredient) =>
+            a.element.localeCompare(b.element)
+          )
+        );
       } else {
         alert("Groceries returned " + response?.data + ", server may be down.");
       }
