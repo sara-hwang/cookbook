@@ -7,6 +7,6 @@ body {
 }
 
 .MuiTypography-root.MuiTypography-h4 {
-  font-family: "Roboto", "Helvetica", "Arial", sans-serif;
+  /* font-family: "Roboto", "Helvetica", "Arial", sans-serif; */
   font-weight: bold;
 }
