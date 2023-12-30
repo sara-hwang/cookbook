@@ -431,111 +431,117 @@ const AddRecipe = () => {
                 )}
               </FieldArray>
               <FieldArray name="steps">
-                {(arrayHelpers) => (
-                  <>
-                    <Grid
-                      item
-                      container
-                      xs={12}
-                      spacing={1}
-                      direction="row"
-                      alignItems="center"
-                    >
-                      <Grid item>
-                        <Typography variant="h6">Steps </Typography>
-                      </Grid>
-                      <Grid item>
-                        <IconButton
-                          onClick={() => {
-                            arrayHelpers.push({
-                              isDivider: false,
-                            });
-                          }}
-                        >
-                          <Add />
-                        </IconButton>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          variant="outlined"
-                          onClick={() => {
-                            arrayHelpers.push({
-                              isDivider: true,
-                            });
-                          }}
-                        >
-                          Add Divider
-                        </Button>
-                      </Grid>
-                      <Grid item>
-                        <Button
-                          variant="outlined"
-                          onClick={() => {
-                            setBulkEntryType("step");
-                            sethandleTokens(() => (token: string) => {
+                {(arrayHelpers) => {
+                  let currStep = 0;
+                  return (
+                    <>
+                      <Grid
+                        item
+                        container
+                        xs={12}
+                        spacing={1}
+                        direction="row"
+                        alignItems="center"
+                      >
+                        <Grid item>
+                          <Typography variant="h6">Steps </Typography>
+                        </Grid>
+                        <Grid item>
+                          <IconButton
+                            onClick={() => {
                               arrayHelpers.push({
                                 isDivider: false,
-                                text: token,
                               });
-                            });
-                            setPopupOpen(true);
-                          }}
-                        >
-                          Bulk Entry
-                        </Button>
-                      </Grid>
-                    </Grid>
-                    {values.steps?.map((step, index) => {
-                      let numSteps = 1;
-                      return (
-                        <Grid item container xs={12} key={index} spacing={1}>
-                          <Grid item>
-                            <Typography key={index} variant="h6">
-                              {!step.isDivider && numSteps++ + "."}
-                            </Typography>
-                          </Grid>
-                          <Grid item xs>
-                            <Field
-                              name={`steps.${index}.text`}
-                              placeholder={
-                                step.isDivider
-                                  ? "Section name..."
-                                  : "Instructions..."
-                              }
-                              as={TextField}
-                              size="small"
-                              fullWidth
-                              multiline={!step.isDivider ?? undefined}
-                              rows={2}
-                              error={
-                                errors.steps &&
-                                errors.steps[index] &&
-                                (errors.steps[index] as FormikErrors<Step>)
-                                  .text !== undefined
-                              }
-                              helperText={
-                                errors.steps &&
-                                errors.steps[index] &&
-                                (errors.steps[index] as FormikErrors<Step>).text
-                              }
-                            />
-                          </Grid>
-                          <Grid item>
-                            <IconButton
-                              disableRipple
-                              className="delete-element-button"
-                              onClick={() => {
-                                arrayHelpers.remove(index);
-                              }}
-                            >
-                              <Delete />
-                            </IconButton>
-                          </Grid>
+                            }}
+                          >
+                            <Add />
+                          </IconButton>
                         </Grid>
-                      );
-                    })}
-                  </>
-                )}
+                        <Grid item>
+                          <Button
+                            variant="outlined"
+                            onClick={() => {
+                              arrayHelpers.push({
+                                isDivider: true,
+                              });
+                            }}
+                          >
+                            Add Divider
+                          </Button>
+                        </Grid>
+                        <Grid item>
+                          <Button
+                            variant="outlined"
+                            onClick={() => {
+                              setBulkEntryType("step");
+                              sethandleTokens(() => (token: string) => {
+                                arrayHelpers.push({
+                                  isDivider: false,
+                                  text: token,
+                                });
+                              });
+                              setPopupOpen(true);
+                            }}
+                          >
+                            Bulk Entry
+                          </Button>
+                        </Grid>
+                      </Grid>
+                      {values.steps?.map((step, index) => {
+                        if (!step.isDivider) currStep++;
+                        return (
+                          <Grid item container xs={12} key={index} spacing={1}>
+                            {!step.isDivider && (
+                              <Grid item>
+                                <Typography key={index} variant="h6">
+                                  {currStep}.
+                                </Typography>
+                              </Grid>
+                            )}
+                            <Grid item xs>
+                              <Field
+                                name={`steps.${index}.text`}
+                                placeholder={
+                                  step.isDivider
+                                    ? "Section name..."
+                                    : "Instructions..."
+                                }
+                                as={TextField}
+                                size="small"
+                                fullWidth
+                                multiline={!step.isDivider ?? undefined}
+                                rows={2}
+                                error={
+                                  errors.steps &&
+                                  errors.steps[index] &&
+                                  (errors.steps[index] as FormikErrors<Step>)
+                                    .text !== undefined
+                                }
+                                helperText={
+                                  errors.steps &&
+                                  errors.steps[index] &&
+                                  (errors.steps[index] as FormikErrors<Step>)
+                                    .text
+                                }
+                              />
+                            </Grid>
+                            <Grid item>
+                              <IconButton
+                                disableRipple
+                                className="delete-element-button"
+                                onClick={() => {
+                                  arrayHelpers.remove(index);
+                                }}
+                              >
+                                <Delete />
+                              </IconButton>
+                            </Grid>
+                          </Grid>
+                        );
+                      })}
+                    </>
+                  );
+                }}
               </FieldArray>
               <Grid item xs={12}>
                 <Typography variant="h6">Photo</Typography>
