@@ -211,6 +211,7 @@ export default function ResponsiveDrawer() {
             }
           >
             <ListItemButton
+              disableRipple
               selected={currentTab === index - defaultTabs.length}
               onClick={(event) =>
                 handleListItemClick(event, index - defaultTabs.length)
@@ -244,6 +245,7 @@ export default function ResponsiveDrawer() {
               }
             >
               <ListItemButton
+                disableRipple
                 selected={currentTab === index}
                 onClick={(event) => handleListItemClick(event, index)}
               >
