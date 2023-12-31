@@ -270,6 +270,7 @@ const AddRecipe = () => {
                           onClick={() => {
                             arrayHelpers.push({
                               isDivider: true,
+                              element: "",
                             });
                           }}
                         >
@@ -364,6 +365,7 @@ const AddRecipe = () => {
                             onClick={() => {
                               arrayHelpers.push({
                                 isDivider: true,
+                                text: "",
                               });
                             }}
                           >
