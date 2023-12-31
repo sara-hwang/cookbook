@@ -12,6 +12,8 @@ const UserSchema = new mongoose.Schema({
         amount: Number,
         element: String,
         unit: String,
+        fdcId: String,
+        fdcQuery: String,
       },
     ],
     default: [],

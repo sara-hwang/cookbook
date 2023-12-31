@@ -117,7 +117,7 @@ export const getIngredientSearch = async (
       {
         params: {
           query: query,
-          dataType: ["Survey (FNDDS)", "Foundation"],
+          dataType: ["Foundation"],
           api_key: FDC_API_KEY,
         },
         paramsSerializer: (params) => {
@@ -127,6 +127,24 @@ export const getIngredientSearch = async (
       }
     );
     if (response.status === 200) return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    if (error.response) console.log(error.response);
+  }
+};
+
+export const getFoodCategory = async (fdcId?: string) => {
+  if (!fdcId) return;
+  try {
+    const response = await axios.get(
+      `https://api.nal.usda.gov/fdc/v1/food/${fdcId}`,
+      {
+        params: {
+          api_key: FDC_API_KEY,
+        },
+      }
+    );
+    return response.data.foodCategory.description;
   } catch (e) {
     const error = e as AxiosError;
     if (error.response) console.log(error.response);
