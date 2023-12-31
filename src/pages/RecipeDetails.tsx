@@ -238,7 +238,10 @@ const RecipeDetails = () => {
                     {ing.element}
                   </Typography>
                 ) : (
-                  <div key={index} className="checkbox-container no-strike">
+                  <div
+                    key={index}
+                    className="checkbox-container view-recipe no-strike"
+                  >
                     <input
                       type="checkbox"
                       name={"" + index}

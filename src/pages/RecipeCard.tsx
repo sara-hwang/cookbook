@@ -121,7 +121,11 @@ const RecipeCard = ({
           sessionStorage.setItem("scrollpos", "" + window.scrollY);
         }}
       >
-        <CardMedia component="img" image={recipe.thumbnail ?? DEFAULT_PHOTO} />
+        <CardMedia
+          component="img"
+          image={recipe.thumbnail ?? DEFAULT_PHOTO}
+          loading="lazy"
+        />
         <CardContent className="card-content disable-scrollbars">
           <Typography
             gutterBottom
