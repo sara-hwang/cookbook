@@ -66,7 +66,11 @@ const AddIngredientRow = ({
           <Grid item container xs={6} direction="row">
             <Grid item>
               <a
-                href={`https://fdc.nal.usda.gov/fdc-app.html#/food-details/${values.ingredients[index].fdcId}/nutrients`}
+                href={
+                  values.ingredients[index].fdcId
+                    ? `https://fdc.nal.usda.gov/fdc-app.html#/food-details/${values.ingredients[index].fdcId}/nutrients`
+                    : undefined
+                }
               >
                 <IconButton
                   disableRipple
