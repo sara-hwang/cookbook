@@ -205,10 +205,7 @@ const RecipeDetails = () => {
             >
               <IconButton
                 disableRipple
-                sx={{
-                  padding: 0,
-                  "&:hover": { color: theme.palette.primary.main },
-                }}
+                sx={{ "&:hover": { color: theme.palette.primary.main } }}
                 onClick={() => {
                   groceryMode && isAuthenticated() && addToGrocery();
                   isAuthenticated() && setGroceryMode(!groceryMode);
@@ -225,9 +222,6 @@ const RecipeDetails = () => {
               <Button
                 color="error"
                 variant="contained"
-                sx={{
-                  marginLeft: "auto",
-                }}
                 onClick={() => {
                   setGroceryMode(!groceryMode);
                 }}
@@ -244,27 +238,13 @@ const RecipeDetails = () => {
                     {ing.element}
                   </Typography>
                 ) : (
-                  <div
-                    key={index}
-                    style={{
-                      width: "100%",
-                      margin: "8px 0px 20px 10px",
-                    }}
-                  >
+                  <div key={index} className="checkbox-container no-strike">
                     <input
                       type="checkbox"
                       name={"" + index}
                       id={`ingredient-checkbox-${index}`}
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        marginRight: "10px",
-                      }}
                     />
-                    <label
-                      htmlFor={`ingredient-checkbox-${index}`}
-                      style={{ fontSize: "large", textDecoration: "none" }}
-                    >
+                    <label htmlFor={`ingredient-checkbox-${index}`}>
                       {calculateAmount(ing.amount)}
                       &nbsp;
                       {ing.unit}
@@ -284,7 +264,7 @@ const RecipeDetails = () => {
                   </Typography>
                 ) : (
                   <Fragment key={index}>
-                    <li style={{ width: "fit-content" }}>
+                    <li>
                       {calculateAmount(ing.amount)}
                       &nbsp;
                       {ing.unit}
@@ -307,10 +287,7 @@ const RecipeDetails = () => {
             >
               <IconButton
                 disableRipple
-                sx={{
-                  padding: 0,
-                  "&:hover": { color: theme.palette.primary.main },
-                }}
+                sx={{ "&:hover": { color: theme.palette.primary.main } }}
                 onClick={() => {
                   setPrepareMode(!prepareMode);
                 }}
@@ -327,28 +304,13 @@ const RecipeDetails = () => {
                     {step.text}
                   </Typography>
                 ) : (
-                  <div
-                    key={index}
-                    className="grocery-list"
-                    style={{
-                      width: "100%",
-                      margin: "8px 0px 20px 10px",
-                    }}
-                  >
+                  <div key={index} className="checkbox-container view-recipe">
                     <input
                       type="checkbox"
                       name={"" + index}
                       id={`step-checkbox-${index}`}
-                      style={{
-                        width: "20px",
-                        height: "20px",
-                        marginRight: "10px",
-                      }}
                     />
-                    <label
-                      htmlFor={`step-checkbox-${index}`}
-                      style={{ fontSize: "large", textDecoration: "none" }}
-                    >
+                    <label htmlFor={`step-checkbox-${index}`}>
                       {step.text}
                     </label>
                   </div>
@@ -368,10 +330,8 @@ const RecipeDetails = () => {
                   );
                 }
                 return (
-                  <div key={index} style={{ display: "flex" }}>
-                    <Typography style={{ margin: "0 5px 0 10px" }}>
-                      {stepNumber + ". "}
-                    </Typography>
+                  <div key={index} className="recipe-step-text">
+                    <Typography>{stepNumber + ". "}</Typography>
                     <Typography>{step.text}</Typography>
                   </div>
                 );
@@ -383,8 +343,8 @@ const RecipeDetails = () => {
           {recipe?.photo && (
             <img
               src={recipe?.photo}
-              style={{ maxWidth: "100%", width: "400px" }}
               alt={recipe.title}
+              className="recipe-details-photo"
             />
           )}
         </Grid>

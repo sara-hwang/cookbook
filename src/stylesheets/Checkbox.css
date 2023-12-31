@@ -1,0 +1,30 @@
+.checkbox-container.view-recipe {
+  margin: 15px;
+}
+
+.checkbox-container input[type="checkbox"] + label {
+  font-size: large;
+  margin-bottom: 10px;
+  text-decoration: none;
+}
+
+.checkbox-container input[type="checkbox"]:checked + label {
+  text-decoration: line-through;
+}
+
+.checkbox-container.no-strike input[type="checkbox"]:checked + label {
+  text-decoration: none;
+}
+
+.checkbox-container input[type="checkbox"] {
+  width: 20px;
+  height: 20px;
+  margin-right: 10px;
+}
+
+.checkbox-container .MuiSkeleton-root.grocery-item-label-skeleton {
+  width: 250px;
+  height: 30px;
+  float: right;
+  margin-bottom: 0;
+}

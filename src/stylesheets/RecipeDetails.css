@@ -2,3 +2,16 @@ h6 + ul {
   margin-top: 0px;
   margin-bottom: 0px;
 }
+
+.recipe-step-text {
+  display: flex;
+}
+
+.recipe-step-text .MuiTypography-root {
+  margin: 0 5px 0 10px;
+}
+
+.recipe-details-photo {
+  max-width: 100%;
+  width: 400px;
+}

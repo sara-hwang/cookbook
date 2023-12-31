@@ -4,7 +4,7 @@ import { useAuthUser } from "react-auth-kit";
 import { useLocation } from "react-router-dom";
 import { getFoodCategory, getGroceryList, updateGroceryList } from "../api";
 import { Ingredient } from "../constants/types";
-import "../stylesheets/Grocery.css";
+import "../stylesheets/Checkbox.css";
 import "../stylesheets/App.css";
 
 export const GroceryList = () => {
@@ -91,7 +91,7 @@ export const GroceryList = () => {
                       <Typography variant="h6">{ing.element}</Typography>
                     </Grid>
                   ) : (
-                    <div className="grocery-list">
+                    <div className="checkbox-container">
                       <input
                         type="checkbox"
                         name={"" + index}
