@@ -1,4 +1,4 @@
-import { Box, Button, Grid, Typography } from "@mui/material";
+import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { useLocation } from "react-router-dom";
@@ -10,6 +10,7 @@ import "../stylesheets/App.css";
 export const GroceryList = () => {
   const auth = useAuthUser();
   const { pathname } = useLocation();
+  const [loading, setLoading] = useState(false);
   const [groceryList, setGroceryList] = useState<Ingredient[]>([]);
   const [categorizedItems, setCategorizedItems] = useState<Ingredient[]>([]);
 
@@ -33,13 +34,13 @@ export const GroceryList = () => {
   useEffect(() => {
     const categoryDict: { [categoryName: string]: Ingredient[] } = {};
     const categorizeGroceryList = async () => {
+      setLoading(true);
       for (const [index, _] of groceryList.entries()) {
         let response = await getFoodCategory(groceryList[index].fdcId);
         if (!response) response = "Other";
         if (response in categoryDict)
           categoryDict[response].push(groceryList[index]);
         else categoryDict[response] = [groceryList[index]];
-        await new Promise((r) => setTimeout(r, 100));
       }
       const flatCategories: Ingredient[] = [];
       Object.keys(categoryDict).forEach((categoryName) => {
@@ -47,6 +48,7 @@ export const GroceryList = () => {
         categoryDict[categoryName].forEach((ing) => flatCategories.push(ing));
       });
       setCategorizedItems(flatCategories);
+      setLoading(false);
     };
 
     categorizeGroceryList();
@@ -73,29 +75,35 @@ export const GroceryList = () => {
             <Grid item xs={12}>
               <Typography variant="h4">Grocery List</Typography>
             </Grid>
-            {categorizedItems.map((ing, index) => {
+            {(loading
+              ? Array.from({ length: 10 }, (_, index) => ({
+                  isDivider: index === 0,
+                  amount: "",
+                  unit: "",
+                  element: index === 0 ? "Other" : "",
+                }))
+              : categorizedItems
+            ).map((ing, index) => {
               return (
-                <Grid item xs={12} key={index}>
+                <Grid item container xs={12} key={index}>
                   {ing.isDivider ? (
-                    <Typography variant="h6">{ing.element}</Typography>
+                    <Grid item>
+                      <Typography variant="h6">{ing.element}</Typography>
+                    </Grid>
                   ) : (
-                    <div key={index} className="grocery-list">
+                    <div className="grocery-list">
                       <input
                         type="checkbox"
                         name={"" + index}
                         id={`grocery-checkbox-${index}`}
-                        style={{
-                          width: "20px",
-                          height: "20px",
-                          marginRight: "10px",
-                        }}
                       />
-                      <label
-                        htmlFor={`grocery-checkbox-${index}`}
-                        style={{ fontSize: "large", textDecoration: "none" }}
-                      >
-                        {ing.amount} {ing.unit} {ing.element}
-                      </label>
+                      {loading ? (
+                        <Skeleton className="grocery-item-label-skeleton" />
+                      ) : (
+                        <label htmlFor={`grocery-checkbox-${index}`}>
+                          {ing.amount} {ing.unit} {ing.element}
+                        </label>
+                      )}
                     </div>
                   )}
                 </Grid>
