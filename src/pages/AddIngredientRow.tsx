@@ -89,7 +89,7 @@ const AddIngredientRow = ({
               <Autocomplete
                 freeSolo
                 size="small"
-                value={values.ingredients[index].fdcQuery}
+                value={values.ingredients[index].fdcQuery ?? ""}
                 options={suggestions}
                 getOptionLabel={(option) => {
                   if (typeof option === "object") return option.query;
@@ -97,6 +97,10 @@ const AddIngredientRow = ({
                 }}
                 onChange={(e, value) => {
                   if (typeof value === "object" && value?.fdcId) {
+                    setFieldValue(
+                      `ingredients.${index}.fdcQuery`,
+                      value?.query
+                    );
                     setFieldValue(`ingredients.${index}.fdcId`, value?.fdcId);
                   }
                 }}

@@ -129,6 +129,6 @@ export const getIngredientSearch = async (
     if (response.status === 200) return response;
   } catch (e) {
     const error = e as AxiosError;
-    console.log(error.response);
+    if (error.response) console.log(error.response);
   }
 };
