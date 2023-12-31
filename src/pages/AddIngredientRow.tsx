@@ -25,7 +25,7 @@ interface AddIngredientRowProps {
   ingredient: Ingredient;
   setFieldValue: (
     field: string,
-    value: any,
+    value: string,
     shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<Recipe>>;
   values: Recipe;
@@ -87,7 +87,7 @@ const AddIngredientRow = ({
                   return option;
                 }}
                 onChange={(e, value) => {
-                  if (typeof value === "object") {
+                  if (typeof value === "object" && value?.fdcId) {
                     setFieldValue(`ingredients.${index}.fdcId`, value?.fdcId);
                   }
                 }}
