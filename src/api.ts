@@ -107,7 +107,10 @@ export const deleteRecipe = async (key: string | undefined) => {
   }
 };
 
-export const getIngredientSearch = async (query: string) => {
+export const getIngredientSearch = async (
+  query: string,
+  signal: AbortSignal
+) => {
   try {
     const response = await axios.get(
       "https://api.nal.usda.gov/fdc/v1/foods/search",
@@ -120,11 +123,12 @@ export const getIngredientSearch = async (query: string) => {
         paramsSerializer: (params) => {
           return qs.stringify(params);
         },
+        signal,
       }
     );
-    return response;
+    if (response.status === 200) return response;
   } catch (e) {
     const error = e as AxiosError;
-    return error.response;
+    console.log(error.response);
   }
 };

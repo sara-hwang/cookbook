@@ -45,18 +45,23 @@ const AddIngredientRow = ({
   const [apiQuery, setApiQuery] = useState<string>("");
 
   useEffect(() => {
-    const queryIngredient = async () => {
-      if (apiQuery) {
-        const resp = await getIngredientSearch(apiQuery);
-        setSuggestions(
-          resp?.data.foods.map((entry: FdcFoodItem) => {
-            return { query: entry.description, fdcId: entry.fdcId };
-          })
-        );
-      }
-    };
+    const controller = new AbortController();
+    const signal = controller.signal;
 
-    queryIngredient();
+    (async () => {
+      if (!apiQuery) return;
+      const resp = await getIngredientSearch(apiQuery, signal);
+      if (!resp) return;
+      setSuggestions(
+        resp.data.foods.map((entry: FdcFoodItem) => {
+          return { query: entry.description, fdcId: entry.fdcId };
+        })
+      );
+    })();
+
+    return () => {
+      controller.abort();
+    };
   }, [apiQuery]);
 
   return (
