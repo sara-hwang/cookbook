@@ -258,6 +258,8 @@ const AddRecipe = () => {
                               amount: "",
                               unit: "",
                               element: "",
+                              fdcQuery: "",
+                              fdcId: "",
                             });
                           }}
                         >
@@ -322,8 +324,10 @@ const AddRecipe = () => {
                           key={index}
                           arrayHelpers={arrayHelpers}
                           errors={errors}
+                          fdcMode={fdcMode}
                           index={index}
                           ingredient={ingredient}
+                          setFieldValue={setFieldValue}
                           values={values}
                         />
                       )

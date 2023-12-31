@@ -1,8 +1,10 @@
 import axios, { AxiosError } from "axios";
 import { Ingredient, Recipe } from "./constants/types";
+import qs from "qs";
 
 const URI = process.env.REACT_APP_SERVER_URI;
 const AUTH = "Client-ID " + process.env.REACT_APP_IMGUR_CLIENT_ID;
+const FDC_API_KEY = process.env.REACT_APP_FDC_API_KEY;
 
 export const authenticate = async (data: {
   username: string;
@@ -98,6 +100,28 @@ export const getRecipe = async (key: string | undefined) => {
 export const deleteRecipe = async (key: string | undefined) => {
   try {
     const response = await axios.delete(`${URI}/recipes/${key}`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
+export const getIngredientSearch = async (query: string) => {
+  try {
+    const response = await axios.get(
+      "https://api.nal.usda.gov/fdc/v1/foods/search",
+      {
+        params: {
+          query: query,
+          dataType: ["Survey (FNDDS)", "Foundation"],
+          api_key: FDC_API_KEY,
+        },
+        paramsSerializer: (params) => {
+          return qs.stringify(params);
+        },
+      }
+    );
     return response;
   } catch (e) {
     const error = e as AxiosError;

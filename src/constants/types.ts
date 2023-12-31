@@ -17,6 +17,7 @@ export type Ingredient = {
   unit?: UnitMenuItem;
   element: string;
   fdcId?: string;
+  fdcQuery?: string;
 };
 
 export type Step = {
@@ -52,3 +53,29 @@ export const EmptyRecipe = {
 
 export const DEFAULT_PHOTO =
   "https://www.bunsenburnerbakery.com/wp-content/uploads/2020/02/banana-bread-muffins-26-square-735x735.jpg";
+
+export type FdcFoodItem = {
+  fdcId: number;
+  dataType: string;
+  description: string;
+  foodCode: string;
+  foodNutrients: FdcFoodNutrient[];
+  publicationDate: string;
+  scientificName: string;
+  brandOwner: string;
+  gtinUpc: string;
+  ingredients: string;
+  ndbNumber: number;
+  additionalDescriptions: string;
+  allHighlightFields: string;
+  score: number;
+};
+
+export type FdcFoodNutrient = {
+  number: number;
+  name: string;
+  amount: number;
+  unitName: string;
+  derivationCode: string;
+  derivationDescription: string;
+};
