@@ -290,7 +290,11 @@ const AddRecipe = () => {
                               let unit = "";
                               Object.entries(UnitMenuItem).forEach(
                                 ([key, value]) => {
-                                  if (value.some((unit) => unit === words[1]))
+                                  if (
+                                    value.some(
+                                      (val) => val === words[1].toLowerCase()
+                                    )
+                                  )
                                     unit = key;
                                 }
                               );
