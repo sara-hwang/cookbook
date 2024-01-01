@@ -117,7 +117,7 @@ export const getIngredientSearch = async (
       {
         params: {
           query: query,
-          dataType: ["Foundation"],
+          dataType: ["SR Legacy"],
           api_key: FDC_API_KEY,
         },
         paramsSerializer: (params) => {
