@@ -287,6 +287,13 @@ const AddRecipe = () => {
                             sethandleTokens(() => (token: string) => {
                               const words = token.split(" ");
                               words.length === 1;
+                              let unit = "";
+                              Object.entries(UnitMenuItem).forEach(
+                                ([key, value]) => {
+                                  if (value.some((unit) => unit === words[1]))
+                                    unit = key;
+                                }
+                              );
                               arrayHelpers.push({
                                 isDivider: false,
                                 amount: Number.isNaN(+words[0])
@@ -294,10 +301,8 @@ const AddRecipe = () => {
                                     ? eval("" + words[0])
                                     : ""
                                   : words[0],
-                                unit: words[1] in UnitMenuItem ? words[1] : "",
-                                element: words
-                                  .splice(words[1] in UnitMenuItem ? 2 : 1)
-                                  .join(" "),
+                                unit: unit,
+                                element: words.splice(unit ? 2 : 1).join(" "),
                               });
                             });
                             setPopupOpen(true);

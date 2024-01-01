@@ -14,7 +14,7 @@ export type Recipe = {
 export type Ingredient = {
   isDivider: boolean;
   amount?: number;
-  unit?: UnitMenuItem;
+  unit?: string;
   element: string;
   fdcId?: string;
   fdcQuery?: string;
@@ -30,14 +30,14 @@ export type TabItem = {
   link: string;
 };
 
-export enum UnitMenuItem {
-  g,
-  ml,
-  tsp,
-  tbsp,
-  cup,
-  count,
-}
+export const UnitMenuItem = {
+  g: ["g", "gram", "gs", "grams"],
+  ml: ["ml", "millilitre", "milliliter", "mls", "millilitres", "milliliters"],
+  tsp: ["tsp", "teaspoon", "tsps", "teaspoons"],
+  tbsp: ["tbsp", "tablespoon", "tbsps", "tablespoons"],
+  cup: ["cup", "cups"],
+  count: ["count", "unit"],
+};
 
 export const EmptyRecipe = {
   key: "",

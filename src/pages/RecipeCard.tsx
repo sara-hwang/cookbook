@@ -13,6 +13,7 @@ import { pushTab } from "../redux/tabsList";
 import { setSearchTags } from "../redux/searchTags";
 import { RootState } from "../redux/store";
 import "../stylesheets/RecipeCard.css";
+import theme from "../theme";
 
 interface RecipeCardProps {
   cardSpacing: number;
@@ -129,7 +130,6 @@ const RecipeCard = ({
         <CardContent className="card-content disable-scrollbars">
           <Typography
             gutterBottom
-            variant="h6"
             component="div"
             sx={{
               width: `${cardWidthPixels - 30}px`,

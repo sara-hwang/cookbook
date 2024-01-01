@@ -161,13 +161,13 @@ const AddIngredientRow = ({
                   (errors.ingredients[index] as FormikErrors<Ingredient>).unit
                 }
               >
-                {Object.values(UnitMenuItem)
-                  .filter((unitMenuItem) => typeof unitMenuItem == "string")
-                  .map((unitMenuItem) => (
+                {Object.values(Object.keys(UnitMenuItem)).map(
+                  (unitMenuItem) => (
                     <MenuItem key={unitMenuItem} value={unitMenuItem}>
                       {unitMenuItem}
                     </MenuItem>
-                  ))}
+                  )
+                )}
               </Field>
             </Grid>
           </>
