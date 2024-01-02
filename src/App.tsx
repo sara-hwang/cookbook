@@ -262,39 +262,37 @@ export default function ResponsiveDrawer() {
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
       <LoginDialog isLoginOpen={isLoginOpen} setIsLoginOpen={setIsLoginOpen} />
-      <Box sx={{ flexGrow: 1 }}>
-        <AppBar
-          position="fixed"
-          sx={{
-            width: { sm: `calc(100% - ${drawerWidth}px)` },
-            ml: { sm: `${drawerWidth}px` },
-            zIndex: 1,
-          }}
-        >
-          <Toolbar sx={{ padding: "10px !important" }}>
-            <IconButton
-              color="inherit"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ display: { sm: "none" } }}
-            >
-              <Menu />
-            </IconButton>
-            <SearchBar />
-            <Button
-              color="inherit"
-              disableRipple
-              sx={{ marginLeft: 1 }}
-              onClick={() => {
-                isAuthenticated() ? signOut() : setIsLoginOpen(true);
-              }}
-            >
-              {isAuthenticated() ? "Logout" : "Login"}
-            </Button>
-          </Toolbar>
-        </AppBar>
-      </Box>
+      <AppBar
+        position="fixed"
+        sx={{
+          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          ml: { sm: `${drawerWidth}px` },
+          zIndex: 1,
+        }}
+      >
+        <Toolbar sx={{ padding: "10px !important" }}>
+          <IconButton
+            color="inherit"
+            aria-label="open drawer"
+            edge="start"
+            onClick={handleDrawerToggle}
+            sx={{ display: { sm: "none" } }}
+          >
+            <Menu />
+          </IconButton>
+          <SearchBar />
+          <Button
+            color="inherit"
+            disableRipple
+            sx={{ marginLeft: 1 }}
+            onClick={() => {
+              isAuthenticated() ? signOut() : setIsLoginOpen(true);
+            }}
+          >
+            {isAuthenticated() ? "Logout" : "Login"}
+          </Button>
+        </Toolbar>
+      </AppBar>
       <Box
         component="nav"
         sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}

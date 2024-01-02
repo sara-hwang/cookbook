@@ -97,10 +97,14 @@ const ViewRecipes = () => {
                 ))}
               {recipes &&
                 recipes
-                  .filter((recipe) =>
-                    recipe.tags.some((tag) =>
-                      category === "All" ? true : tag === category.toLowerCase()
-                    )
+                  .filter(
+                    (recipe) =>
+                      category === "All" ||
+                      recipe.tags.some((tag) =>
+                        category === "All"
+                          ? true
+                          : tag === category.toLowerCase()
+                      )
                   )
                   .map((recipe) => (
                     <RecipeCard
