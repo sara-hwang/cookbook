@@ -48,7 +48,6 @@ const DeleteRecipeDialog = ({
                   const response = await deleteRecipe(id);
                   if (response && response.status === 200) {
                     dispatch(popTab(`/view/${id}`));
-                    dispatch(setRecipesList([]));
                     navigate("/view");
                   } else {
                     alert(response?.data);

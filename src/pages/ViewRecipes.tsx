@@ -23,22 +23,22 @@ const ViewRecipes = () => {
   const cardsPerRow = width > 800 ? 4 : width > 600 ? 3 : 2;
   const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
   const cardWidthPixels = width / cardsPerRow - cardSpacing * 2;
-  const recipeGridContainer = document.getElementById("view-recipes-box");
-  if (recipeGridContainer)
-    new ResizeObserver(() => {
-      setWidth(recipeGridContainer?.offsetWidth ?? 0);
-    }).observe(recipeGridContainer);
+
+  async function getRecipes() {
+    setLoading(true);
+    const recipes = await getRecipesList();
+    setLoading(false);
+    dispatch(setRecipesList(recipes.toReversed()));
+  }
 
   useEffect(() => {
-    async function getRecipes() {
-      setLoading(true);
-      const recipes = await getRecipesList();
-      dispatch(setRecipesList(recipes.toReversed()));
-      setLoading(false);
-    }
-    if (recipesList.length === 0) {
-      getRecipes();
-    }
+    getRecipes();
+
+    const recipeGridContainer = document.getElementById("view-recipes-box");
+    if (recipeGridContainer)
+      new ResizeObserver(() => {
+        setWidth(recipeGridContainer?.offsetWidth ?? 0);
+      }).observe(recipeGridContainer);
     // const scrollpos = sessionStorage.getItem("scrollpos");
     // if (scrollpos) {
     //   setTimeout(function () {
@@ -47,6 +47,10 @@ const ViewRecipes = () => {
     //   }, 50);
     // }
   }, []);
+
+  useEffect(() => {
+    getRecipes();
+  }, [searchTags]);
 
   useEffect(() => {
     setRecipes(
@@ -60,7 +64,7 @@ const ViewRecipes = () => {
           )
         : recipesList
     );
-  }, [searchTags, recipesList]);
+  }, [recipesList]);
 
   const defaultCategories =
     searchTags.length > 0
