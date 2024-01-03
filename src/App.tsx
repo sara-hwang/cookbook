@@ -267,7 +267,7 @@ export default function ResponsiveDrawer() {
         sx={{
           width: { sm: `calc(100% - ${drawerWidth}px)` },
           ml: { sm: `${drawerWidth}px` },
-          zIndex: 1,
+          zIndex: 2,
         }}
       >
         <Toolbar sx={{ padding: "10px !important" }}>

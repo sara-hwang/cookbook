@@ -7,6 +7,8 @@ import { RootState } from "../redux/store";
 import { getRecipesList } from "../helpers";
 import { setRecipesList } from "../redux/recipesList";
 import RecipeCard from "./RecipeCard";
+import { Splide, SplideSlide } from "@splidejs/react-splide";
+import "@splidejs/splide/css";
 
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
@@ -73,17 +75,17 @@ const ViewRecipes = () => {
           "All",
         ];
   return (
-    <Box>
+    <Box sx={{ marginTop: `${cardSpacing * 2}px` }}>
       {defaultCategories.map((category) => {
-        return (
+        return category === "All" ? (
           <div className="recipe-grid-container" key={category}>
-            <Typography variant="h4">{category}</Typography>
-            <Box
-              style={{
-                padding: `${cardSpacing}px`,
-              }}
-              id="view-recipes-box"
+            <Typography
+              variant="h4"
+              style={{ paddingLeft: `${cardSpacing * 2}px` }}
             >
+              {category}
+            </Typography>
+            <Box style={{ padding: `${cardSpacing}px` }} id="view-recipes-box">
               {loading &&
                 [...Array(12).keys()].map((key) => (
                   <RecipeCard
@@ -95,28 +97,53 @@ const ViewRecipes = () => {
                     recipe={EmptyRecipe}
                   />
                 ))}
-              {recipes &&
-                recipes
-                  .filter(
-                    (recipe) =>
-                      category === "All" ||
-                      recipe.tags.some((tag) =>
-                        category === "All"
-                          ? true
-                          : tag === category.toLowerCase()
-                      )
-                  )
-                  .map((recipe) => (
-                    <RecipeCard
-                      cardSpacing={cardSpacing}
-                      cardWidth={cardWidth}
-                      cardWidthPixels={cardWidthPixels}
-                      isSkeleton={false}
-                      key={recipe.key}
-                      recipe={recipe}
-                    />
-                  ))}
+              {recipes.map((recipe) => (
+                <RecipeCard
+                  cardSpacing={cardSpacing}
+                  cardWidth={cardWidth}
+                  cardWidthPixels={cardWidthPixels}
+                  isSkeleton={false}
+                  key={recipe.key}
+                  recipe={recipe}
+                />
+              ))}
             </Box>
+          </div>
+        ) : (
+          <div
+            key={category}
+            style={{
+              padding: `0 ${cardSpacing * 2}px ${cardSpacing * 2}px`,
+              maxWidth: width,
+            }}
+          >
+            <Typography variant="h4">{category}</Typography>
+            <Splide
+              options={{
+                type: "loop",
+                perPage: cardsPerRow,
+                drag: "free",
+                perMove: cardsPerRow,
+                gap: cardSpacing,
+              }}
+            >
+              {(loading
+                ? [...Array(cardsPerRow).keys()]
+                : recipes.filter((recipe) =>
+                    recipe.tags.some((tag) => tag === category.toLowerCase())
+                  )
+              ).map((item) => (
+                <SplideSlide key={typeof item == "number" ? item : item.key}>
+                  <RecipeCard
+                    cardSpacing={0}
+                    cardWidth={"99%"}
+                    cardWidthPixels={cardWidthPixels}
+                    isSkeleton={loading}
+                    recipe={typeof item === "object" ? item : EmptyRecipe}
+                  />
+                </SplideSlide>
+              ))}
+            </Splide>
           </div>
         );
       })}

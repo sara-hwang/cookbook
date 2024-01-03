@@ -3,6 +3,10 @@
   flex-wrap: wrap;
 }
 
-.recipe-grid-container .MuiTypography-root.MuiTypography-h4 {
-  padding: 20px 0px 0px 20px;
+.splide__pagination__page.is-active {
+  background: #33691e !important;
+}
+
+.splide__track--draggable {
+  padding: 10px 0 35px;
 }
