@@ -28,7 +28,11 @@ const ViewRecipes = () => {
     setLoading(true);
     const recipes = await getRecipesList();
     setLoading(false);
-    dispatch(setRecipesList(recipes.toReversed()));
+    dispatch(
+      setRecipesList(
+        recipes.sort((a: Recipe, b: Recipe) => b.dateAdded - a.dateAdded)
+      )
+    );
   }
 
   useEffect(() => {

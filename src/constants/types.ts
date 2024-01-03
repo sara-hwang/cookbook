@@ -8,7 +8,7 @@ export type Recipe = {
   thumbnail: string | undefined;
   tags: string[];
   url: string;
-  dateAdded?: number;
+  dateAdded: number;
 };
 
 export type Ingredient = {
@@ -49,6 +49,7 @@ export const EmptyRecipe = {
   thumbnail: undefined,
   tags: [],
   url: "",
+  dateAdded: 0,
 };
 
 export const DEFAULT_PHOTO =

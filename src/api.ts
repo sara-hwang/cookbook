@@ -53,7 +53,7 @@ export const upload = async (file: FormData) => {
 };
 
 export const addRecipe = async (data: Recipe) => {
-  data.dateAdded = Date.now();
+  if (!data.dateAdded) data.dateAdded = Date.now();
   try {
     const response = await axios.post(`${URI}/recipes/add`, data);
     return response;

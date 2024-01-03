@@ -6,23 +6,21 @@ import {
   FormControlLabel,
   Grid,
   IconButton,
-  MenuItem,
   Switch,
   TextField,
   Typography,
 } from "@mui/material";
-import { Field, FieldArray, Form, Formik, FormikErrors } from "formik";
+import { Field, FieldArray, Form, Formik } from "formik";
 import * as yup from "yup";
 import slugify from "slugify";
 import {
   EmptyRecipe,
   Ingredient,
   Recipe,
-  Step,
   UnitMenuItem,
 } from "../constants/types";
-import { Add, Delete, MoveUp } from "@mui/icons-material";
-import { addRecipe, updateRecipe, upload } from "../api";
+import { Add } from "@mui/icons-material";
+import { addRecipe, deleteRecipe, updateRecipe, upload } from "../api";
 import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
@@ -36,6 +34,7 @@ import ChipDisplay from "../components/ChipDisplay";
 import BulkEntryDialog from "./BulkEntryDialog";
 import AddIngredientRow from "./AddIngredientRow";
 import AddStepRow from "./AddStepRow";
+import { popTab } from "../redux/tabsList";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
@@ -164,7 +163,16 @@ const AddRecipe = () => {
         if (id === undefined) {
           response = await addRecipe(data);
         } else {
-          response = await updateRecipe(data);
+          if (initialValues.key !== key) {
+            response = await deleteRecipe(initialValues.key);
+            if (response && response.status === 200) {
+              dispatch(popTab(`/view/${id}`));
+              data.dateAdded = initialValues.dateAdded;
+              response = await addRecipe(data);
+            } else {
+              alert(response?.data);
+            }
+          } else response = await updateRecipe(data);
         }
         if (response && response.status === 200) {
           resetForm();
@@ -202,13 +210,8 @@ const AddRecipe = () => {
                   label="Title"
                   fullWidth
                   required
-                  disabled={id !== undefined}
                   error={errors.title !== undefined}
-                  helperText={
-                    id
-                      ? "You cannot edit a recipe title after creation."
-                      : errors.title
-                  }
+                  helperText={errors.title}
                 />
               </Grid>
               <Grid item xs={12} md={9}>
