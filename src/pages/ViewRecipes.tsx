@@ -9,12 +9,13 @@ import { setRecipesList } from "../redux/recipesList";
 import RecipeCard from "./RecipeCard";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/css";
+import RandomButton from "./RandomButton";
 
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
-  const [width, setWidth] = useState(1000);
+  const [width, setWidth] = useState(700);
   const [keys, setKeys] = useState([1, 2, 3, 4, 5, 6]);
   const { searchTags, searchTitle } = useAppSelector(
     (state: RootState) => state.searchTags
@@ -23,7 +24,7 @@ const ViewRecipes = () => {
     (state: RootState) => state.recipesList
   );
   const cardSpacing = 10;
-  const cardsPerRow = width > 800 ? 4 : width > 600 ? 3 : 2;
+  const cardsPerRow = width > 1000 ? 5 : width > 800 ? 4 : width > 600 ? 3 : 2;
   const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
   const cardWidthPixels = width / cardsPerRow - cardSpacing * 2;
 
@@ -80,50 +81,56 @@ const ViewRecipes = () => {
 
   return (
     <Box sx={{ marginTop: `${cardSpacing * 2}px` }}>
-      {defaultCategories.map((category, index) => (
-        <div
-          key={category + keys[index]}
-          style={{
-            padding: `0 ${cardSpacing * 2}px ${cardSpacing}px`,
-            maxWidth: width,
-          }}
-        >
-          <Typography variant="h4">{category}</Typography>
-          <Splide
-            options={{
-              type: "loop",
-              perPage: cardsPerRow,
-              drag: "free",
-              perMove: cardsPerRow,
-              gap: cardSpacing,
+      {defaultCategories.map((category, index) => {
+        const catRecipes = recipes.filter((recipe) =>
+          recipe.tags.some((tag) => tag === category.toLowerCase())
+        );
+        return (
+          <div
+            key={category + keys[index]}
+            style={{
+              padding: `0 ${cardSpacing * 2}px ${cardSpacing}px`,
+              maxWidth: width,
             }}
           >
-            {(loading
-              ? [...Array(cardsPerRow).keys()]
-              : recipes.filter((recipe) =>
-                  recipe.tags.some((tag) => tag === category.toLowerCase())
+            <div className="spaced-apart">
+              <Typography variant="h4">{category}</Typography>
+              {catRecipes.length > 0 && <RandomButton recipes={catRecipes} />}
+            </div>
+            <Splide
+              options={{
+                type: "loop",
+                perPage: cardsPerRow,
+                drag: "free",
+                perMove: cardsPerRow,
+                gap: cardSpacing * 2,
+              }}
+            >
+              {(loading ? [...Array(cardsPerRow).keys()] : catRecipes).map(
+                (item, index) => (
+                  <SplideSlide key={typeof item === "number" ? item : item.key}>
+                    <RecipeCard
+                      cardSpacing={0}
+                      cardWidth={"99%"}
+                      cardWidthPixels={cardWidthPixels}
+                      isSkeleton={loading}
+                      recipe={typeof item === "object" ? item : EmptyRecipe}
+                    />
+                  </SplideSlide>
                 )
-            ).map((item, index) => (
-              <SplideSlide key={typeof item === "number" ? item : item.key}>
-                <RecipeCard
-                  cardSpacing={0}
-                  cardWidth={"99%"}
-                  cardWidthPixels={cardWidthPixels}
-                  isSkeleton={loading}
-                  recipe={typeof item === "object" ? item : EmptyRecipe}
-                />
-              </SplideSlide>
-            ))}
-          </Splide>
-        </div>
-      ))}
+              )}
+            </Splide>
+          </div>
+        );
+      })}
       <div className="recipe-grid-container">
-        <Typography
-          variant="h4"
-          style={{ paddingLeft: `${cardSpacing * 2}px` }}
+        <div
+          className="spaced-apart"
+          style={{ padding: `0 ${cardSpacing * 2}px` }}
         >
-          All
-        </Typography>
+          <Typography variant="h4">All</Typography>
+          <RandomButton recipes={recipes} />
+        </div>
         <Box
           style={{ padding: `0 ${cardSpacing}px ${cardSpacing}px` }}
           id="view-recipes-box"

@@ -1,4 +1,4 @@
-import { lightGreen } from "@mui/material/colors";
+import { grey, lightGreen } from "@mui/material/colors";
 import { createTheme } from "@mui/material/styles";
 
 const theme = createTheme({
@@ -8,6 +8,9 @@ const theme = createTheme({
     },
     secondary: {
       main: lightGreen[200],
+    },
+    info: {
+      main: grey[900],
     },
   },
   typography: {

@@ -13,10 +13,8 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
-  Tooltip,
 } from "@mui/material";
 import {
-  Casino,
   Close,
   Menu,
   MenuBook,
@@ -33,11 +31,10 @@ import RecipeDetails from "./pages/RecipeDetails";
 import LoginDialog from "./pages/Login";
 import { useIsAuthenticated, useSignOut } from "react-auth-kit";
 import GroceryList from "./pages/GroceryList";
-import { popTab, pushTab, setCurrentTab } from "./redux/tabsList";
+import { popTab, setCurrentTab } from "./redux/tabsList";
 import { RootState } from "./redux/store";
 import { setSearchTags } from "./redux/searchTags";
 import SearchBar from "./components/SearchBar";
-import { getRecipesList } from "./helpers";
 
 const drawerWidth = 240;
 
@@ -70,12 +67,8 @@ export default function ResponsiveDrawer() {
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [randomDisabled, setRandomDisabled] = useState(false);
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
-  );
-  const { recipesList } = useAppSelector(
-    (state: RootState) => state.recipesList
   );
 
   const handleListItemClick = (
@@ -167,49 +160,7 @@ export default function ResponsiveDrawer() {
       </Toolbar>
       <List>
         {defaultTabs.map(({ label, icon, link }, index) => (
-          <ListItem
-            key={index}
-            disablePadding
-            className={link === "/view" ? "view-recipes-tab" : undefined}
-            secondaryAction={
-              link === "/view" && (
-                <Tooltip title="Random Recipe" disableInteractive arrow>
-                  <IconButton
-                    size="small"
-                    component="span"
-                    disableRipple
-                    className={randomDisabled ? "random-disabled" : undefined}
-                    // add a timeout otherwise spam-clicking leads to bugs
-                    onClick={
-                      randomDisabled
-                        ? undefined
-                        : async () => {
-                            setRandomDisabled(true);
-                            setTimeout(() => {
-                              setRandomDisabled(false);
-                            }, 1000);
-                            let recipes = [];
-                            if (recipesList.length == 0)
-                              recipes = await getRecipesList();
-                            else recipes = recipesList;
-                            const randomIndex = Math.floor(
-                              Math.random() * recipes.length
-                            );
-                            dispatch(
-                              pushTab({
-                                label: recipes[randomIndex].title,
-                                link: `/view/${recipes[randomIndex].key}`,
-                              })
-                            );
-                          }
-                    }
-                  >
-                    <Casino fontSize="small" />
-                  </IconButton>
-                </Tooltip>
-              )
-            }
-          >
+          <ListItem key={index} disablePadding>
             <ListItemButton
               disableRipple
               selected={currentTab === index - defaultTabs.length}
