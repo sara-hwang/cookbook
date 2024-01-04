@@ -20,7 +20,13 @@ import {
   UnitMenuItem,
 } from "../constants/types";
 import { Add } from "@mui/icons-material";
-import { addRecipe, deleteRecipe, updateRecipe, upload } from "../api";
+import {
+  addRecipe,
+  deleteRecipe,
+  getFoodCategory,
+  updateRecipe,
+  upload,
+} from "../api";
 import { RootState } from "../redux/store";
 import { useEffect, useState } from "react";
 import { setRecipeDraft } from "../redux/recipeDraft";
@@ -158,6 +164,12 @@ const AddRecipe = () => {
           key: key,
           photo: images?.original,
           thumbnail: images?.thumbnail,
+          ingredients: await Promise.all(
+            data.ingredients.map(async (ing) => {
+              const foodCategory = await getFoodCategory(ing.fdcId);
+              return { ...ing, foodCategory: foodCategory };
+            })
+          ),
         };
         let response;
         if (id === undefined) {

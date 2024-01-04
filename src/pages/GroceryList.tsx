@@ -36,11 +36,10 @@ export const GroceryList = () => {
     const categorizeGroceryList = async () => {
       setLoading(true);
       for (const [index, _] of groceryList.entries()) {
-        let response = await getFoodCategory(groceryList[index].fdcId);
-        if (!response) response = "Other";
-        if (response in categoryDict)
-          categoryDict[response].push(groceryList[index]);
-        else categoryDict[response] = [groceryList[index]];
+        const foodCategory = groceryList[index].foodCategory ?? "Other";
+        if (foodCategory in categoryDict)
+          categoryDict[foodCategory].push(groceryList[index]);
+        else categoryDict[foodCategory] = [groceryList[index]];
       }
       const flatCategories: Ingredient[] = [];
       Object.keys(categoryDict).forEach((categoryName) => {
