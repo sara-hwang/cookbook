@@ -2,15 +2,18 @@ import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { useLocation } from "react-router-dom";
-import { getFoodCategory, getGroceryList, updateGroceryList } from "../api";
+import { getGroceryList, updateGroceryList } from "../api";
 import { Ingredient } from "../constants/types";
 import "../stylesheets/Checkbox.css";
 import "../stylesheets/App.css";
+import ClearGroceryDialog from "./ClearGroceryDialog";
 
 export const GroceryList = () => {
   const auth = useAuthUser();
   const { pathname } = useLocation();
   const [loading, setLoading] = useState(false);
+  const [clear, setClear] = useState(false);
+  const [popupOpen, setPopupOpen] = useState(false);
   const [groceryList, setGroceryList] = useState<Ingredient[]>([]);
   const [categorizedItems, setCategorizedItems] = useState<Ingredient[]>([]);
 
@@ -53,6 +56,13 @@ export const GroceryList = () => {
     categorizeGroceryList();
   }, [groceryList]);
 
+  useEffect(() => {
+    if (!clear) return;
+    updateGroceryList(auth()?.username, []);
+    setGroceryList([]);
+    setClear(false);
+  }, [clear]);
+
   const update = async () => {
     const checkboxElement = document.getElementById("grocery-checklist");
     if (!checkboxElement || !auth()?.username) return;
@@ -68,6 +78,11 @@ export const GroceryList = () => {
 
   return (
     <Box sx={{ display: "flex", padding: "24px" }}>
+      <ClearGroceryDialog
+        popupOpen={popupOpen}
+        setPopupOpen={setPopupOpen}
+        setClear={setClear}
+      />
       <form id="grocery-checklist">
         <Grid container spacing={3}>
           <Grid item container spacing={1}>
@@ -120,10 +135,7 @@ export const GroceryList = () => {
                 <Button
                   variant="contained"
                   color="error"
-                  onClick={() => {
-                    updateGroceryList(auth()?.username, []);
-                    setGroceryList([]);
-                  }}
+                  onClick={() => groceryList.length && setPopupOpen(true)}
                 >
                   Clear
                 </Button>
