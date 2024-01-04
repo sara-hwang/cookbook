@@ -1,6 +1,6 @@
 import { Box, Typography } from "@mui/material";
 import { Recipe, EmptyRecipe } from "../constants/types";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useState } from "react";
 import "../stylesheets/ViewRecipes.css";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
@@ -15,7 +15,10 @@ const ViewRecipes = () => {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
   const [width, setWidth] = useState(1000);
-  const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
+  const [keys, setKeys] = useState([1, 2, 3, 4, 5, 6]);
+  const { searchTags, searchTitle } = useAppSelector(
+    (state: RootState) => state.searchTags
+  );
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
   );
@@ -52,109 +55,91 @@ const ViewRecipes = () => {
     // }
   }, []);
 
-  useEffect(() => {
-    getRecipes();
-  }, [searchTags]);
-
-  useEffect(() => {
-    setRecipes(
+  useLayoutEffect(() => {
+    const tagsFilter =
       searchTags.length > 0
         ? recipesList.filter(
             (recipe: Recipe) =>
-              searchTags.every((tag) => recipe.tags.includes(tag)) ||
-              searchTags.every((tag) =>
-                recipe.ingredients.map((ing) => ing.element).includes(tag)
-              )
+              searchTags.length &&
+              searchTags.every((tag) => recipe.tags.includes(tag))
           )
-        : recipesList
-    );
-  }, [recipesList]);
+        : recipesList;
+    const titleFilter = searchTitle
+      ? recipesList.filter((recipe: Recipe) =>
+          recipe.title.toLowerCase().includes(searchTitle.toLowerCase())
+        )
+      : recipesList;
+    setRecipes(tagsFilter.filter((recipe) => titleFilter.includes(recipe)));
+    setKeys(keys.map((key) => (key *= -1)));
+  }, [recipesList, searchTitle, searchTags]);
 
   const defaultCategories =
-    searchTags.length > 0
-      ? ["All"]
-      : [
-          "Breakfast",
-          "Dessert",
-          "Vegetarian",
-          "Vegan",
-          "Easy",
-          "Instant Pot",
-          "All",
-        ];
+    searchTags.length > 0 || searchTitle
+      ? []
+      : ["Breakfast", "Dessert", "Vegetarian", "Vegan", "Easy", "Instant Pot"];
+
   return (
     <Box sx={{ marginTop: `${cardSpacing * 2}px` }}>
-      {defaultCategories.map((category) => {
-        return category === "All" ? (
-          <div className="recipe-grid-container" key={category}>
-            <Typography
-              variant="h4"
-              style={{ paddingLeft: `${cardSpacing * 2}px` }}
-            >
-              {category}
-            </Typography>
-            <Box style={{ padding: `${cardSpacing}px` }} id="view-recipes-box">
-              {loading &&
-                [...Array(12).keys()].map((key) => (
-                  <RecipeCard
-                    cardSpacing={cardSpacing}
-                    cardWidth={cardWidth}
-                    cardWidthPixels={cardWidthPixels}
-                    isSkeleton={true}
-                    key={key}
-                    recipe={EmptyRecipe}
-                  />
-                ))}
-              {recipes.map((recipe) => (
-                <RecipeCard
-                  cardSpacing={cardSpacing}
-                  cardWidth={cardWidth}
-                  cardWidthPixels={cardWidthPixels}
-                  isSkeleton={false}
-                  key={recipe.key}
-                  recipe={recipe}
-                />
-              ))}
-            </Box>
-          </div>
-        ) : (
-          <div
-            key={category}
-            style={{
-              padding: `0 ${cardSpacing * 2}px ${cardSpacing * 2}px`,
-              maxWidth: width,
+      {defaultCategories.map((category, index) => (
+        <div
+          key={category + keys[index]}
+          style={{
+            padding: `0 ${cardSpacing * 2}px ${cardSpacing}px`,
+            maxWidth: width,
+          }}
+        >
+          <Typography variant="h4">{category}</Typography>
+          <Splide
+            options={{
+              type: "loop",
+              perPage: cardsPerRow,
+              drag: "free",
+              perMove: cardsPerRow,
+              gap: cardSpacing,
             }}
           >
-            <Typography variant="h4">{category}</Typography>
-            <Splide
-              options={{
-                type: "loop",
-                perPage: cardsPerRow,
-                drag: "free",
-                perMove: cardsPerRow,
-                gap: cardSpacing,
-              }}
-            >
-              {(loading
-                ? [...Array(cardsPerRow).keys()]
-                : recipes.filter((recipe) =>
-                    recipe.tags.some((tag) => tag === category.toLowerCase())
-                  )
-              ).map((item) => (
-                <SplideSlide key={typeof item == "number" ? item : item.key}>
-                  <RecipeCard
-                    cardSpacing={0}
-                    cardWidth={"99%"}
-                    cardWidthPixels={cardWidthPixels}
-                    isSkeleton={loading}
-                    recipe={typeof item === "object" ? item : EmptyRecipe}
-                  />
-                </SplideSlide>
-              ))}
-            </Splide>
-          </div>
-        );
-      })}
+            {(loading
+              ? [...Array(cardsPerRow).keys()]
+              : recipes.filter((recipe) =>
+                  recipe.tags.some((tag) => tag === category.toLowerCase())
+                )
+            ).map((item, index) => (
+              <SplideSlide key={typeof item === "number" ? item : item.key}>
+                <RecipeCard
+                  cardSpacing={0}
+                  cardWidth={"99%"}
+                  cardWidthPixels={cardWidthPixels}
+                  isSkeleton={loading}
+                  recipe={typeof item === "object" ? item : EmptyRecipe}
+                />
+              </SplideSlide>
+            ))}
+          </Splide>
+        </div>
+      ))}
+      <div className="recipe-grid-container">
+        <Typography
+          variant="h4"
+          style={{ paddingLeft: `${cardSpacing * 2}px` }}
+        >
+          All
+        </Typography>
+        <Box
+          style={{ padding: `0 ${cardSpacing}px ${cardSpacing}px` }}
+          id="view-recipes-box"
+        >
+          {(loading ? [...Array(12).keys()] : recipes).map((item) => (
+            <RecipeCard
+              cardSpacing={cardSpacing}
+              cardWidth={cardWidth}
+              cardWidthPixels={cardWidthPixels}
+              isSkeleton={loading}
+              key={typeof item === "number" ? item : item.key}
+              recipe={typeof item === "object" ? item : EmptyRecipe}
+            />
+          ))}
+        </Box>
+      </div>
     </Box>
   );
 };

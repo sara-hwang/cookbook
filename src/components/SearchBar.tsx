@@ -3,7 +3,7 @@ import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
 import { Recipe } from "../constants/types";
 import SearchIcon from "@mui/icons-material/Search";
-import { setSearchTags } from "../redux/searchTags";
+import { setSearchTags, setSearchTitle } from "../redux/searchTags";
 import ChipDisplay from "./ChipDisplay";
 import { useNavigate, useLocation } from "react-router-dom";
 
@@ -15,7 +15,9 @@ const SearchBar = () => {
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
   );
-  const { searchTags } = useAppSelector((state: RootState) => state.searchTags);
+  const { searchTags, searchKey } = useAppSelector(
+    (state: RootState) => state.searchTags
+  );
 
   const suggestions = [
     ...new Set(
@@ -24,7 +26,6 @@ const SearchBar = () => {
           (accumulator: string[], currentValue: Recipe) => [
             ...accumulator,
             ...currentValue.tags,
-            ...currentValue.ingredients.map((ing) => ing.element),
           ],
           []
         )
@@ -36,9 +37,10 @@ const SearchBar = () => {
     <Autocomplete
       multiple
       freeSolo
+      fullWidth
+      key={searchKey}
       options={suggestions}
       value={searchTags}
-      fullWidth
       onFocus={() => {
         if (pathname !== "/view") navigate("/view");
       }}
@@ -50,6 +52,9 @@ const SearchBar = () => {
           onChipDelete={getTagProps({ index: 0 }).onDelete}
         />
       )}
+      onInputChange={(event, newInputValue, reason) => {
+        reason === "clear" && dispatch(setSearchTitle(""));
+      }}
       renderInput={(params) => (
         <TextField
           {...params}
@@ -69,7 +74,8 @@ const SearchBar = () => {
               </>
             ),
           }}
-          placeholder="Press enter to search for a tag"
+          onChange={(e) => dispatch(setSearchTitle(e.target.value))}
+          placeholder="Start typing to search by title or press enter to search for a tag"
         />
       )}
     />
