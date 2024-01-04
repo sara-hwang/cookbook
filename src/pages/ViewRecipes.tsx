@@ -14,7 +14,7 @@ import RandomButton from "./RandomButton";
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
-  const [loading, setLoading] = useState(false);
+  const [loading, setLoading] = useState(true);
   const [width, setWidth] = useState(10000);
   const [keys, setKeys] = useState([1, 2, 3, 4, 5, 6]);
   const { searchTags, searchTitle } = useAppSelector(
@@ -57,10 +57,6 @@ const ViewRecipes = () => {
   }, []);
 
   useLayoutEffect(() => {
-    width === 10000 && setLoading(true);
-  }, [width]);
-
-  useLayoutEffect(() => {
     const tagsFilter =
       searchTags.length > 0
         ? recipesList.filter(
@@ -76,6 +72,11 @@ const ViewRecipes = () => {
       : recipesList;
     setRecipes(tagsFilter.filter((recipe) => titleFilter.includes(recipe)));
     setKeys(keys.map((key) => (key *= -1)));
+    setLoading(true);
+  }, [recipesList, searchTitle, searchTags]);
+
+  useEffect(() => {
+    return () => setLoading(false);
   }, [recipesList, searchTitle, searchTags]);
 
   const defaultCategories =
