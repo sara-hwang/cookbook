@@ -36,17 +36,3 @@
   visibility: visible;
   color: red;
 }
-
-.view-recipes-tab .MuiIconButton-root {
-  visibility: hidden;
-}
-
-.view-recipes-tab:hover .MuiIconButton-root {
-  visibility: visible;
-  color: black;
-}
-
-.view-recipes-tab:hover .MuiIconButton-root.random-disabled {
-  visibility: visible;
-  color: gray;
-}

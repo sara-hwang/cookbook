@@ -15,7 +15,7 @@ const ViewRecipes = () => {
   const dispatch = useAppDispatch();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(false);
-  const [width, setWidth] = useState(700);
+  const [width, setWidth] = useState(10000);
   const [keys, setKeys] = useState([1, 2, 3, 4, 5, 6]);
   const { searchTags, searchTitle } = useAppSelector(
     (state: RootState) => state.searchTags
@@ -55,6 +55,10 @@ const ViewRecipes = () => {
     //   }, 50);
     // }
   }, []);
+
+  useLayoutEffect(() => {
+    width === 10000 && setLoading(true);
+  }, [width]);
 
   useLayoutEffect(() => {
     const tagsFilter =
