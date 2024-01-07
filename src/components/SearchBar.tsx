@@ -31,7 +31,9 @@ const SearchBar = () => {
         )
         .map((word) => word.toLowerCase().trim())
     ),
-  ].sort();
+  ]
+    .filter((tag) => !searchTags.includes(tag))
+    .sort();
 
   return (
     <Autocomplete
