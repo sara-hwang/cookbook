@@ -15,7 +15,7 @@ const ViewRecipes = () => {
   const dispatch = useAppDispatch();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
-  const [width, setWidth] = useState(10000);
+  const [width, setWidth] = useState(0);
   const [keys, setKeys] = useState([1, 2, 3, 4, 5, 6]);
   const { searchTags, searchTitle } = useAppSelector(
     (state: RootState) => state.searchTags
