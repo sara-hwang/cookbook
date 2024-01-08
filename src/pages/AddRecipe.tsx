@@ -458,7 +458,7 @@ const AddRecipe = () => {
                     <ChipDisplay
                       tags={value}
                       size="small"
-                      onChipDelete={getTagProps({ index: 0 }).onDelete}
+                      getTagProps={getTagProps}
                     />
                   )}
                   renderInput={(params) => (

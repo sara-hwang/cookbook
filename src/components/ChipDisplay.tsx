@@ -1,13 +1,20 @@
-import { Chip, useTheme } from "@mui/material";
+import { AutocompleteRenderGetTagProps, Chip, useTheme } from "@mui/material";
 
 interface IProps {
   tags: readonly string[];
   size: "small" | "medium";
   onChipClick?: (tag: string, index: number) => void;
   onChipDelete?: (index: number) => void;
+  getTagProps?: AutocompleteRenderGetTagProps;
 }
 
-const ChipDisplay = ({ tags, size, onChipClick, onChipDelete }: IProps) => {
+const ChipDisplay = ({
+  tags,
+  size,
+  onChipClick,
+  onChipDelete,
+  getTagProps,
+}: IProps) => {
   const theme = useTheme();
   return (
     <div>
@@ -23,7 +30,13 @@ const ChipDisplay = ({ tags, size, onChipClick, onChipDelete }: IProps) => {
                 }
               : undefined
           }
-          onDelete={onChipDelete ? () => onChipDelete(index) : undefined}
+          onDelete={
+            onChipDelete
+              ? () => onChipDelete(index)
+              : getTagProps
+              ? getTagProps({ index: index }).onDelete
+              : undefined
+          }
           size={size}
           sx={{
             margin: "2px",
