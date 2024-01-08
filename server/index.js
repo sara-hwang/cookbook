@@ -4,6 +4,7 @@ const cors = require("cors");
 const RecipeModel = require("./models/recipes");
 const jwt = require("jsonwebtoken");
 const UserModel = require("./models/users");
+const IngredientModel = require("./models/ingredients");
 
 require("dotenv").config({ path: "../.env" });
 const app = express();
@@ -138,6 +139,37 @@ app.delete("/recipes/:id", async (req, res) => {
     console.log(error);
     res.status(500);
     res.json(error.message);
+  }
+});
+
+app.get("/ingredients/:id", async (req, res) => {
+  console.log(`Getting ingredient ${req.params.id}`);
+  try {
+    let response = await IngredientModel.findOne(req.query);
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+    res.json(error);
+  }
+});
+
+app.post("/ingredients/add", async (req, res) => {
+  const obj = req.body;
+  try {
+    let response = await IngredientModel.create(obj);
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    if (error.code === 11000) {
+      res.status(400);
+      res.json("An ingredient with that FDC ID already exists.");
+    } else {
+      res.status(500);
+      res.json(error.message);
+    }
   }
 });
 

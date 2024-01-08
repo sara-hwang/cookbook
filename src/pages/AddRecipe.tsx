@@ -23,7 +23,7 @@ import { Add } from "@mui/icons-material";
 import {
   addRecipe,
   deleteRecipe,
-  getFoodCategory,
+  addFdcIngredient,
   updateRecipe,
   upload,
 } from "../api";
@@ -166,7 +166,7 @@ const AddRecipe = () => {
           thumbnail: images?.thumbnail,
           ingredients: await Promise.all(
             data.ingredients.map(async (ing) => {
-              const foodCategory = await getFoodCategory(ing.fdcId);
+              const foodCategory = await addFdcIngredient(ing.fdcId);
               return { ...ing, foodCategory: foodCategory };
             })
           ),

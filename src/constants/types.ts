@@ -21,6 +21,34 @@ export type Ingredient = {
   foodCategory?: string;
 };
 
+export type FdcIngredient = {
+  fdcId: string;
+  category: string;
+  nutrition: Nutrient[];
+};
+
+export type Nutrient = {
+  name: string;
+  id: number;
+  amount: number;
+  unit: string;
+};
+
+export enum FdcNutrientId {
+  calories = 1008,
+  protein = 1003,
+  fat = 1004,
+  carbs = 1005,
+  fiber = 1079,
+  totalSugars = 2000,
+  calcium = 1087,
+  iron = 1089,
+  sodium = 1093,
+  saturatedFat = 1258,
+  cholesterol = 1253,
+  transFat = 1257,
+}
+
 export type Step = {
   isDivider: boolean;
   text: string;

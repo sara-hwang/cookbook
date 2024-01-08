@@ -1,5 +1,5 @@
 import axios, { AxiosError } from "axios";
-import { Ingredient, Recipe } from "./constants/types";
+import { FdcNutrientId, Ingredient, Nutrient, Recipe } from "./constants/types";
 import qs from "qs";
 
 const URI = process.env.REACT_APP_SERVER_URI;
@@ -133,10 +133,11 @@ export const getIngredientSearch = async (
   }
 };
 
-export const getFoodCategory = async (fdcId?: string) => {
+// return food category for now to not break things
+export const addFdcIngredient = async (fdcId?: string) => {
   if (!fdcId) return;
   try {
-    const response = await axios.get(
+    const fdcResponse = await axios.get(
       `https://api.nal.usda.gov/fdc/v1/food/${fdcId}`,
       {
         params: {
@@ -144,7 +145,25 @@ export const getFoodCategory = async (fdcId?: string) => {
         },
       }
     );
-    return response.data.foodCategory.description;
+
+    const nutrition: Nutrient[] = [];
+    fdcResponse.data.foodNutrients.forEach((entry: any) => {
+      if (!(entry.nutrient.id in FdcNutrientId)) return;
+      nutrition.push({
+        name: entry.nutrient.name,
+        id: entry.nutrient.id,
+        amount: entry.amount,
+        unit: entry.nutrient.unitName,
+      });
+    });
+
+    const fdcIngredient = {
+      fdcId: fdcId,
+      category: fdcResponse.data.foodCategory.description,
+      nutrition: nutrition,
+    };
+    await axios.post(`${URI}/ingredients/add`, fdcIngredient);
+    return fdcResponse.data.foodCategory.description;
   } catch (e) {
     const error = e as AxiosError;
     if (error.response) console.log(error.response);
