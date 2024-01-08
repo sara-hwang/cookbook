@@ -48,11 +48,7 @@ const SearchBar = () => {
       }}
       onChange={(e, value) => dispatch(setSearchTags(value))}
       renderTags={(value: readonly string[], getTagProps) => (
-        <ChipDisplay
-          tags={value}
-          size="small"
-          onChipDelete={getTagProps({ index: 0 }).onDelete}
-        />
+        <ChipDisplay tags={value} size="small" getTagProps={getTagProps} />
       )}
       onInputChange={(event, newInputValue, reason) => {
         reason === "clear" && dispatch(setSearchTitle(""));

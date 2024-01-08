@@ -4,17 +4,10 @@ interface IProps {
   tags: readonly string[];
   size: "small" | "medium";
   onChipClick?: (tag: string, index: number) => void;
-  onChipDelete?: (index: number) => void;
   getTagProps?: AutocompleteRenderGetTagProps;
 }
 
-const ChipDisplay = ({
-  tags,
-  size,
-  onChipClick,
-  onChipDelete,
-  getTagProps,
-}: IProps) => {
+const ChipDisplay = ({ tags, size, onChipClick, getTagProps }: IProps) => {
   const theme = useTheme();
   return (
     <div>
@@ -31,11 +24,7 @@ const ChipDisplay = ({
               : undefined
           }
           onDelete={
-            onChipDelete
-              ? () => onChipDelete(index)
-              : getTagProps
-              ? getTagProps({ index: index }).onDelete
-              : undefined
+            getTagProps ? getTagProps({ index: index }).onDelete : undefined
           }
           size={size}
           sx={{
