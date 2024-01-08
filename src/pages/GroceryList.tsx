@@ -2,7 +2,7 @@ import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { useLocation } from "react-router-dom";
-import { getGroceryList, updateGroceryList } from "../api";
+import { getFdcIngredient, getGroceryList, updateGroceryList } from "../api";
 import { Ingredient } from "../constants/types";
 import "../stylesheets/Checkbox.css";
 import "../stylesheets/App.css";
@@ -39,7 +39,11 @@ export const GroceryList = () => {
     const categorizeGroceryList = async () => {
       setLoading(true);
       for (const [index, _] of groceryList.entries()) {
-        const foodCategory = groceryList[index].foodCategory ?? "Other";
+        const response = await getFdcIngredient(groceryList[index].fdcId);
+        const foodCategory =
+          response && response.status === 200 && response.data
+            ? response.data.category
+            : "Other";
         if (foodCategory in categoryDict)
           categoryDict[foodCategory].push(groceryList[index]);
         else categoryDict[foodCategory] = [groceryList[index]];

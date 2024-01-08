@@ -14,7 +14,6 @@ const UserSchema = new mongoose.Schema({
         unit: String,
         fdcId: String,
         fdcQuery: String,
-        foodCategory: String,
       },
     ],
     default: [],

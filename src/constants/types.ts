@@ -18,7 +18,6 @@ export type Ingredient = {
   element: string;
   fdcId?: string;
   fdcQuery?: string;
-  foodCategory?: string;
 };
 
 export type FdcIngredient = {

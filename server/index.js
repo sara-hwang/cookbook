@@ -145,7 +145,7 @@ app.delete("/recipes/:id", async (req, res) => {
 app.get("/ingredients/:id", async (req, res) => {
   console.log(`Getting ingredient ${req.params.id}`);
   try {
-    let response = await IngredientModel.findOne(req.query);
+    let response = await IngredientModel.findOne({ fdcId: req.params.id });
     res.status(200);
     res.json(response);
   } catch (error) {

@@ -164,13 +164,11 @@ const AddRecipe = () => {
           key: key,
           photo: images?.original,
           thumbnail: images?.thumbnail,
-          ingredients: await Promise.all(
-            data.ingredients.map(async (ing) => {
-              const foodCategory = await addFdcIngredient(ing.fdcId);
-              return { ...ing, foodCategory: foodCategory };
-            })
-          ),
+          ingredients: data.ingredients,
         };
+        data.ingredients.forEach(
+          async (ing) => await addFdcIngredient(ing.fdcId)
+        );
         let response;
         if (id === undefined) {
           response = await addRecipe(data);

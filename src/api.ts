@@ -133,7 +133,6 @@ export const getIngredientSearch = async (
   }
 };
 
-// return food category for now to not break things
 export const addFdcIngredient = async (fdcId?: string) => {
   if (!fdcId) return;
   try {
@@ -147,15 +146,20 @@ export const addFdcIngredient = async (fdcId?: string) => {
     );
 
     const nutrition: Nutrient[] = [];
-    fdcResponse.data.foodNutrients.forEach((entry: any) => {
-      if (!(entry.nutrient.id in FdcNutrientId)) return;
-      nutrition.push({
-        name: entry.nutrient.name,
-        id: entry.nutrient.id,
-        amount: entry.amount,
-        unit: entry.nutrient.unitName,
-      });
-    });
+    fdcResponse.data.foodNutrients.forEach(
+      (entry: {
+        nutrient: { id: number; name: string; unitName: string };
+        amount: number;
+      }) => {
+        if (!(entry.nutrient.id in FdcNutrientId)) return;
+        nutrition.push({
+          name: entry.nutrient.name,
+          id: entry.nutrient.id,
+          amount: entry.amount,
+          unit: entry.nutrient.unitName,
+        });
+      }
+    );
 
     const fdcIngredient = {
       fdcId: fdcId,
@@ -163,9 +167,19 @@ export const addFdcIngredient = async (fdcId?: string) => {
       nutrition: nutrition,
     };
     await axios.post(`${URI}/ingredients/add`, fdcIngredient);
-    return fdcResponse.data.foodCategory.description;
   } catch (e) {
     const error = e as AxiosError;
     if (error.response) console.log(error.response);
+  }
+};
+
+export const getFdcIngredient = async (fdcId?: string) => {
+  if (!fdcId) return;
+  try {
+    const response = await axios.get(`${URI}/ingredients/${fdcId}`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
   }
 };
