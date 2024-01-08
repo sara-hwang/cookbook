@@ -76,6 +76,7 @@ export const LoginDialog = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
               })
             ) {
               setIsLoginOpen(false);
+              location.reload();
             } else {
               setErrorMessage(response?.data.message);
             }

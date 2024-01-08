@@ -82,7 +82,16 @@ const ViewRecipes = () => {
   const defaultCategories =
     searchTags.length > 0 || searchTitle
       ? []
-      : ["Breakfast", "Dessert", "Vegetarian", "Vegan", "Easy", "Instant Pot"];
+      : [
+          "Breakfast",
+          "Lunch",
+          "Dinner",
+          "Dessert",
+          "Vegetarian",
+          "Vegan",
+          "Easy",
+          "Instant Pot",
+        ];
 
   return (
     <Box sx={{ marginTop: `${cardSpacing * 2}px` }}>
