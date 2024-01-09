@@ -155,6 +155,7 @@ export default function ResponsiveDrawer() {
           onClick={() => {
             dispatch(setCurrentTab(-defaultTabs.length));
             dispatch(setSearchTags([]));
+            window.scrollTo(0, 0);
           }}
         />
       </Toolbar>
