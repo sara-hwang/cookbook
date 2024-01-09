@@ -17,12 +17,14 @@ h6 + ul {
 }
 
 .MuiGrid-container.MuiGrid-item.post-it-note {
-  position: fixed;
+  position: sticky;
   background-color: #ffff99;
   padding: 20px 10px;
   width: 250px;
   min-height: 200px;
+  height: fit-content;
   right: 20px;
+  top: 80px;
   box-sizing: content-box;
   box-shadow: 1px 1px lightgrey;
 }

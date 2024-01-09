@@ -127,55 +127,55 @@ const RecipeDetails = () => {
     <Box sx={{ display: "flex", padding: "24px" }}>
       <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <Grid container direction="row" spacing={2}>
-        <Grid item container spacing={2} xs={12} lg>
-          <Grid
-            item
-            container
-            xs={12}
-            direction="row"
-            justifyContent="space-between"
-            alignItems="flex-start"
-          >
-            <Grid item xs={11}>
-              <Typography variant="h4">{recipe.title}</Typography>
-              <div>
-                {recipe.dateAdded
-                  ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
-                  : undefined}
-              </div>
-              {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
-            </Grid>
-            <Grid item xs={1}>
-              <IconButton disableTouchRipple onClick={handleClick}>
-                <MoreVert />
-              </IconButton>
-              <Menu
-                id="basic-menu"
-                anchorEl={anchorEl}
-                open={open}
-                onClose={() => setAnchorEl(null)}
-              >
-                <MenuItem
-                  onClick={() => {
-                    navigate(`/add/${id}`);
-                    setAnchorEl(null);
-                  }}
-                >
-                  <Edit fontSize="small" color="action" />
-                  &nbsp;Edit
-                </MenuItem>
-                <MenuItem
-                  onClick={() => {
-                    setPopupOpen(true);
-                    setAnchorEl(null);
-                  }}
-                >
-                  <Delete fontSize="small" color="action" />
-                  &nbsp;Delete
-                </MenuItem>
-              </Menu>
-            </Grid>
+        <Grid
+          item
+          container
+          xs={12}
+          direction="row"
+          justifyContent="space-between"
+          alignItems="flex-start"
+        >
+          <Grid item xs={11}>
+            <Typography variant="h4">{recipe.title}</Typography>
+            <div>
+              {recipe.dateAdded
+                ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
+                : undefined}
+            </div>
+            {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
           </Grid>
+          <Grid item xs={1}>
+            <IconButton disableTouchRipple onClick={handleClick}>
+              <MoreVert />
+            </IconButton>
+            <Menu
+              id="basic-menu"
+              anchorEl={anchorEl}
+              open={open}
+              onClose={() => setAnchorEl(null)}
+            >
+              <MenuItem
+                onClick={() => {
+                  navigate(`/add/${id}`);
+                  setAnchorEl(null);
+                }}
+              >
+                <Edit fontSize="small" color="action" />
+                &nbsp;Edit
+              </MenuItem>
+              <MenuItem
+                onClick={() => {
+                  setPopupOpen(true);
+                  setAnchorEl(null);
+                }}
+              >
+                <Delete fontSize="small" color="action" />
+                &nbsp;Delete
+              </MenuItem>
+            </Menu>
+          </Grid>
+        </Grid>
+        <Grid item container spacing={2} xs={12} lg>
           <Grid item xs={12}>
             <div className="side-by-side-container">
               <p>Servings: &nbsp;</p>
@@ -356,37 +356,37 @@ const RecipeDetails = () => {
             )}
           </Grid>
         </Grid>
-        <Grid
-          item
-          container
-          xs={12}
-          lg="auto"
-          className={gtLarge ? "post-it-note-container" : undefined}
-        >
+        {recipe.notes && (
           <Grid
             item
             container
-            spacing={2}
-            className={gtLarge ? "post-it-note" : undefined}
+            xs={12}
+            lg="auto"
+            className={gtLarge ? "post-it-note-container" : undefined}
           >
-            {recipe.notes && (
+            <Grid
+              item
+              container
+              spacing={2}
+              className={gtLarge ? "post-it-note" : undefined}
+            >
               <Grid item xs={12}>
                 <Typography variant="h6">{`Chef's Notes`}</Typography>
                 {recipe.notes}
               </Grid>
-            )}
-            <Grid item xs={12}>
-              <Typography variant="h6">Tags</Typography>
-              <ChipDisplay
-                tags={recipe.tags}
-                size="medium"
-                onChipClick={(tag) => {
-                  dispatch(setSearchTags([tag]));
-                  dispatch(setCurrentTab(-3));
-                }}
-              />
             </Grid>
           </Grid>
+        )}
+        <Grid item xs={12}>
+          <Typography variant="h6">Tags</Typography>
+          <ChipDisplay
+            tags={recipe.tags}
+            size="medium"
+            onChipClick={(tag) => {
+              dispatch(setSearchTags([tag]));
+              dispatch(setCurrentTab(-3));
+            }}
+          />
         </Grid>
       </Grid>
     </Box>
