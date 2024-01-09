@@ -4,11 +4,12 @@ export type Recipe = {
   ingredients: Ingredient[];
   steps: Step[];
   servings: number;
-  photo: string | undefined;
-  thumbnail: string | undefined;
+  photo?: string;
+  thumbnail?: string;
   tags: string[];
   url: string;
   dateAdded: number;
+  notes?: string;
 };
 
 export type Ingredient = {
@@ -73,8 +74,6 @@ export const EmptyRecipe = {
   servings: 1,
   ingredients: [],
   steps: [],
-  photo: undefined,
-  thumbnail: undefined,
   tags: [],
   url: "",
   dateAdded: 0,

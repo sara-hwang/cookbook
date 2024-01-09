@@ -35,6 +35,7 @@ const RecipeSchema = new mongoose.Schema({
   tags: [String],
   url: String,
   dateAdded: Number,
+  notes: String,
 });
 
 const RecipeModel = mongoose.model("recipes", RecipeSchema);

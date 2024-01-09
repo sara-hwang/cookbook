@@ -8,6 +8,7 @@ import {
   TextField,
   Tooltip,
   Typography,
+  useMediaQuery,
   useTheme,
 } from "@mui/material";
 import { EmptyRecipe, Ingredient, Recipe, TabItem } from "../constants/types";
@@ -52,6 +53,8 @@ const RecipeDetails = () => {
   const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
     setAnchorEl(event.currentTarget);
   };
+  const gtLarge = useMediaQuery(theme.breakpoints.up("lg"));
+
   let stepNumber = 0;
 
   useEffect(() => {
@@ -123,244 +126,267 @@ const RecipeDetails = () => {
   return (
     <Box sx={{ display: "flex", padding: "24px" }}>
       <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-      <Grid container spacing={2}>
+      <Grid container direction="row" spacing={2}>
+        <Grid item container spacing={2} xs={12} lg>
+          <Grid
+            item
+            container
+            xs={12}
+            direction="row"
+            justifyContent="space-between"
+            alignItems="flex-start"
+          >
+            <Grid item xs={11}>
+              <Typography variant="h4">{recipe.title}</Typography>
+              <div>
+                {recipe.dateAdded
+                  ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
+                  : undefined}
+              </div>
+              {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
+            </Grid>
+            <Grid item xs={1}>
+              <IconButton disableTouchRipple onClick={handleClick}>
+                <MoreVert />
+              </IconButton>
+              <Menu
+                id="basic-menu"
+                anchorEl={anchorEl}
+                open={open}
+                onClose={() => setAnchorEl(null)}
+              >
+                <MenuItem
+                  onClick={() => {
+                    navigate(`/add/${id}`);
+                    setAnchorEl(null);
+                  }}
+                >
+                  <Edit fontSize="small" color="action" />
+                  &nbsp;Edit
+                </MenuItem>
+                <MenuItem
+                  onClick={() => {
+                    setPopupOpen(true);
+                    setAnchorEl(null);
+                  }}
+                >
+                  <Delete fontSize="small" color="action" />
+                  &nbsp;Delete
+                </MenuItem>
+              </Menu>
+            </Grid>
+          </Grid>
+          <Grid item xs={12}>
+            <div className="side-by-side-container">
+              <p>Servings: &nbsp;</p>
+              <TextField
+                value={servings.toString()}
+                id="servings"
+                variant="outlined"
+                type="number"
+                InputProps={{
+                  inputProps: { min: 1, step: 1 },
+                }}
+                onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                  setServings(parseInt(event.target.value));
+                }}
+              />
+            </div>
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              Ingredients
+              <Tooltip
+                arrow
+                disableInteractive
+                title={
+                  isAuthenticated()
+                    ? groceryMode
+                      ? "Add selected ingredients to grocery list"
+                      : "Enter grocery mode"
+                    : "Log in to add to grocery list"
+                }
+              >
+                <IconButton
+                  disableRipple
+                  sx={{ "&:hover": { color: theme.palette.primary.main } }}
+                  onClick={() => {
+                    groceryMode && isAuthenticated() && addToGrocery();
+                    isAuthenticated() && setGroceryMode(!groceryMode);
+                  }}
+                >
+                  {groceryMode ? (
+                    <AddShoppingCartOutlined fontSize="large" />
+                  ) : (
+                    <ShoppingCartOutlined fontSize="large" />
+                  )}
+                </IconButton>
+              </Tooltip>
+              {groceryMode && (
+                <Button
+                  color="error"
+                  variant="contained"
+                  onClick={() => {
+                    setGroceryMode(!groceryMode);
+                  }}
+                >
+                  Cancel
+                </Button>
+              )}
+            </Typography>
+            {groceryMode ? (
+              <form id="grocery-checklist">
+                {recipe?.ingredients.map((ing, index) =>
+                  ing.isDivider ? (
+                    <Typography variant="h6" key={index}>
+                      {ing.element}
+                    </Typography>
+                  ) : (
+                    <div
+                      key={index}
+                      className="checkbox-container view-recipe no-strike"
+                    >
+                      <input
+                        type="checkbox"
+                        name={"" + index}
+                        id={`ingredient-checkbox-${index}`}
+                      />
+                      <label htmlFor={`ingredient-checkbox-${index}`}>
+                        {calculateAmount(ing.amount)}
+                        &nbsp;
+                        {ing.unit}
+                        &nbsp;
+                        {ing.element}
+                      </label>
+                    </div>
+                  )
+                )}
+              </form>
+            ) : (
+              <ul>
+                {recipe?.ingredients.map((ing, index) =>
+                  ing.isDivider ? (
+                    <Typography variant="h6" marginLeft={"-30px"} key={index}>
+                      {ing.element}
+                    </Typography>
+                  ) : (
+                    <Fragment key={index}>
+                      <li>
+                        {calculateAmount(ing.amount)}
+                        &nbsp;
+                        {ing.unit}
+                        &nbsp;
+                        {ing.element}
+                      </li>
+                    </Fragment>
+                  )
+                )}
+              </ul>
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            <Typography variant="h6">
+              Steps
+              <Tooltip
+                arrow
+                disableInteractive
+                title={prepareMode ? "Exit prepare mode" : "Enter prepare mode"}
+              >
+                <IconButton
+                  disableRipple
+                  sx={{ "&:hover": { color: theme.palette.primary.main } }}
+                  onClick={() => {
+                    setPrepareMode(!prepareMode);
+                  }}
+                >
+                  <ChecklistOutlined fontSize="large" />
+                </IconButton>
+              </Tooltip>
+            </Typography>
+            {prepareMode ? (
+              <form>
+                {recipe?.steps.map((step, index) =>
+                  step.isDivider ? (
+                    <Typography variant="h6" key={index}>
+                      {step.text}
+                    </Typography>
+                  ) : (
+                    <div key={index} className="checkbox-container view-recipe">
+                      <input
+                        type="checkbox"
+                        name={"" + index}
+                        id={`step-checkbox-${index}`}
+                      />
+                      <label htmlFor={`step-checkbox-${index}`}>
+                        {step.text}
+                      </label>
+                    </div>
+                  )
+                )}
+              </form>
+            ) : (
+              <div>
+                {recipe?.steps.map((step, index) => {
+                  stepNumber++;
+                  if (step.isDivider) {
+                    stepNumber = 0;
+                    return (
+                      <Typography variant="h6" key={index}>
+                        {step.text}
+                      </Typography>
+                    );
+                  }
+                  return (
+                    <div key={index} className="recipe-step-text">
+                      <Typography>{stepNumber + ". "}</Typography>
+                      <Typography>{step.text}</Typography>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </Grid>
+          <Grid item xs={12}>
+            {recipe?.photo && (
+              <img
+                src={recipe?.photo}
+                alt={recipe.title}
+                className="recipe-details-photo"
+              />
+            )}
+          </Grid>
+        </Grid>
         <Grid
           item
           container
           xs={12}
-          direction="row"
-          justifyContent="space-between"
-          alignItems="flex-start"
+          lg="auto"
+          className={gtLarge ? "post-it-note-container" : undefined}
         >
-          <Grid item xs={11}>
-            <Typography variant="h4">{recipe.title}</Typography>
-            <div>
-              {recipe.dateAdded
-                ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
-                : undefined}
-            </div>
-            {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
-          </Grid>
-          <Grid item xs={1}>
-            <IconButton disableTouchRipple onClick={handleClick}>
-              <MoreVert />
-            </IconButton>
-            <Menu
-              id="basic-menu"
-              anchorEl={anchorEl}
-              open={open}
-              onClose={() => setAnchorEl(null)}
-            >
-              <MenuItem
-                onClick={() => {
-                  navigate(`/add/${id}`);
-                  setAnchorEl(null);
-                }}
-              >
-                <Edit fontSize="small" color="action" />
-                &nbsp;Edit
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPopupOpen(true);
-                  setAnchorEl(null);
-                }}
-              >
-                <Delete fontSize="small" color="action" />
-                &nbsp;Delete
-              </MenuItem>
-            </Menu>
-          </Grid>
-        </Grid>
-        <Grid item xs={12}>
-          <div className="side-by-side-container">
-            <p>Servings: &nbsp;</p>
-            <TextField
-              value={servings.toString()}
-              id="servings"
-              variant="outlined"
-              type="number"
-              InputProps={{
-                inputProps: { min: 1, step: 1 },
-              }}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setServings(parseInt(event.target.value));
-              }}
-            />
-          </div>
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">
-            Ingredients
-            <Tooltip
-              arrow
-              disableInteractive
-              title={
-                isAuthenticated()
-                  ? groceryMode
-                    ? "Add selected ingredients to grocery list"
-                    : "Enter grocery mode"
-                  : "Log in to add to grocery list"
-              }
-            >
-              <IconButton
-                disableRipple
-                sx={{ "&:hover": { color: theme.palette.primary.main } }}
-                onClick={() => {
-                  groceryMode && isAuthenticated() && addToGrocery();
-                  isAuthenticated() && setGroceryMode(!groceryMode);
-                }}
-              >
-                {groceryMode ? (
-                  <AddShoppingCartOutlined fontSize="large" />
-                ) : (
-                  <ShoppingCartOutlined fontSize="large" />
-                )}
-              </IconButton>
-            </Tooltip>
-            {groceryMode && (
-              <Button
-                color="error"
-                variant="contained"
-                onClick={() => {
-                  setGroceryMode(!groceryMode);
-                }}
-              >
-                Cancel
-              </Button>
+          <Grid
+            item
+            container
+            spacing={2}
+            className={gtLarge ? "post-it-note" : undefined}
+          >
+            {recipe.notes && (
+              <Grid item xs={12}>
+                <Typography variant="h6">{`Chef's Notes`}</Typography>
+                {recipe.notes}
+              </Grid>
             )}
-          </Typography>
-          {groceryMode ? (
-            <form id="grocery-checklist">
-              {recipe?.ingredients.map((ing, index) =>
-                ing.isDivider ? (
-                  <Typography variant="h6" key={index}>
-                    {ing.element}
-                  </Typography>
-                ) : (
-                  <div
-                    key={index}
-                    className="checkbox-container view-recipe no-strike"
-                  >
-                    <input
-                      type="checkbox"
-                      name={"" + index}
-                      id={`ingredient-checkbox-${index}`}
-                    />
-                    <label htmlFor={`ingredient-checkbox-${index}`}>
-                      {calculateAmount(ing.amount)}
-                      &nbsp;
-                      {ing.unit}
-                      &nbsp;
-                      {ing.element}
-                    </label>
-                  </div>
-                )
-              )}
-            </form>
-          ) : (
-            <ul>
-              {recipe?.ingredients.map((ing, index) =>
-                ing.isDivider ? (
-                  <Typography variant="h6" marginLeft={"-30px"} key={index}>
-                    {ing.element}
-                  </Typography>
-                ) : (
-                  <Fragment key={index}>
-                    <li>
-                      {calculateAmount(ing.amount)}
-                      &nbsp;
-                      {ing.unit}
-                      &nbsp;
-                      {ing.element}
-                    </li>
-                  </Fragment>
-                )
-              )}
-            </ul>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">
-            Steps
-            <Tooltip
-              arrow
-              disableInteractive
-              title={prepareMode ? "Exit prepare mode" : "Enter prepare mode"}
-            >
-              <IconButton
-                disableRipple
-                sx={{ "&:hover": { color: theme.palette.primary.main } }}
-                onClick={() => {
-                  setPrepareMode(!prepareMode);
+            <Grid item xs={12}>
+              <Typography variant="h6">Tags</Typography>
+              <ChipDisplay
+                tags={recipe.tags}
+                size="medium"
+                onChipClick={(tag) => {
+                  dispatch(setSearchTags([tag]));
+                  dispatch(setCurrentTab(-3));
                 }}
-              >
-                <ChecklistOutlined fontSize="large" />
-              </IconButton>
-            </Tooltip>
-          </Typography>
-          {prepareMode ? (
-            <form>
-              {recipe?.steps.map((step, index) =>
-                step.isDivider ? (
-                  <Typography variant="h6" key={index}>
-                    {step.text}
-                  </Typography>
-                ) : (
-                  <div key={index} className="checkbox-container view-recipe">
-                    <input
-                      type="checkbox"
-                      name={"" + index}
-                      id={`step-checkbox-${index}`}
-                    />
-                    <label htmlFor={`step-checkbox-${index}`}>
-                      {step.text}
-                    </label>
-                  </div>
-                )
-              )}
-            </form>
-          ) : (
-            <div>
-              {recipe?.steps.map((step, index) => {
-                stepNumber++;
-                if (step.isDivider) {
-                  stepNumber = 0;
-                  return (
-                    <Typography variant="h6" key={index}>
-                      {step.text}
-                    </Typography>
-                  );
-                }
-                return (
-                  <div key={index} className="recipe-step-text">
-                    <Typography>{stepNumber + ". "}</Typography>
-                    <Typography>{step.text}</Typography>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          {recipe?.photo && (
-            <img
-              src={recipe?.photo}
-              alt={recipe.title}
-              className="recipe-details-photo"
-            />
-          )}
-        </Grid>
-        <Grid item xs={12}>
-          <Typography variant="h6">Tags</Typography>
-          <ChipDisplay
-            tags={recipe.tags}
-            size="medium"
-            onChipClick={(tag) => {
-              dispatch(setSearchTags([tag]));
-              dispatch(setCurrentTab(-3));
-            }}
-          />
+              />
+            </Grid>
+          </Grid>
         </Grid>
       </Grid>
     </Box>

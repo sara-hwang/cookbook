@@ -15,3 +15,18 @@ h6 + ul {
   max-width: 100%;
   width: 400px;
 }
+
+.MuiGrid-container.MuiGrid-item.post-it-note {
+  position: fixed;
+  background-color: #ffff99;
+  padding: 20px 10px;
+  width: 250px;
+  min-height: 200px;
+  right: 20px;
+  box-sizing: content-box;
+  box-shadow: 1px 1px lightgrey;
+}
+
+.MuiGrid-container.MuiGrid-item.post-it-note-container {
+  width: 280px;
+}
