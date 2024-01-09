@@ -445,6 +445,18 @@ const AddRecipe = () => {
                 />
               </Grid>
               <Grid item xs={12} md={9}>
+                <Typography variant="h6">{`Chef's Notes`}</Typography>
+                <Field
+                  name="notes"
+                  type="input"
+                  as={TextField}
+                  fullWidth
+                  multiline
+                  size="small"
+                  minRows={3}
+                />
+              </Grid>
+              <Grid item xs={12} md={9}>
                 <Typography variant="h6">Tags</Typography>
                 <Autocomplete
                   multiple

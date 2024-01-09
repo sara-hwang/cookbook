@@ -36,7 +36,7 @@ const AddStepRow = ({
           size="small"
           fullWidth
           multiline={!step.isDivider ?? undefined}
-          rows={2}
+          minRows={2}
           error={
             errors.steps &&
             errors.steps[index] &&

@@ -32,7 +32,7 @@ const BulkEntryDialog = ({
             <TextField
               fullWidth
               multiline
-              rows={10}
+              minRows={10}
               value={value}
               placeholder={
                 type === "step"
