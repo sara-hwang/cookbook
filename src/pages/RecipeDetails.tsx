@@ -154,24 +154,37 @@ const RecipeDetails = () => {
               open={open}
               onClose={() => setAnchorEl(null)}
             >
-              <MenuItem
-                onClick={() => {
-                  navigate(`/add/${id}`);
-                  setAnchorEl(null);
-                }}
+              <Tooltip
+                title={
+                  !isAuthenticated()
+                    ? "You must login to edit or delete recipes"
+                    : undefined
+                }
+                disableInteractive
               >
-                <Edit fontSize="small" color="action" />
-                &nbsp;Edit
-              </MenuItem>
-              <MenuItem
-                onClick={() => {
-                  setPopupOpen(true);
-                  setAnchorEl(null);
-                }}
-              >
-                <Delete fontSize="small" color="action" />
-                &nbsp;Delete
-              </MenuItem>
+                <div>
+                  <MenuItem
+                    disabled={!isAuthenticated()}
+                    onClick={() => {
+                      navigate(`/add/${id}`);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    <Edit fontSize="small" color="action" />
+                    &nbsp;Edit
+                  </MenuItem>
+                  <MenuItem
+                    disabled={!isAuthenticated()}
+                    onClick={() => {
+                      setPopupOpen(true);
+                      setAnchorEl(null);
+                    }}
+                  >
+                    <Delete fontSize="small" color="action" />
+                    &nbsp;Delete
+                  </MenuItem>
+                </div>
+              </Tooltip>
             </Menu>
           </Grid>
         </Grid>
