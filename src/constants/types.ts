@@ -25,11 +25,18 @@ export type FdcIngredient = {
   fdcId: number;
   category: string;
   nutrition: Nutrient[];
+  portions: IngredientPortion[];
 };
 
 export type Nutrient = {
   name: string;
   id: number;
+  amount: number;
+  unit: string;
+};
+
+export type IngredientPortion = {
+  gramWeight: number;
   amount: number;
   unit: string;
 };

@@ -1,5 +1,11 @@
 import axios, { AxiosError } from "axios";
-import { FdcNutrientId, Ingredient, Nutrient, Recipe } from "./constants/types";
+import {
+  FdcNutrientId,
+  Ingredient,
+  IngredientPortion,
+  Nutrient,
+  Recipe,
+} from "./constants/types";
 import qs from "qs";
 
 const URI = process.env.REACT_APP_SERVER_URI;
@@ -161,10 +167,23 @@ export const addFdcIngredient = async (fdcId?: number) => {
       }
     );
 
+    const portions: IngredientPortion[] = [];
+    fdcResponse.data.foodPortions &&
+      fdcResponse.data.foodPortions.forEach(
+        (entry: { gramWeight: number; amount: number; modifier: string }) => {
+          portions.push({
+            gramWeight: entry.gramWeight,
+            amount: entry.amount,
+            unit: entry.modifier,
+          });
+        }
+      );
+
     const fdcIngredient = {
       fdcId: fdcId,
       category: fdcResponse.data.foodCategory.description,
       nutrition: nutrition,
+      portions: portions,
     };
     await axios.post(`${URI}/ingredients/add`, fdcIngredient);
   } catch (e) {

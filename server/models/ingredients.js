@@ -8,6 +8,12 @@ const NutrientSchema = new mongoose.Schema({
   unit: String,
 });
 
+const IngredientPortion = new mongoose.Schema({
+  gramWeight: Number,
+  amount: Number,
+  unit: String,
+});
+
 const IngredientSchema = new mongoose.Schema({
   fdcId: {
     type: Number,
@@ -16,6 +22,7 @@ const IngredientSchema = new mongoose.Schema({
   },
   category: String,
   nutrition: [NutrientSchema],
+  portions: [IngredientPortion],
 });
 
 const IngredientModel = mongoose.model("ingredients", IngredientSchema);
