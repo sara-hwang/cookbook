@@ -133,7 +133,7 @@ export const getIngredientSearch = async (
   }
 };
 
-export const addFdcIngredient = async (fdcId?: string) => {
+export const addFdcIngredient = async (fdcId?: number) => {
   if (!fdcId) return;
   try {
     const fdcResponse = await axios.get(
@@ -173,7 +173,7 @@ export const addFdcIngredient = async (fdcId?: string) => {
   }
 };
 
-export const getFdcIngredient = async (fdcId?: string) => {
+export const getFdcIngredient = async (fdcId?: number) => {
   if (!fdcId) return;
   try {
     const response = await axios.get(`${URI}/ingredients/${fdcId}`);

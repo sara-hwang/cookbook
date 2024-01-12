@@ -25,7 +25,7 @@ interface AddIngredientRowProps {
   ingredient: Ingredient;
   setFieldValue: (
     field: string,
-    value: string,
+    value: number | string,
     shouldValidate?: boolean | undefined
   ) => Promise<void | FormikErrors<Recipe>>;
   values: Recipe;
@@ -40,7 +40,7 @@ const AddIngredientRow = ({
   values,
 }: AddIngredientRowProps) => {
   const [suggestions, setSuggestions] = useState<
-    { query: string; fdcId: string }[]
+    { query: string; fdcId: number }[]
   >([]);
   const [apiQuery, setApiQuery] = useState<string>("");
 

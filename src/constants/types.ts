@@ -17,12 +17,12 @@ export type Ingredient = {
   amount?: number;
   unit?: string;
   element: string;
-  fdcId?: string;
+  fdcId?: number;
   fdcQuery?: string;
 };
 
 export type FdcIngredient = {
-  fdcId: string;
+  fdcId: number;
   category: string;
   nutrition: Nutrient[];
 };

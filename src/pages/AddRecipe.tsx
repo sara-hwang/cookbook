@@ -272,7 +272,7 @@ const AddRecipe = () => {
                               unit: "",
                               element: "",
                               fdcQuery: "",
-                              fdcId: "",
+                              fdcId: undefined,
                             });
                           }}
                         >

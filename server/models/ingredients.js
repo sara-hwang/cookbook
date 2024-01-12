@@ -10,7 +10,7 @@ const NutrientSchema = new mongoose.Schema({
 
 const IngredientSchema = new mongoose.Schema({
   fdcId: {
-    type: String,
+    type: Number,
     required: true,
     unique: true,
   },
