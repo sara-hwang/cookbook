@@ -8,6 +8,7 @@ const UserModel = require("./models/users");
 const IngredientModel = require("./models/ingredients");
 const OpenAI = require("openai");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+require("log-timestamp");
 
 const app = express();
 app.use(cors());
