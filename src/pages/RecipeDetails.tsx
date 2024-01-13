@@ -32,6 +32,7 @@ import {
   ShoppingCartOutlined,
 } from "@mui/icons-material";
 import DeleteRecipeDialog from "./DeleteRecipeDialog";
+import Chat from "./Chat";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
@@ -369,14 +370,15 @@ const RecipeDetails = () => {
             )}
           </Grid>
         </Grid>
-        {recipe.notes && (
-          <Grid
-            item
-            container
-            xs={12}
-            lg="auto"
-            className={gtLarge ? "post-it-note-container" : undefined}
-          >
+
+        <Grid
+          item
+          container
+          xs={12}
+          lg="auto"
+          className={gtLarge ? "post-it-note-container" : undefined}
+        >
+          {recipe.notes && (
             <Grid
               item
               container
@@ -388,8 +390,12 @@ const RecipeDetails = () => {
                 {recipe.notes}
               </Grid>
             </Grid>
+          )}
+          <Grid item>
+            <Chat />
           </Grid>
-        )}
+        </Grid>
+
         <Grid item xs={12}>
           <Typography variant="h6">Tags</Typography>
           <ChipDisplay

@@ -1,3 +1,4 @@
+require("dotenv").config({ path: "../.env" });
 const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
@@ -5,8 +6,9 @@ const RecipeModel = require("./models/recipes");
 const jwt = require("jsonwebtoken");
 const UserModel = require("./models/users");
 const IngredientModel = require("./models/ingredients");
+const OpenAI = require("openai");
+const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
 
-require("dotenv").config({ path: "../.env" });
 const app = express();
 app.use(cors());
 app.use(express.json());
@@ -175,6 +177,24 @@ app.post("/ingredients/add", async (req, res) => {
 
 app.get("/healthcheck", async (req, res) => {
   res.status(200).json({ status: "ok" });
+});
+
+app.get("/chat", async (req, res) => {
+  const message = req.query.body;
+  console.log(message);
+  try {
+    const response = await openai.chat.completions.create({
+      messages: [{ role: "system", content: message }],
+      model: "gpt-3.5-turbo",
+    });
+    console.log(response.choices[0].message.content);
+    res.status(200);
+    res.json(response.choices[0].message.content);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
 });
 
 app.listen(3000, () => {

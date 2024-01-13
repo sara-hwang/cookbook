@@ -1,0 +1,101 @@
+import { LiveHelp } from "@mui/icons-material";
+import { IconButton, TextField, useTheme } from "@mui/material";
+import { useEffect, useState } from "react";
+import { sendChatMessage } from "../api";
+import "../stylesheets/Chat.css";
+
+interface Message {
+  text: string;
+  user: boolean;
+}
+
+const Chat = () => {
+  const theme = useTheme();
+  const [showChat, setShowChat] = useState(false);
+  const [loading, setLoading] = useState(false);
+  const [messages, setMessages] = useState<Message[]>([]);
+  const [currMessage, setCurrMessage] = useState<string>("");
+
+  useEffect(() => {
+    if (showChat) scrollToBottom();
+  }, [showChat, messages]);
+
+  const scrollToBottom = () => {
+    const element = document.getElementById("message-history");
+    if (element) element.scrollTop = element.scrollHeight;
+  };
+
+  return (
+    <div>
+      {showChat && (
+        <div className="chat-container">
+          <div id="message-history" className="disable-scrollbars">
+            {messages.map((msg, index) => {
+              return (
+                <div
+                  key={index}
+                  className={`message ${msg.user ? "user" : "ai"}`}
+                >
+                  <div
+                    className="message-text"
+                    style={{
+                      background: msg.user
+                        ? theme.palette.primary.main
+                        : theme.palette.secondary.main,
+                    }}
+                  >
+                    {`${msg.text}`}
+                  </div>
+                </div>
+              );
+            })}
+            {loading && (
+              <div className="dots">
+                <div className="dot"></div>
+                <div className="dot"></div>
+                <div className="dot"></div>
+              </div>
+            )}
+          </div>
+          <TextField
+            variant="filled"
+            placeholder="Eg. How many grams is in a cup of butter?"
+            fullWidth
+            multiline
+            hiddenLabel
+            rows={2}
+            size="small"
+            value={currMessage}
+            inputProps={{ style: { padding: 0 } }}
+            onChange={(event) => {
+              setCurrMessage(event.target.value);
+            }}
+            onKeyDown={async (event) => {
+              if (event.key !== "Enter") return;
+              event.preventDefault();
+              if (!currMessage) return;
+              const newMsg = { text: currMessage, user: true };
+              setCurrMessage("");
+              setMessages((prev) => [...prev, newMsg]);
+              // send result to openai
+              setLoading(true);
+              const response = await sendChatMessage(newMsg.text);
+              setLoading(false);
+              if (response)
+                setMessages((prev) => [
+                  ...prev,
+                  { text: response.data, user: false },
+                ]);
+            }}
+          />
+        </div>
+      )}
+      <div className="chat-button">
+        <IconButton disableRipple onClick={() => setShowChat((bool) => !bool)}>
+          <LiveHelp />
+        </IconButton>
+      </div>
+    </div>
+  );
+};
+export default Chat;

@@ -202,3 +202,16 @@ export const getFdcIngredient = async (fdcId?: number) => {
     return error.response;
   }
 };
+
+export const sendChatMessage = async (message: string) => {
+  if (!message) return;
+  try {
+    const response = await axios.get(`${URI}/chat`, {
+      params: { body: message },
+    });
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
