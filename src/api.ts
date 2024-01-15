@@ -203,11 +203,12 @@ export const getFdcIngredient = async (fdcId?: number) => {
   }
 };
 
-export const sendChatMessage = async (message: string) => {
-  if (!message) return;
+export const sendChatMessage = async (messages: string[]) => {
+  console.log(messages);
+  if (!messages || !messages.length) return;
   try {
     const response = await axios.get(`${URI}/chat`, {
-      params: { body: message },
+      params: { body: messages },
     });
     return response;
   } catch (e) {

@@ -185,7 +185,9 @@ app.get("/chat", async (req, res) => {
   console.log(message);
   try {
     const response = await openai.chat.completions.create({
-      messages: [{ role: "system", content: message }],
+      messages: message.map((msg) => {
+        return { role: "user", content: msg };
+      }),
       model: "gpt-3.5-turbo",
     });
     console.log(response.choices[0].message.content);

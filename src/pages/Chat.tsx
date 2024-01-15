@@ -9,16 +9,32 @@ interface Message {
   user: boolean;
 }
 
-const Chat = () => {
+interface ChatProps {
+  recipe: string;
+}
+
+const Chat = ({ recipe }: ChatProps) => {
   const theme = useTheme();
   const [showChat, setShowChat] = useState(false);
   const [loading, setLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
   const [currMessage, setCurrMessage] = useState<string>("");
+  const [userMessages, setUserMessages] = useState<string[]>([]);
 
   useEffect(() => {
     if (showChat) scrollToBottom();
   }, [showChat, messages]);
+
+  useEffect(() => {
+    const makeChatRequest = async () => {
+      setLoading(true);
+      const response = await sendChatMessage([recipe, ...userMessages]);
+      setLoading(false);
+      if (response)
+        setMessages((prev) => [...prev, { text: response.data, user: false }]);
+    };
+    if (userMessages.length) makeChatRequest();
+  }, [userMessages]);
 
   const scrollToBottom = () => {
     const element = document.getElementById("message-history");
@@ -74,18 +90,12 @@ const Chat = () => {
               if (event.key !== "Enter") return;
               event.preventDefault();
               if (!currMessage) return;
-              const newMsg = { text: currMessage, user: true };
+              setUserMessages((prev) => [...prev, currMessage]);
+              setMessages((prev) => [
+                ...prev,
+                { text: currMessage, user: true },
+              ]);
               setCurrMessage("");
-              setMessages((prev) => [...prev, newMsg]);
-              // send result to openai
-              setLoading(true);
-              const response = await sendChatMessage(newMsg.text);
-              setLoading(false);
-              if (response)
-                setMessages((prev) => [
-                  ...prev,
-                  { text: response.data, user: false },
-                ]);
             }}
           />
         </div>

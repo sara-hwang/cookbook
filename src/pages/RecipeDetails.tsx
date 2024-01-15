@@ -45,6 +45,7 @@ const RecipeDetails = () => {
   const [groceryMode, setGroceryMode] = useState(false);
   const [prepareMode, setPrepareMode] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
+  const [recipeString, setRecipeString] = useState("");
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
@@ -79,6 +80,12 @@ const RecipeDetails = () => {
       dispatch(pushTab(newTab));
     }
     setServings(recipe.servings);
+    // create recipe details string to send to chat
+    let recipeString = "Recipe ingredients: ";
+    recipe.ingredients.forEach((ing) => {
+      if (!ing.isDivider) recipeString += ing.element + ", ";
+    });
+    setRecipeString(recipeString);
   }, [recipe]);
 
   const calculateAmount = (num?: number) => {
@@ -392,7 +399,7 @@ const RecipeDetails = () => {
             </Grid>
           )}
           <Grid item>
-            <Chat />
+            <Chat recipe={recipeString} />
           </Grid>
         </Grid>
 
