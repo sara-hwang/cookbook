@@ -76,7 +76,7 @@ export const LoginDialog = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
               })
             ) {
               setIsLoginOpen(false);
-              location.reload();
+              if (pathname.startsWith("/grocery")) location.reload();
             } else {
               setErrorMessage(response?.data.message);
             }
