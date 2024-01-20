@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { Recipe } from "../constants/types";
+import { Recipe } from "../utils/types";
 
 const initialState: { recipesList: Recipe[] } = {
   recipesList: [],

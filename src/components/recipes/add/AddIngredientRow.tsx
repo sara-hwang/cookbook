@@ -11,11 +11,11 @@ import {
   Ingredient,
   Recipe,
   UnitMenuItem,
-} from "../constants/types";
+} from "../../../utils/types";
 import { Delete, Link, MoveUp } from "@mui/icons-material";
-import "../stylesheets/AddRecipe.css";
+import "./AddRecipe.css";
 import { useEffect, useState } from "react";
-import { getIngredientSearch } from "../api";
+import { getIngredientSearch } from "../../../utils/api";
 
 interface AddIngredientRowProps {
   arrayHelpers: FieldArrayRenderProps;

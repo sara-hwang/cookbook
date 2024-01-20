@@ -7,7 +7,7 @@ import { BrowserRouter } from "react-router-dom";
 import App from "./App";
 import { AuthProvider } from "react-auth-kit";
 import { ThemeProvider } from "@mui/material/styles";
-import theme from "./theme";
+import theme from "./utils/theme";
 
 const root = ReactDOM.createRoot(
   document.getElementById("root") as HTMLElement

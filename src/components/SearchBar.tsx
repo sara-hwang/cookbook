@@ -1,7 +1,7 @@
 import { Autocomplete, InputAdornment, TextField } from "@mui/material";
 import { useAppDispatch, useAppSelector } from "../redux/hooks";
 import { RootState } from "../redux/store";
-import { Recipe } from "../constants/types";
+import { Recipe } from "../utils/types";
 import SearchIcon from "@mui/icons-material/Search";
 import { setSearchTags, setSearchTitle } from "../redux/searchTags";
 import ChipDisplay from "./ChipDisplay";

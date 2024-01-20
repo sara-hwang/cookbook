@@ -2,10 +2,14 @@ import { Box, Button, Grid, Skeleton, Typography } from "@mui/material";
 import { useEffect, useState } from "react";
 import { useAuthUser } from "react-auth-kit";
 import { useLocation } from "react-router-dom";
-import { getFdcIngredient, getGroceryList, updateGroceryList } from "../api";
-import { Ingredient } from "../constants/types";
-import "../stylesheets/Checkbox.css";
-import "../stylesheets/App.css";
+import {
+  getFdcIngredient,
+  getGroceryList,
+  updateGroceryList,
+} from "../../utils/api";
+import { Ingredient } from "../../utils/types";
+import "./Checkbox.css";
+import "../../stylesheets/App.css";
 import ClearGroceryDialog from "./ClearGroceryDialog";
 
 export const GroceryList = () => {

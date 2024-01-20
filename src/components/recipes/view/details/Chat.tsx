@@ -1,8 +1,8 @@
 import { LiveHelp } from "@mui/icons-material";
 import { IconButton, TextField, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
-import { sendChatMessage } from "../api";
-import "../stylesheets/Chat.css";
+import { sendChatMessage } from "../../../../utils/api";
+import "./Chat.css";
 
 interface Message {
   text: string;

@@ -18,7 +18,7 @@ import {
   Ingredient,
   Recipe,
   UnitMenuItem,
-} from "../constants/types";
+} from "../../../utils/types";
 import { Add } from "@mui/icons-material";
 import {
   addRecipe,
@@ -26,21 +26,21 @@ import {
   addFdcIngredient,
   updateRecipe,
   upload,
-} from "../api";
-import { RootState } from "../redux/store";
+} from "../../../utils/api";
+import { RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
-import { setRecipeDraft } from "../redux/recipeDraft";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import UploadImage from "../components/UploadImage";
+import { setRecipeDraft } from "../../../redux/recipeDraft";
+import { useAppDispatch, useAppSelector } from "../../../redux/hooks";
+import UploadImage from "./UploadImage";
 import { useNavigate, useParams } from "react-router-dom";
-import { getAllTags, getRecipeDetails } from "../helpers";
-import "../stylesheets/AddRecipe.css";
-import { setRecipesList } from "../redux/recipesList";
-import ChipDisplay from "../components/ChipDisplay";
+import { getAllTags, getRecipeDetails } from "../../../utils/helpers";
+import "./AddRecipe.css";
+import { setRecipesList } from "../../../redux/recipesList";
+import ChipDisplay from "../../ChipDisplay";
 import BulkEntryDialog from "./BulkEntryDialog";
 import AddIngredientRow from "./AddIngredientRow";
 import AddStepRow from "./AddStepRow";
-import { popTab } from "../redux/tabsList";
+import { popTab } from "../../../redux/tabsList";
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);

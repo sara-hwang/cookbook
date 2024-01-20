@@ -1,8 +1,8 @@
 import { Grid, IconButton, TextField, Typography } from "@mui/material";
 import { Field, FieldArrayRenderProps, FormikErrors } from "formik";
-import { Recipe, Step } from "../constants/types";
+import { Recipe, Step } from "../../../utils/types";
 import { Delete, MoveUp } from "@mui/icons-material";
-import "../stylesheets/AddRecipe.css";
+import "./AddRecipe.css";
 
 interface AddStepRowProps {
   arrayHelpers: FieldArrayRenderProps;

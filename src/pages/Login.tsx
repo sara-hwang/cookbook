@@ -10,7 +10,7 @@ import {
 } from "@mui/material";
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
-import { authenticate } from "../api";
+import { authenticate } from "../utils/api";
 import { useEffect, useState } from "react";
 import { useSignIn } from "react-auth-kit";
 import { useLocation, useNavigate } from "react-router-dom";

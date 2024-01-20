@@ -1,9 +1,9 @@
 import { Button, Dialog, DialogContent, Grid } from "@mui/material";
-import { deleteRecipe } from "../api";
-import { setRecipesList } from "../redux/recipesList";
+import { deleteRecipe } from "../../../../utils/api";
+import { setRecipesList } from "../../../../redux/recipesList";
 import { useNavigate, useParams } from "react-router-dom";
-import { useAppDispatch } from "../redux/hooks";
-import { popTab } from "../redux/tabsList";
+import { useAppDispatch } from "../../../../redux/hooks";
+import { popTab } from "../../../../redux/tabsList";
 
 interface DeleteRecipeDialogProps {
   popupOpen: boolean;

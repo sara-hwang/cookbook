@@ -6,14 +6,13 @@ import {
   Skeleton,
   Typography,
 } from "@mui/material";
-import ChipDisplay from "../components/ChipDisplay";
-import { DEFAULT_PHOTO, Recipe } from "../constants/types";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { pushTab } from "../redux/tabsList";
-import { setSearchTags } from "../redux/searchTags";
-import { RootState } from "../redux/store";
-import "../stylesheets/RecipeCard.css";
-import theme from "../theme";
+import ChipDisplay from "../../../ChipDisplay";
+import { DEFAULT_PHOTO, Recipe } from "../../../../utils/types";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { pushTab } from "../../../../redux/tabsList";
+import { setSearchTags } from "../../../../redux/searchTags";
+import { RootState } from "../../../../redux/store";
+import "./RecipeCard.css";
 
 interface RecipeCardProps {
   cardSpacing: number;

@@ -11,17 +11,22 @@ import {
   useMediaQuery,
   useTheme,
 } from "@mui/material";
-import { EmptyRecipe, Ingredient, Recipe, TabItem } from "../constants/types";
+import {
+  EmptyRecipe,
+  Ingredient,
+  Recipe,
+  TabItem,
+} from "../../../../utils/types";
 import { useNavigate, useParams } from "react-router-dom";
 import { Fragment, useEffect, useState } from "react";
-import { pushTab, setCurrentTab } from "../redux/tabsList";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { setSearchTags } from "../redux/searchTags";
-import ChipDisplay from "../components/ChipDisplay";
-import "../stylesheets/RecipeDetails.css";
-import { RootState } from "../redux/store";
-import { getRecipeDetails } from "../helpers";
-import { getGroceryList, updateGroceryList } from "../api";
+import { pushTab, setCurrentTab } from "../../../../redux/tabsList";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { setSearchTags } from "../../../../redux/searchTags";
+import ChipDisplay from "../../../ChipDisplay";
+import "./RecipeDetails.css";
+import { RootState } from "../../../../redux/store";
+import { getRecipeDetails } from "../../../../utils/helpers";
+import { getGroceryList, updateGroceryList } from "../../../../utils/api";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,

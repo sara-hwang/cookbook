@@ -1,6 +1,6 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
-import { EmptyRecipe, Recipe } from "../constants/types";
+import { EmptyRecipe, Recipe } from "../utils/types";
 
 const initialState: Recipe = EmptyRecipe;
 

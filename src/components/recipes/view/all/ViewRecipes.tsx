@@ -1,11 +1,11 @@
 import { Box, Typography } from "@mui/material";
-import { Recipe, EmptyRecipe } from "../constants/types";
+import { Recipe, EmptyRecipe } from "../../../../utils/types";
 import { useEffect, useLayoutEffect, useState } from "react";
-import "../stylesheets/ViewRecipes.css";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
-import { getRecipesList } from "../helpers";
-import { setRecipesList } from "../redux/recipesList";
+import "./ViewRecipes.css";
+import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
+import { RootState } from "../../../../redux/store";
+import { getRecipesList } from "../../../../utils/helpers";
+import { setRecipesList } from "../../../../redux/recipesList";
 import RecipeCard from "./RecipeCard";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/css";

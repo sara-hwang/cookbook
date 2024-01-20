@@ -5,7 +5,7 @@ import {
   IngredientPortion,
   Nutrient,
   Recipe,
-} from "./constants/types";
+} from "./types";
 import qs from "qs";
 
 const URI = process.env.REACT_APP_SERVER_URI;
