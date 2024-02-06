@@ -8,6 +8,11 @@ const UserModel = require("./models/users");
 const IngredientModel = require("./models/ingredients");
 const OpenAI = require("openai");
 const openai = new OpenAI({ apiKey: process.env.OPENAI_API_KEY });
+const multer = require("multer");
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
+const axios = require("axios");
+
 require("log-timestamp");
 
 const app = express();
@@ -115,6 +120,26 @@ app.post("/recipes/add", async (req, res) => {
       res.status(500);
       res.json(error.message);
     }
+  }
+});
+
+app.post("/image/upload", upload.single("image"), async (req, res) => {
+  const AUTH = "Client-ID " + process.env.IMGUR_CLIENT_ID;
+  const data = {
+    image: req.file.buffer.toString("base64"),
+    type: "base64",
+  };
+
+  try {
+    const response = await axios.post("https://api.imgur.com/3/image/", data, {
+      headers: { Authorization: AUTH },
+    });
+    res.status(200);
+    res.json(response.data);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
   }
 });
 

@@ -9,7 +9,6 @@ import {
 import qs from "qs";
 
 const URI = process.env.REACT_APP_SERVER_URI;
-const AUTH = "Client-ID " + process.env.REACT_APP_IMGUR_CLIENT_ID;
 const FDC_API_KEY = process.env.REACT_APP_FDC_API_KEY;
 
 export const authenticate = async (data: {
@@ -47,9 +46,7 @@ export const updateGroceryList = async (user: string, item: Ingredient[]) => {
 
 export const upload = async (file: FormData) => {
   try {
-    const response = await axios.post("https://api.imgur.com/3/image/", file, {
-      headers: { Authorization: AUTH },
-    });
+    const response = await axios.post(`${URI}/image/upload`, file);
     return response;
   } catch (e) {
     const error = e as AxiosError;

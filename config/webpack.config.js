@@ -300,9 +300,6 @@ module.exports = function (webpackEnv) {
         "process.env.REACT_APP_SERVER_URI": JSON.stringify(
           process.env.REACT_APP_SERVER_URI
         ),
-        "process.env.REACT_APP_IMGUR_CLIENT_ID": JSON.stringify(
-          process.env.REACT_APP_IMGUR_CLIENT_ID
-        ),
         "process.env.REACT_APP_FDC_API_KEY": JSON.stringify(
           process.env.REACT_APP_FDC_API_KEY
         ),
