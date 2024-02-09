@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Fab, Fade, Typography, useScrollTrigger } from "@mui/material";
 import { Recipe, EmptyRecipe } from "../../../../utils/types";
 import { useEffect, useLayoutEffect, useState } from "react";
 import "./ViewRecipes.css";
@@ -10,6 +10,23 @@ import RecipeCard from "./RecipeCard";
 import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/css";
 import RandomButton from "./RandomButton";
+import { KeyboardArrowUp } from "@mui/icons-material";
+
+const ScrollTop = (props: any) => {
+  const { children } = props;
+  const trigger = useScrollTrigger({
+    disableHysteresis: true,
+    threshold: 100,
+  });
+
+  return (
+    <Fade in={trigger}>
+      <Box className="scroll-top" onClick={() => window.scrollTo(0, 0)}>
+        {children}
+      </Box>
+    </Fade>
+  );
+};
 
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
@@ -161,6 +178,11 @@ const ViewRecipes = () => {
           ))}
         </Box>
       </div>
+      <ScrollTop>
+        <Fab color="primary" size="small" aria-label="scroll back to top">
+          <KeyboardArrowUp />
+        </Fab>
+      </ScrollTop>
     </Box>
   );
 };

@@ -1,3 +1,14 @@
+html {
+  scroll-behavior: smooth;
+}
+
+.MuiBox-root.scroll-top {
+  position: fixed;
+  bottom: 16px;
+  right: 16px;
+  z-index: 1;
+}
+
 .recipe-grid-container .MuiBox-root {
   display: flex;
   flex-wrap: wrap;
