@@ -32,3 +32,7 @@ h6 + ul {
 .MuiGrid-container.MuiGrid-item.post-it-note-container {
   width: 280px;
 }
+
+.chefs-notes-text {
+  white-space: pre-wrap;
+}

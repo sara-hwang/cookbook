@@ -399,7 +399,7 @@ const RecipeDetails = () => {
             >
               <Grid item xs={12}>
                 <Typography variant="h6">{`Chef's Notes`}</Typography>
-                {recipe.notes}
+                <div className="chefs-notes-text">{recipe.notes}</div>
               </Grid>
             </Grid>
           )}
