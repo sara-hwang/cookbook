@@ -1,11 +1,7 @@
-.chat-button {
+.MuiFab-root.chat-button {
   position: fixed;
-  bottom: 30px;
+  bottom: 20px;
   right: 20px;
-}
-
-.chat-button .MuiIconButton-root {
-  transform: scale(2);
 }
 
 .message {

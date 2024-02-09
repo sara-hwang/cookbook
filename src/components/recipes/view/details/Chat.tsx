@@ -1,5 +1,5 @@
 import { LiveHelp } from "@mui/icons-material";
-import { IconButton, TextField, useTheme } from "@mui/material";
+import { Fab, TextField, useTheme } from "@mui/material";
 import { useEffect, useState } from "react";
 import { sendChatMessage } from "../../../../utils/api";
 import "./Chat.css";
@@ -100,11 +100,15 @@ const Chat = ({ recipe }: ChatProps) => {
           />
         </div>
       )}
-      <div className="chat-button">
-        <IconButton disableRipple onClick={() => setShowChat((bool) => !bool)}>
-          <LiveHelp />
-        </IconButton>
-      </div>
+      <Fab
+        className="chat-button"
+        color="primary"
+        size="medium"
+        disableRipple
+        onClick={() => setShowChat((bool) => !bool)}
+      >
+        <LiveHelp />
+      </Fab>
     </div>
   );
 };
