@@ -12,7 +12,11 @@ import "@splidejs/splide/css";
 import RandomButton from "./RandomButton";
 import { KeyboardArrowUp } from "@mui/icons-material";
 
-const ScrollTop = (props: any) => {
+interface ScrollTopProps {
+  children: React.ReactNode;
+}
+
+const ScrollTop = (props: ScrollTopProps) => {
   const { children } = props;
   const trigger = useScrollTrigger({
     disableHysteresis: true,
