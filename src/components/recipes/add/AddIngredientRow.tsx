@@ -6,12 +6,7 @@ import {
   TextField,
 } from "@mui/material";
 import { Field, FieldArrayRenderProps, FormikErrors } from "formik";
-import {
-  FdcFoodItem,
-  Ingredient,
-  Recipe,
-  UnitMenuItem,
-} from "../../../utils/types";
+import { Ingredient, Recipe, UnitMenuItem } from "../../../utils/types";
 import { Delete, Link, MoveUp } from "@mui/icons-material";
 import "./AddRecipe.css";
 import { useEffect, useState } from "react";
@@ -53,7 +48,7 @@ const AddIngredientRow = ({
       const resp = await getIngredientSearch(apiQuery, signal);
       if (!resp) return;
       setSuggestions(
-        resp.data.foods.map((entry: FdcFoodItem) => {
+        resp.data.foods.map((entry: { description: string; fdcId: number }) => {
           return { query: entry.description, fdcId: entry.fdcId };
         })
       );
