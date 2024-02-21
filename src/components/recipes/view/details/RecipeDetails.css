@@ -33,6 +33,6 @@ h6 + ul {
   width: 280px;
 }
 
-.chefs-notes-text {
+.preserve-newlines {
   white-space: pre-wrap;
 }

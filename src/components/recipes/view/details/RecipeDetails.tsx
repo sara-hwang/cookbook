@@ -399,7 +399,7 @@ const RecipeDetails = () => {
             >
               <Grid item xs={12}>
                 <Typography variant="h6">{`Chef's Notes`}</Typography>
-                <div className="chefs-notes-text">{recipe.notes}</div>
+                <div className="preserve-newlines">{recipe.notes}</div>
               </Grid>
             </Grid>
           )}
