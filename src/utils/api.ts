@@ -167,11 +167,16 @@ export const addFdcIngredient = async (fdcId?: number) => {
     const portions: IngredientPortion[] = [];
     fdcResponse.data.foodPortions &&
       fdcResponse.data.foodPortions.forEach(
-        (entry: { gramWeight: number; amount: number; modifier: string }) => {
+        (entry: {
+          measureUnit: { name: string };
+          gramWeight: number;
+          amount: number;
+          modifier: string;
+        }) => {
           portions.push({
             gramWeight: entry.gramWeight,
             amount: entry.amount,
-            unit: entry.modifier,
+            unit: entry.modifier ?? entry.measureUnit.name,
           });
         }
       );

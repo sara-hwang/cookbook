@@ -10,6 +10,7 @@ export type Recipe = {
   url: string;
   dateAdded: number;
   notes?: string;
+  nutritionalValues?: NutritionalProfile;
 };
 
 export type Ingredient = {
@@ -28,6 +29,21 @@ export type FdcIngredient = {
   portions: IngredientPortion[];
 };
 
+export type NutritionalProfile = {
+  _1008: number;
+  _1003: number;
+  _1004: number;
+  _1005: number;
+  _1079: number;
+  _2000: number;
+  _1087: number;
+  _1089: number;
+  _1093: number;
+  _1258: number;
+  _1253: number;
+  _1257: number;
+};
+
 export type Nutrient = {
   name: string;
   id: number;
@@ -42,18 +58,18 @@ export type IngredientPortion = {
 };
 
 export enum FdcNutrientId {
-  calories = 1008,
-  protein = 1003,
-  fat = 1004,
-  carbs = 1005,
-  fiber = 1079,
-  totalSugars = 2000,
-  calcium = 1087,
-  iron = 1089,
-  sodium = 1093,
-  saturatedFat = 1258,
-  cholesterol = 1253,
-  transFat = 1257,
+  "Calories" = 1008,
+  "Protein" = 1003,
+  "Fat" = 1004,
+  "Carbs" = 1005,
+  "Fiber" = 1079,
+  "Total Sugars" = 2000,
+  "Calcium" = 1087,
+  "Iron" = 1089,
+  "Sodium" = 1093,
+  "Saturated Fat" = 1258,
+  "Cholesterol" = 1253,
+  "Trans Fat" = 1257,
 }
 
 export type Step = {

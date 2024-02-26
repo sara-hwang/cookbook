@@ -16,6 +16,8 @@ import slugify from "slugify";
 import {
   EmptyRecipe,
   Ingredient,
+  Nutrient,
+  NutritionalProfile,
   Recipe,
   UnitMenuItem,
 } from "../../../utils/types";
@@ -26,6 +28,7 @@ import {
   addFdcIngredient,
   updateRecipe,
   upload,
+  getFdcIngredient,
 } from "../../../utils/api";
 import { RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
@@ -41,6 +44,45 @@ import BulkEntryDialog from "./BulkEntryDialog";
 import AddIngredientRow from "./AddIngredientRow";
 import AddStepRow from "./AddStepRow";
 import { popTab } from "../../../redux/tabsList";
+
+const getNutritionalValues = async (ingredients: Ingredient[]): Promise<NutritionalProfile> => {
+  const nutritionObj: NutritionalProfile = {
+  _1008: 0,
+  _1003: 0,
+  _1004: 0,
+  _1005: 0,
+  _1079: 0,
+  _2000: 0,
+  _1087: 0,
+  _1089: 0,
+  _1093: 0,
+  _1258: 0,
+  _1253: 0,
+  _1257: 0,
+  }
+  for (const [index, ing] of ingredients.entries()) {
+    // get ingredient nutritional profile, continue if none
+    const response = await getFdcIngredient(ing.fdcId);
+    if (
+      !response ||
+      response.status != 200 ||
+      !response.data ||
+      !response.data.nutrition
+    )
+      continue;
+    response.data.nutrition.forEach((nutrient: Nutrient) => {
+      if (!ing.amount) return;
+      const amountInGrams = ing.amount;
+      if (ing.unit !== "g") {
+        return; // to do
+      }
+      const key = "_" + nutrient.id as keyof typeof nutritionObj;
+      nutritionObj[key] += (amountInGrams / 100) * nutrient.amount;
+    });
+  }
+
+  return nutritionObj
+};
 
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
@@ -169,6 +211,7 @@ const AddRecipe = () => {
         data.ingredients.forEach(
           async (ing) => await addFdcIngredient(ing.fdcId)
         );
+        data.nutritionalValues = await getNutritionalValues(data.ingredients)
         let response;
         if (id === undefined) {
           response = await addRecipe(data);

@@ -13,6 +13,7 @@ import {
 } from "@mui/material";
 import {
   EmptyRecipe,
+  FdcNutrientId,
   Ingredient,
   Recipe,
   TabItem,
@@ -26,7 +27,11 @@ import ChipDisplay from "../../../ChipDisplay";
 import "./RecipeDetails.css";
 import { RootState } from "../../../../redux/store";
 import { getRecipeDetails } from "../../../../utils/helpers";
-import { getGroceryList, updateGroceryList } from "../../../../utils/api";
+import {
+  getFdcIngredient,
+  getGroceryList,
+  updateGroceryList,
+} from "../../../../utils/api";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,
@@ -51,6 +56,7 @@ const RecipeDetails = () => {
   const [prepareMode, setPrepareMode] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [recipeString, setRecipeString] = useState("");
+  const [nutritionalValues, setNutritionalValues] = useState("");
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
@@ -85,6 +91,7 @@ const RecipeDetails = () => {
       dispatch(pushTab(newTab));
     }
     setServings(recipe.servings);
+    calculateNutrition(recipe);
     // create recipe details string to send to chat
     let recipeString = "Recipe ingredients: ";
     recipe.ingredients.forEach((ing) => {
@@ -97,6 +104,21 @@ const RecipeDetails = () => {
     return !servings || !num
       ? 0
       : +((num * servings) / recipe.servings).toFixed(2);
+  };
+
+  const calculateNutrition = async (recipe: Recipe) => {
+    if (!recipe.nutritionalValues) return;
+    let string = "";
+    Object.entries(recipe.nutritionalValues).forEach(([key, val]) => {
+      const cleanKey = key.substring(1);
+      string +=
+        FdcNutrientId[+cleanKey] +
+        ": " +
+        Math.round(val / recipe.servings) +
+        (cleanKey == "1008" ? "" : "g") +
+        "\n";
+    });
+    setNutritionalValues(string);
   };
 
   const addToGrocery = async () => {
@@ -408,6 +430,11 @@ const RecipeDetails = () => {
           </Grid>
         </Grid>
 
+        {recipe.nutritionalValues && <Grid item xs={12}>
+          <Typography variant="h6">Nutrition per serving (beta)</Typography>
+          <div className="preserve-newlines">{nutritionalValues}</div>
+        </Grid>
+        }
         <Grid item xs={12}>
           <Typography variant="h6">Tags</Typography>
           <ChipDisplay
