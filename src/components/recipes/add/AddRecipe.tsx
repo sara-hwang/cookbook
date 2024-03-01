@@ -235,19 +235,31 @@ const AddRecipe = () => {
                   size="small"
                 />
               </Grid>
-              <Grid item xs={12}>
-                <Field
-                  name="servings"
-                  type="number"
-                  as={TextField}
-                  label="Number of Servings"
-                  size="small"
-                  InputProps={{
-                    inputProps: { min: "0", step: "any" },
-                  }}
-                  error={errors.servings !== undefined}
-                  helperText={errors.servings}
-                />
+              <Grid item container direction={"row"} spacing={2}>
+                <Grid item>
+                  <Field
+                    name="servings"
+                    type="number"
+                    as={TextField}
+                    label="Number of Servings"
+                    size="small"
+                    InputProps={{
+                      inputProps: { min: "0", step: "any" },
+                    }}
+                    error={errors.servings !== undefined}
+                    helperText={errors.servings}
+                  />
+                </Grid>
+                <Grid item>
+                  <Field
+                    placeholder="eg. 2 cookies (100 g)"
+                    name="servingDescription"
+                    type="input"
+                    as={TextField}
+                    label="Serving description"
+                    size="small"
+                  />
+                </Grid>
               </Grid>
               <FieldArray name="ingredients">
                 {(arrayHelpers) => (

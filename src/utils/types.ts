@@ -4,6 +4,7 @@ export type Recipe = {
   ingredients: Ingredient[];
   steps: Step[];
   servings: number;
+  servingDescription: string;
   photo?: string;
   thumbnail?: string;
   tags: string[];
@@ -79,6 +80,7 @@ export const EmptyRecipe = {
   key: "",
   title: "",
   servings: 1,
+  servingDescription: "",
   ingredients: [],
   steps: [],
   tags: [],
