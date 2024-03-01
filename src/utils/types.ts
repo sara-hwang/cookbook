@@ -64,11 +64,11 @@ export enum FdcNutrientId {
   "Carbs" = 1005,
   "Fiber" = 1079,
   "Total Sugars" = 2000,
-  "Calcium" = 1087,
-  "Iron" = 1089,
-  "Sodium" = 1093,
+  "Calcium" = 1087, // mg
+  "Iron" = 1089, // mg
+  "Sodium" = 1093, //mg
   "Saturated Fat" = 1258,
-  "Cholesterol" = 1253,
+  "Cholesterol" = 1253, // mg
   "Trans Fat" = 1257,
 }
 
