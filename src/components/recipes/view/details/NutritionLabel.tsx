@@ -1,22 +1,23 @@
-import { NutritionalProfile } from "../../../../utils/types";
+import { Recipe } from "../../../../utils/types";
 import "./NutritionLabel.css";
 
 interface NutritionLabelProps {
-  nutritionalProfile: NutritionalProfile;
-  servings: number;
+  recipe: Recipe;
 }
 
-const NutritionLabel = ({
-  nutritionalProfile,
-  servings,
-}: NutritionLabelProps) => {
-  return (
+const NutritionLabel = ({ recipe }: NutritionLabelProps) => {
+  const nutritionalProfile = recipe.nutritionalValues;
+  const servings = recipe.servings;
+
+  return !nutritionalProfile ? (
+    <></>
+  ) : (
     <section className="nutrition-facts">
       <header className="nutrition-facts__header">
         <h1 className="nutrition-facts__title">Nutrition Facts</h1>
-        <p>
-          Serving Size 
-        </p>
+        {recipe.servingDescription && (
+          <p>Serving Size {recipe.servingDescription}</p>
+        )}
       </header>
       <table className="nutrition-facts__table">
         <thead>
@@ -44,9 +45,7 @@ const NutritionLabel = ({
               <b>Total Fat </b>
               {Math.round(nutritionalProfile["_1004"] / servings) + "g"}
             </th>
-            <td>
-              {/* <b>22%</b> */}
-            </td>
+            <td>{/* <b>22%</b> */}</td>
           </tr>
           <tr>
             <td className="blank-cell"></td>
@@ -54,9 +53,7 @@ const NutritionLabel = ({
               Saturated Fat
               {" " + Math.round(nutritionalProfile["_1258"] / servings) + "g"}
             </th>
-            <td>
-              {/* <b>22%</b> */}
-            </td>
+            <td>{/* <b>22%</b> */}</td>
           </tr>
           <tr>
             <td className="blank-cell"></td>
@@ -71,27 +68,21 @@ const NutritionLabel = ({
               <b>Cholesterol </b>
               {Math.round(nutritionalProfile["_1253"] / servings) + "mg"}
             </th>
-            <td>
-              {/* <b>18%</b> */}
-            </td>
+            <td>{/* <b>18%</b> */}</td>
           </tr>
           <tr>
             <th colSpan={2}>
               <b>Sodium </b>
               {Math.round(nutritionalProfile["_1093"] / servings) + "mg"}
             </th>
-            <td>
-              {/* <b>2%</b> */}
-            </td>
+            <td>{/* <b>2%</b> */}</td>
           </tr>
           <tr>
             <th colSpan={2}>
               <b>Total Carbohydrate </b>
               {Math.round(nutritionalProfile["_1005"] / servings) + "g"}
             </th>
-            <td>
-              {/* <b>6%</b> */}
-            </td>
+            <td>{/* <b>6%</b> */}</td>
           </tr>
           <tr>
             <td className="blank-cell"></td>
@@ -99,9 +90,7 @@ const NutritionLabel = ({
               Dietary Fiber
               {" " + Math.round(nutritionalProfile["_1079"] / servings) + "g"}
             </th>
-            <td>
-              {/* <b>4%</b> */}
-            </td>
+            <td>{/* <b>4%</b> */}</td>
           </tr>
           <tr>
             <td className="blank-cell"></td>
@@ -120,7 +109,8 @@ const NutritionLabel = ({
           </tr>
           <tr className="thin-end">
             <td colSpan={2}>
-              Calcium {Math.round(nutritionalProfile["_1087"] / servings) + "mg"}
+              Calcium
+              {" " + Math.round(nutritionalProfile["_1087"] / servings) + "mg"}
             </td>
             <td />
           </tr>

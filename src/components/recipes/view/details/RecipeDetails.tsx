@@ -419,7 +419,7 @@ const RecipeDetails = () => {
 
         {recipe.nutritionalValues && (
           <Grid item xs={12}>
-            <NutritionLabel nutritionalProfile={recipe.nutritionalValues} servings={recipe.servings}/>
+            <NutritionLabel recipe={recipe}/>
           </Grid>
         )}
         <Grid item xs={12}>
