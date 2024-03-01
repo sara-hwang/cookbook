@@ -1,5 +1,5 @@
 import { Box, Fab, Fade, Typography, useScrollTrigger } from "@mui/material";
-import { Recipe, EmptyRecipe } from "../../../../utils/types";
+import { Recipe, EmptyRecipe, RecipeCategories } from "../../../../utils/types";
 import { useEffect, useLayoutEffect, useState } from "react";
 import "./ViewRecipes.css";
 import { useAppDispatch, useAppSelector } from "../../../../redux/hooks";
@@ -101,18 +101,7 @@ const ViewRecipes = () => {
   }, [recipesList, searchTitle, searchTags]);
 
   const defaultCategories =
-    searchTags.length > 0 || searchTitle
-      ? []
-      : [
-          "Breakfast",
-          "Lunch",
-          "Dinner",
-          "Dessert",
-          "Vegetarian",
-          "Vegan",
-          "Easy",
-          "Instant Pot",
-        ];
+    searchTags.length > 0 || searchTitle ? [] : RecipeCategories;
 
   return (
     <Box sx={{ marginTop: `${cardSpacing * 2}px` }}>
@@ -129,7 +118,15 @@ const ViewRecipes = () => {
             }}
           >
             <div className="spaced-apart">
-              <Typography variant="h4">{category}</Typography>
+              <Typography
+                id={category}
+                variant="h4"
+                sx={{
+                  scrollMarginTop: "70px",
+                }}
+              >
+                {category}
+              </Typography>
               {catRecipes.length > 0 && <RandomButton recipes={catRecipes} />}
             </div>
             <Splide
@@ -163,7 +160,15 @@ const ViewRecipes = () => {
           className="spaced-apart"
           style={{ padding: `0 ${cardSpacing * 2}px` }}
         >
-          <Typography variant="h4">All</Typography>
+          <Typography
+            id="All"
+            variant="h4"
+            sx={{
+              scrollMarginTop: "70px",
+            }}
+          >
+            All
+          </Typography>
           <RandomButton recipes={recipes} />
         </div>
         <Box

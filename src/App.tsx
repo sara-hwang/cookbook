@@ -3,6 +3,7 @@ import "./stylesheets/App.css";
 import {
   Box,
   Button,
+  Collapse,
   CssBaseline,
   Divider,
   Drawer,
@@ -16,6 +17,8 @@ import {
 } from "@mui/material";
 import {
   Close,
+  ExpandLess,
+  ExpandMore,
   Menu,
   MenuBook,
   PostAdd,
@@ -35,6 +38,7 @@ import { popTab, setCurrentTab } from "./redux/tabsList";
 import { RootState } from "./redux/store";
 import { setSearchTags } from "./redux/searchTags";
 import SearchBar from "./components/SearchBar";
+import { RecipeCategories } from "./utils/types";
 
 const drawerWidth = 240;
 
@@ -59,6 +63,11 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
+const handleCategoryClick = (category: string) => {
+  const element = document.getElementById(category);
+  element?.scrollIntoView();
+};
+
 export default function ResponsiveDrawer() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { pathname } = useLocation();
@@ -70,6 +79,7 @@ export default function ResponsiveDrawer() {
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
+  const [viewCategories, setViewCategories] = useState(true);
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -77,6 +87,7 @@ export default function ResponsiveDrawer() {
   ) => {
     dispatch(setCurrentTab(index));
     setMobileOpen(false);
+    setViewCategories(false);
   };
 
   useEffect(() => {
@@ -161,18 +172,52 @@ export default function ResponsiveDrawer() {
       </Toolbar>
       <List>
         {defaultTabs.map(({ label, icon, link }, index) => (
-          <ListItem key={index} disablePadding>
+          <>
             <ListItemButton
               disableRipple
               selected={currentTab === index - defaultTabs.length}
-              onClick={(event) =>
-                handleListItemClick(event, index - defaultTabs.length)
-              }
+              onClick={(event) => {
+                handleListItemClick(event, index - defaultTabs.length);
+                link === "/view" && (pathname !== "/view"
+                  ? setViewCategories(true)
+                  : setViewCategories(!viewCategories));
+              }}
             >
               <ListItemIcon>{icon}</ListItemIcon>
               <ListItemText primary={label} />
+              {link === "/view" &&
+                (viewCategories && pathname === "/view" ? (
+                  <ExpandLess />
+                ) : (
+                  <ExpandMore />
+                ))}
             </ListItemButton>
-          </ListItem>
+            {link === "/view" && (
+              <Collapse
+                in={viewCategories && pathname === "/view"}
+                timeout="auto"
+                unmountOnExit
+              >
+                <List component="div" disablePadding>
+                  {RecipeCategories.map((category) => (
+                    <ListItemButton
+                      key={category}
+                      sx={{ pl: "80px" }}
+                      onClick={() => handleCategoryClick(category)}
+                    >
+                      <ListItemText primary={category} />
+                    </ListItemButton>
+                  ))}
+                  <ListItemButton
+                    sx={{ pl: "80px" }}
+                    onClick={() => handleCategoryClick("All")}
+                  >
+                    <ListItemText primary="All" />
+                  </ListItemButton>
+                </List>
+              </Collapse>
+            )}
+          </>
         ))}
       </List>
       <Divider />
