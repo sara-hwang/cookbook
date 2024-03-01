@@ -172,7 +172,7 @@ export default function ResponsiveDrawer() {
       </Toolbar>
       <List>
         {defaultTabs.map(({ label, icon, link }, index) => (
-          <>
+          <React.Fragment key={link}>
             <ListItemButton
               disableRipple
               selected={currentTab === index - defaultTabs.length}
@@ -217,7 +217,7 @@ export default function ResponsiveDrawer() {
                 </List>
               </Collapse>
             )}
-          </>
+          </React.Fragment>
         ))}
       </List>
       <Divider />
