@@ -30,6 +30,7 @@ const RecipeSchema = new mongoose.Schema({
     type: Number,
     default: 1,
   },
+  servingDescription: String,
   photo: String,
   thumbnail: String,
   tags: [String],

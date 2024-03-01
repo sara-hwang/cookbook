@@ -223,6 +223,11 @@ const RecipeDetails = () => {
               />
             </div>
           </Grid>
+          {recipe.servingDescription && (
+            <Grid item xs={12}>
+              Serving size: {recipe.servingDescription}
+            </Grid>
+          )}
           <Grid item xs={12}>
             <Typography variant="h6">
               Ingredients
