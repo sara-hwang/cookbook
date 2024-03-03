@@ -77,7 +77,6 @@ const getNutritionalValues = async (
           (portion: IngredientPortion) =>
             `${portion.amount} ${portion.unit}` === ing.fdcUnit
         );
-        console.error(currUnit);
         if (!currUnit || !ing.fdcAmount) return;
         amountInGrams = currUnit.gramWeight * ing.fdcAmount;
       }

@@ -170,9 +170,15 @@ export const getFdcUnits = async (fdcId: number) => {
 export const addFdcIngredient = async (fdcId?: number) => {
   if (!fdcId) return;
   try {
+    // check if it already exists first
+    const response = await getFdcIngredient(fdcId);
+    if (response?.data) return;
+
+    // get the data from FDC API
     const fdcResponse = await getFdcIngredientById(fdcId);
     if (!fdcResponse) return;
 
+    // get the nutritional values we're interested in
     const nutrition: Nutrient[] = [];
     fdcResponse.data.foodNutrients.forEach(
       (entry: {
@@ -189,6 +195,7 @@ export const addFdcIngredient = async (fdcId?: number) => {
       }
     );
 
+    // get the ingredient portions
     const portions: IngredientPortion[] = [];
     fdcResponse.data.foodPortions &&
       fdcResponse.data.foodPortions.forEach(
