@@ -14,6 +14,7 @@ import slugify from "slugify";
 import {
   EmptyRecipe,
   Ingredient,
+  IngredientPortion,
   Nutrient,
   NutritionalProfile,
   Recipe,
@@ -70,9 +71,15 @@ const getNutritionalValues = async (
     )
       continue;
     response.data.nutrition.forEach((nutrient: Nutrient) => {
-      const amountInGrams = ing.fdcAmount ?? 0;
+      let amountInGrams = ing.fdcAmount ?? 0;
       if (ing.fdcUnit !== "g") {
-        return; // to do
+        const currUnit = response.data.portions.find(
+          (portion: IngredientPortion) =>
+            `${portion.amount} ${portion.unit}` === ing.fdcUnit
+        );
+        console.error(currUnit);
+        if (!currUnit || !ing.fdcAmount) return;
+        amountInGrams = currUnit.gramWeight * ing.fdcAmount;
       }
       const key = ("_" + nutrient.id) as keyof typeof nutritionObj;
       nutritionObj[key] += (amountInGrams / 100) * nutrient.amount;
@@ -119,8 +126,7 @@ const AddRecipe = () => {
         text: yup.string().required("Required"),
         fdcAmount: yup.number().when(["isDivider"], {
           is: false,
-          then: (schema) =>
-            schema.min(0, "Must be at least 0"),
+          then: (schema) => schema.min(0, "Must be at least 0"),
         }),
       })
     ),
@@ -317,7 +323,7 @@ const AddRecipe = () => {
                               fdcQuery: "",
                               fdcId: undefined,
                               fdcUnit: undefined,
-                              fdcAmount: undefined
+                              fdcAmount: undefined,
                             });
                           }}
                         >

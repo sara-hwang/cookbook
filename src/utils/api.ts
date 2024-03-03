@@ -201,7 +201,7 @@ export const addFdcIngredient = async (fdcId?: number) => {
           portions.push({
             gramWeight: entry.gramWeight,
             amount: entry.amount,
-            unit: entry.modifier ?? entry.measureUnit.name,
+            unit: entry.modifier,
           });
         }
       );
