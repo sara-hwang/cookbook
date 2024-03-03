@@ -167,7 +167,11 @@ const AddIngredientRow = ({
               type="number"
               as={TextField}
               select
-              value={ingredient.fdcUnit ?? ""}
+              value={
+                fdcUnitMenuItem.length > 0 && ingredient.fdcUnit
+                  ? ingredient.fdcUnit
+                  : ""
+              }
               size="small"
               label={!ingredient ? "Unit *" : ""}
               className="ingredient-unit-select-field"
