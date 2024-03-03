@@ -136,8 +136,7 @@ export const getIngredientSearch = async (
   }
 };
 
-export const addFdcIngredient = async (fdcId?: number) => {
-  if (!fdcId) return;
+export const getFdcIngredientById = async (fdcId: number) => {
   try {
     const fdcResponse = await axios.get(
       `https://api.nal.usda.gov/fdc/v1/food/${fdcId}`,
@@ -147,6 +146,32 @@ export const addFdcIngredient = async (fdcId?: number) => {
         },
       }
     );
+    return fdcResponse;
+  } catch (e) {
+    const error = e as AxiosError;
+    if (error.response) console.log(error.response);
+  }
+};
+
+export const getFdcUnits = async (fdcId: number) => {
+  try {
+    const fdcResponse = await getFdcIngredientById(fdcId);
+    if (!fdcResponse) return;
+    return fdcResponse.data.foodPortions.map(
+      (portion: { amount: string; modifier: string }) =>
+        `${parseFloat(portion.amount)} ${portion.modifier}`
+    );
+  } catch (e) {
+    const error = e as AxiosError;
+    if (error.response) console.log(error.response);
+  }
+};
+
+export const addFdcIngredient = async (fdcId?: number) => {
+  if (!fdcId) return;
+  try {
+    const fdcResponse = await getFdcIngredientById(fdcId);
+    if (!fdcResponse) return;
 
     const nutrition: Nutrient[] = [];
     fdcResponse.data.foodNutrients.forEach(
@@ -167,7 +192,12 @@ export const addFdcIngredient = async (fdcId?: number) => {
     const portions: IngredientPortion[] = [];
     fdcResponse.data.foodPortions &&
       fdcResponse.data.foodPortions.forEach(
-        (entry: { gramWeight: number; amount: number; modifier: string }) => {
+        (entry: {
+          measureUnit: { name: string };
+          gramWeight: number;
+          amount: number;
+          modifier: string;
+        }) => {
           portions.push({
             gramWeight: entry.gramWeight,
             amount: entry.amount,

@@ -11,15 +11,16 @@ export type Recipe = {
   url: string;
   dateAdded: number;
   notes?: string;
+  nutritionalValues?: NutritionalProfile;
 };
 
 export type Ingredient = {
   isDivider: boolean;
-  amount?: number;
-  unit?: string;
-  element: string;
+  text: string;
   fdcId?: number;
   fdcQuery?: string;
+  fdcUnit?: string;
+  fdcAmount?: number;
 };
 
 export type FdcIngredient = {
@@ -27,6 +28,21 @@ export type FdcIngredient = {
   category: string;
   nutrition: Nutrient[];
   portions: IngredientPortion[];
+};
+
+export type NutritionalProfile = {
+  _1008: number;
+  _1003: number;
+  _1004: number;
+  _1005: number;
+  _1079: number;
+  _2000: number;
+  _1087: number;
+  _1089: number;
+  _1093: number;
+  _1258: number;
+  _1253: number;
+  _1257: number;
 };
 
 export type Nutrient = {
@@ -43,18 +59,18 @@ export type IngredientPortion = {
 };
 
 export enum FdcNutrientId {
-  calories = 1008,
-  protein = 1003,
-  fat = 1004,
-  carbs = 1005,
-  fiber = 1079,
-  totalSugars = 2000,
-  calcium = 1087,
-  iron = 1089,
-  sodium = 1093,
-  saturatedFat = 1258,
-  cholesterol = 1253,
-  transFat = 1257,
+  "Calories" = 1008,
+  "Protein" = 1003,
+  "Fat" = 1004,
+  "Carbs" = 1005,
+  "Fiber" = 1079,
+  "Total Sugars" = 2000,
+  "Calcium" = 1087, // mg
+  "Iron" = 1089, // mg
+  "Sodium" = 1093, //mg
+  "Saturated Fat" = 1258,
+  "Cholesterol" = 1253, // mg
+  "Trans Fat" = 1257,
 }
 
 export type Step = {
@@ -65,15 +81,6 @@ export type Step = {
 export type TabItem = {
   label: string;
   link: string;
-};
-
-export const UnitMenuItem = {
-  g: ["g", "gram", "gs", "grams"],
-  ml: ["ml", "millilitre", "milliliter", "mls", "millilitres", "milliliters"],
-  tsp: ["tsp", "teaspoon", "tsps", "teaspoons"],
-  tbsp: ["tbsp", "tablespoon", "tbsps", "tablespoons"],
-  cup: ["cup", "cups"],
-  count: ["count", "unit"],
 };
 
 export const EmptyRecipe = {

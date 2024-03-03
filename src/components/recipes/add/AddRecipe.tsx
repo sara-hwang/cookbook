@@ -3,10 +3,8 @@ import {
   Box,
   Button,
   CircularProgress,
-  FormControlLabel,
   Grid,
   IconButton,
-  Switch,
   TextField,
   Typography,
 } from "@mui/material";
@@ -16,8 +14,10 @@ import slugify from "slugify";
 import {
   EmptyRecipe,
   Ingredient,
+  IngredientPortion,
+  Nutrient,
+  NutritionalProfile,
   Recipe,
-  UnitMenuItem,
 } from "../../../utils/types";
 import { Add } from "@mui/icons-material";
 import {
@@ -26,6 +26,7 @@ import {
   addFdcIngredient,
   updateRecipe,
   upload,
+  getFdcIngredient,
 } from "../../../utils/api";
 import { RootState } from "../../../redux/store";
 import { useEffect, useState } from "react";
@@ -42,6 +43,52 @@ import AddIngredientRow from "./AddIngredientRow";
 import AddStepRow from "./AddStepRow";
 import { popTab } from "../../../redux/tabsList";
 
+const getNutritionalValues = async (
+  ingredients: Ingredient[]
+): Promise<NutritionalProfile> => {
+  const nutritionObj: NutritionalProfile = {
+    _1008: 0,
+    _1003: 0,
+    _1004: 0,
+    _1005: 0,
+    _1079: 0,
+    _2000: 0,
+    _1087: 0,
+    _1089: 0,
+    _1093: 0,
+    _1258: 0,
+    _1253: 0,
+    _1257: 0,
+  };
+  for (const [index, ing] of ingredients.entries()) {
+    // get ingredient nutritional profile, continue if none
+    const response = await getFdcIngredient(ing.fdcId);
+    if (
+      !response ||
+      response.status != 200 ||
+      !response.data ||
+      !response.data.nutrition
+    )
+      continue;
+    response.data.nutrition.forEach((nutrient: Nutrient) => {
+      let amountInGrams = ing.fdcAmount ?? 0;
+      if (ing.fdcUnit !== "g") {
+        const currUnit = response.data.portions.find(
+          (portion: IngredientPortion) =>
+            `${portion.amount} ${portion.unit}` === ing.fdcUnit
+        );
+        console.error(currUnit);
+        if (!currUnit || !ing.fdcAmount) return;
+        amountInGrams = currUnit.gramWeight * ing.fdcAmount;
+      }
+      const key = ("_" + nutrient.id) as keyof typeof nutritionObj;
+      nutritionObj[key] += (amountInGrams / 100) * nutrient.amount;
+    });
+  }
+
+  return nutritionObj;
+};
+
 const AddRecipe = () => {
   const draft = useAppSelector((state: RootState) => state.recipeDraft);
   const dispatch = useAppDispatch();
@@ -51,13 +98,9 @@ const AddRecipe = () => {
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
   const [allTags, setAllTags] = useState<string[]>([]);
   const [popupOpen, setPopupOpen] = useState(false);
-  const [fdcMode, setFdcMode] = useState(false);
   const [bulkEntryType, setBulkEntryType] = useState<"ingredient" | "step">(
     "ingredient"
   );
-  const [handleTokens, sethandleTokens] = useState(() => (token: string) => {
-    return;
-  });
 
   useEffect(() => {
     const initTags = async () => {
@@ -80,16 +123,11 @@ const AddRecipe = () => {
     ingredients: yup.array().of(
       yup.object().shape({
         isDivider: yup.boolean().required("Required"),
-        amount: yup.number().when(["isDivider"], {
+        text: yup.string().required("Required"),
+        fdcAmount: yup.number().when(["isDivider"], {
           is: false,
-          then: (schema) =>
-            schema.required("Required").min(0, "Must be at least 0"),
+          then: (schema) => schema.min(0, "Must be at least 0"),
         }),
-        unit: yup.string().when(["isDivider"], {
-          is: false,
-          then: (schema) => schema.required("Required"),
-        }),
-        element: yup.string().required("Required"),
       })
     ),
     steps: yup.array().of(
@@ -169,6 +207,7 @@ const AddRecipe = () => {
         data.ingredients.forEach(
           async (ing) => await addFdcIngredient(ing.fdcId)
         );
+        data.nutritionalValues = await getNutritionalValues(data.ingredients);
         let response;
         if (id === undefined) {
           response = await addRecipe(data);
@@ -204,12 +243,6 @@ const AddRecipe = () => {
       }) => (
         <Form>
           <Box sx={{ display: "flex", padding: "24px" }}>
-            <BulkEntryDialog
-              type={bulkEntryType}
-              popupOpen={popupOpen}
-              setPopupOpen={setPopupOpen}
-              handleTokens={handleTokens}
-            />
             <Grid container spacing={2}>
               <Grid item xs={12}>
                 <Field
@@ -264,6 +297,12 @@ const AddRecipe = () => {
               <FieldArray name="ingredients">
                 {(arrayHelpers) => (
                   <>
+                    <BulkEntryDialog
+                      type={bulkEntryType}
+                      popupOpen={popupOpen}
+                      setPopupOpen={setPopupOpen}
+                      arrayHelpers={arrayHelpers}
+                    />
                     <Grid
                       item
                       container
@@ -280,11 +319,11 @@ const AddRecipe = () => {
                           onClick={() => {
                             arrayHelpers.push({
                               isDivider: false,
-                              amount: "",
-                              unit: "",
-                              element: "",
+                              text: "",
                               fdcQuery: "",
                               fdcId: undefined,
+                              fdcUnit: undefined,
+                              fdcAmount: undefined,
                             });
                           }}
                         >
@@ -309,47 +348,11 @@ const AddRecipe = () => {
                           variant="outlined"
                           onClick={() => {
                             setBulkEntryType("ingredient");
-                            sethandleTokens(() => (token: string) => {
-                              const words = token.split(" ");
-                              words.length === 1;
-                              let unit = "";
-                              Object.entries(UnitMenuItem).forEach(
-                                ([key, value]) => {
-                                  if (
-                                    value.some(
-                                      (val) => val === words[1].toLowerCase()
-                                    )
-                                  )
-                                    unit = key;
-                                }
-                              );
-                              arrayHelpers.push({
-                                isDivider: false,
-                                amount: Number.isNaN(+words[0])
-                                  ? words[0].includes("/")
-                                    ? eval("" + words[0])
-                                    : ""
-                                  : words[0],
-                                unit: unit,
-                                element: words.splice(unit ? 2 : 1).join(" "),
-                              });
-                            });
                             setPopupOpen(true);
                           }}
                         >
                           Bulk Entry
                         </Button>
-                      </Grid>
-                      <Grid item>
-                        <FormControlLabel
-                          control={
-                            <Switch
-                              disableRipple
-                              onChange={(e) => setFdcMode(e.target.checked)}
-                            />
-                          }
-                          label="Edit FDC Info"
-                        />
                       </Grid>
                     </Grid>
                     {values.ingredients?.map(
@@ -358,7 +361,6 @@ const AddRecipe = () => {
                           key={index}
                           arrayHelpers={arrayHelpers}
                           errors={errors}
-                          fdcMode={fdcMode}
                           index={index}
                           ingredient={ingredient}
                           setFieldValue={setFieldValue}
@@ -415,12 +417,6 @@ const AddRecipe = () => {
                             variant="outlined"
                             onClick={() => {
                               setBulkEntryType("step");
-                              sethandleTokens(() => (token: string) => {
-                                arrayHelpers.push({
-                                  isDivider: false,
-                                  text: token,
-                                });
-                              });
                               setPopupOpen(true);
                             }}
                           >

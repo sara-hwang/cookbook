@@ -13,11 +13,11 @@ const RecipeSchema = new mongoose.Schema({
   ingredients: [
     {
       isDivider: Boolean,
-      amount: Number,
-      element: String,
-      unit: String,
+      text: String,
       fdcId: Number,
       fdcQuery: String,
+      fdcUnit: String,
+      fdcAmount: Number,
     },
   ],
   steps: [
@@ -37,6 +37,20 @@ const RecipeSchema = new mongoose.Schema({
   url: String,
   dateAdded: Number,
   notes: String,
+  nutritionalValues: {
+    _1008: Number,
+    _1003: Number,
+    _1004: Number,
+    _1005: Number,
+    _1079: Number,
+    _2000: Number,
+    _1087: Number,
+    _1089: Number,
+    _1093: Number,
+    _1258: Number,
+    _1253: Number,
+    _1257: Number,
+  },
 });
 
 const RecipeModel = mongoose.model("recipes", RecipeSchema);

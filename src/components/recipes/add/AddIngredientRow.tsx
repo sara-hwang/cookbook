@@ -6,16 +6,15 @@ import {
   TextField,
 } from "@mui/material";
 import { Field, FieldArrayRenderProps, FormikErrors } from "formik";
-import { Ingredient, Recipe, UnitMenuItem } from "../../../utils/types";
+import { Ingredient, Recipe } from "../../../utils/types";
 import { Delete, Link, MoveUp } from "@mui/icons-material";
 import "./AddRecipe.css";
 import { useEffect, useState } from "react";
-import { getIngredientSearch } from "../../../utils/api";
+import { getFdcUnits, getIngredientSearch } from "../../../utils/api";
 
 interface AddIngredientRowProps {
   arrayHelpers: FieldArrayRenderProps;
   errors: FormikErrors<Recipe>;
-  fdcMode: boolean;
   index: number;
   ingredient: Ingredient;
   setFieldValue: (
@@ -25,10 +24,10 @@ interface AddIngredientRowProps {
   ) => Promise<void | FormikErrors<Recipe>>;
   values: Recipe;
 }
+
 const AddIngredientRow = ({
   arrayHelpers,
   errors,
-  fdcMode,
   index,
   ingredient,
   setFieldValue,
@@ -37,6 +36,7 @@ const AddIngredientRow = ({
   const [suggestions, setSuggestions] = useState<
     { query: string; fdcId: number }[]
   >([]);
+  const [fdcUnitMenuItem, setFdcUnitMenuItem] = useState<string[]>([]);
   const [apiQuery, setApiQuery] = useState<string>("");
 
   useEffect(() => {
@@ -59,117 +59,39 @@ const AddIngredientRow = ({
     };
   }, [apiQuery]);
 
+  useEffect(() => {
+    ingredient.fdcId && getUnitMenuItems(ingredient.fdcId);
+  }, [ingredient.fdcId]);
+
+  const getUnitMenuItems = async (fdcId: number) => {
+    const unitMenuItems = await getFdcUnits(fdcId);
+    if (!unitMenuItems) return;
+    setFdcUnitMenuItem(["g", ...unitMenuItems]);
+  };
+
   return (
     <Grid item container xs={12} spacing={1}>
-      {!ingredient.isDivider &&
-        (fdcMode ? (
-          <Grid item container xs={6} direction="row">
-            <Grid item>
-              <a
-                href={
-                  values.ingredients[index].fdcId
-                    ? `https://fdc.nal.usda.gov/fdc-app.html#/food-details/${values.ingredients[index].fdcId}/nutrients`
-                    : undefined
-                }
-              >
-                <IconButton
-                  disableRipple
-                  disabled={!values.ingredients[index].fdcId}
-                >
-                  <Link />
-                </IconButton>
-              </a>
-            </Grid>
-            <Grid item xs>
-              <Autocomplete
-                freeSolo
-                size="small"
-                value={values.ingredients[index].fdcQuery ?? ""}
-                options={suggestions}
-                getOptionLabel={(option) => {
-                  if (typeof option === "object") return option.query;
-                  return option;
-                }}
-                onChange={(e, value) => {
-                  if (typeof value === "object" && value?.fdcId) {
-                    setFieldValue(
-                      `ingredients.${index}.fdcQuery`,
-                      value?.query
-                    );
-                    setFieldValue(`ingredients.${index}.fdcId`, value?.fdcId);
-                  }
-                }}
-                renderInput={(params) => (
-                  <TextField
-                    {...params}
-                    placeholder="Search for your ingredient..."
-                    InputLabelProps={{ shrink: false }}
-                    onChange={(e) => setApiQuery(e.target.value)}
-                  />
-                )}
-              />
-            </Grid>
-          </Grid>
-        ) : (
-          <>
-            <Grid item>
-              <Field
-                name={`ingredients.${index}.amount`}
-                type="number"
-                as={TextField}
-                placeholder="Amount *"
-                size="small"
-                className="ingredient-amount-text-field"
-                InputProps={{ inputProps: { min: "0", step: "any" } }}
-                error={
-                  errors.ingredients &&
-                  errors.ingredients[index] &&
-                  (errors.ingredients[index] as FormikErrors<Ingredient>)
-                    .amount !== undefined
-                }
-                helperText={
-                  errors.ingredients &&
-                  errors.ingredients[index] &&
-                  (errors.ingredients[index] as FormikErrors<Ingredient>).amount
-                }
-              />
-            </Grid>
-            <Grid item>
-              <Field
-                name={`ingredients.${index}.unit`}
-                type="number"
-                as={TextField}
-                select
-                size="small"
-                label={!ingredient.unit ? "Unit *" : ""}
-                className="ingredient-unit-select-field"
-                InputLabelProps={{ shrink: false }}
-                error={
-                  errors.ingredients &&
-                  errors.ingredients[index] &&
-                  (errors.ingredients[index] as FormikErrors<Ingredient>)
-                    .unit !== undefined
-                }
-                helperText={
-                  errors.ingredients &&
-                  errors.ingredients[index] &&
-                  (errors.ingredients[index] as FormikErrors<Ingredient>).unit
-                }
-              >
-                {Object.values(Object.keys(UnitMenuItem)).map(
-                  (unitMenuItem) => (
-                    <MenuItem key={unitMenuItem} value={unitMenuItem}>
-                      {unitMenuItem}
-                    </MenuItem>
-                  )
-                )}
-              </Field>
-            </Grid>
-          </>
-        ))}
+      {!ingredient.isDivider && (
+        <Grid item>
+          <a
+            href={
+              values.ingredients[index].fdcId
+                ? `https://fdc.nal.usda.gov/fdc-app.html#/food-details/${values.ingredients[index].fdcId}/nutrients`
+                : undefined
+            }
+          >
+            <IconButton
+              disableRipple
+              disabled={!values.ingredients[index].fdcId}
+            >
+              <Link />
+            </IconButton>
+          </a>
+        </Grid>
+      )}
       <Grid item xs>
         <Field
-          name={`ingredients.${index}.element`}
+          name={`ingredients.${index}.text`}
           as={TextField}
           placeholder={ingredient.isDivider ? "Section name *" : "Ingredient *"}
           size="small"
@@ -177,16 +99,100 @@ const AddIngredientRow = ({
           error={
             errors.ingredients &&
             errors.ingredients[index] &&
-            (errors.ingredients[index] as FormikErrors<Ingredient>).element !==
+            (errors.ingredients[index] as FormikErrors<Ingredient>).text !==
               undefined
           }
           helperText={
             errors.ingredients &&
             errors.ingredients[index] &&
-            (errors.ingredients[index] as FormikErrors<Ingredient>).element
+            (errors.ingredients[index] as FormikErrors<Ingredient>).text
           }
         />
       </Grid>
+      {!ingredient.isDivider && (
+        <Grid item container xs={7} direction="row" spacing={1}>
+          <Grid item xs>
+            <Autocomplete
+              freeSolo
+              size="small"
+              value={values.ingredients[index].fdcQuery ?? ""}
+              options={suggestions}
+              getOptionLabel={(option) => {
+                if (typeof option === "object") return option.query;
+                return option;
+              }}
+              onChange={(e, value) => {
+                if (typeof value === "object" && value?.fdcId) {
+                  setFieldValue(`ingredients.${index}.fdcQuery`, value?.query);
+                  setFieldValue(`ingredients.${index}.fdcId`, value?.fdcId);
+                }
+              }}
+              renderInput={(params) => (
+                <TextField
+                  {...params}
+                  placeholder="Search for your ingredient..."
+                  InputLabelProps={{ shrink: false }}
+                  onChange={(e) => setApiQuery(e.target.value)}
+                />
+              )}
+            />
+          </Grid>
+          <Grid item>
+            <Field
+              name={`ingredients.${index}.fdcAmount`}
+              type="number"
+              as={TextField}
+              placeholder="Amount *"
+              value={ingredient.fdcAmount ?? ""}
+              size="small"
+              className="ingredient-amount-text-field"
+              InputProps={{ inputProps: { min: "0", step: "any" } }}
+              error={
+                errors.ingredients &&
+                errors.ingredients[index] &&
+                (errors.ingredients[index] as FormikErrors<Ingredient>)
+                  .fdcAmount !== undefined
+              }
+              helperText={
+                errors.ingredients &&
+                errors.ingredients[index] &&
+                (errors.ingredients[index] as FormikErrors<Ingredient>)
+                  .fdcAmount
+              }
+            />
+          </Grid>
+          <Grid item>
+            <Field
+              name={`ingredients.${index}.fdcUnit`}
+              type="number"
+              as={TextField}
+              select
+              value={ingredient.fdcUnit ?? ""}
+              size="small"
+              label={!ingredient ? "Unit *" : ""}
+              className="ingredient-unit-select-field"
+              InputLabelProps={{ shrink: false }}
+              error={
+                errors.ingredients &&
+                errors.ingredients[index] &&
+                (errors.ingredients[index] as FormikErrors<Ingredient>)
+                  .fdcUnit !== undefined
+              }
+              helperText={
+                errors.ingredients &&
+                errors.ingredients[index] &&
+                (errors.ingredients[index] as FormikErrors<Ingredient>).fdcUnit
+              }
+            >
+              {fdcUnitMenuItem.map((unitMenuItem) => (
+                <MenuItem key={unitMenuItem} value={unitMenuItem}>
+                  {unitMenuItem}
+                </MenuItem>
+              ))}
+            </Field>
+          </Grid>
+        </Grid>
+      )}
       <Grid item>
         {values.ingredients.length > 1 && (
           <IconButton
