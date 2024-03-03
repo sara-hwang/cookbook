@@ -167,7 +167,7 @@ const ViewRecipes = () => {
               scrollMarginTop: "70px",
             }}
           >
-            All
+            {`All (${recipes.length})`}
           </Typography>
           <RandomButton recipes={recipes} />
         </div>
