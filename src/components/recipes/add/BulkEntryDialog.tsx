@@ -1,18 +1,19 @@
 import { Button, Dialog, DialogContent, Grid, TextField } from "@mui/material";
+import { FieldArrayRenderProps } from "formik";
 import { useState } from "react";
 
 interface BulkEntryDialogProps {
   type: "ingredient" | "step";
   popupOpen: boolean;
   setPopupOpen: React.Dispatch<React.SetStateAction<boolean>>;
-  handleTokens: (token: string) => void;
+  arrayHelpers: FieldArrayRenderProps;
 }
 
 const BulkEntryDialog = ({
   type,
   popupOpen,
   setPopupOpen,
-  handleTokens,
+  arrayHelpers,
 }: BulkEntryDialogProps) => {
   const [value, setValue] = useState<string>();
 
@@ -70,7 +71,12 @@ const BulkEntryDialog = ({
                       .split("\n")
                       .map((token) => token.trim())
                       .filter((token) => token)
-                      .forEach(handleTokens);
+                      .forEach((token: string) => {
+                        arrayHelpers.push({
+                          isDivider: false,
+                          text: token,
+                        });
+                      });
                   setValue("");
                   setPopupOpen(false);
                 }}

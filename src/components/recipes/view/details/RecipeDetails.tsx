@@ -26,10 +26,7 @@ import ChipDisplay from "../../../ChipDisplay";
 import "./RecipeDetails.css";
 import { RootState } from "../../../../redux/store";
 import { getRecipeDetails } from "../../../../utils/helpers";
-import {
-  getGroceryList,
-  updateGroceryList,
-} from "../../../../utils/api";
+import { getGroceryList, updateGroceryList } from "../../../../utils/api";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,
@@ -92,15 +89,26 @@ const RecipeDetails = () => {
     // create recipe details string to send to chat
     let recipeString = "Recipe ingredients: ";
     recipe.ingredients.forEach((ing) => {
-      if (!ing.isDivider) recipeString += ing.element + ", ";
+      if (!ing.isDivider) recipeString += ing.text + ", ";
     });
     setRecipeString(recipeString);
   }, [recipe]);
 
-  const calculateAmount = (num?: number) => {
-    return !servings || !num
-      ? 0
-      : +((num * servings) / recipe.servings).toFixed(2);
+  const calculateAmount = (ingredientText: string) => {
+    if (!servings || !ingredientText) return ingredientText;
+
+    const regex = /\d+(\.\d+)?/g;
+    const resultString = ingredientText.replace(regex, (match) => {
+      const num = parseFloat(match);
+      const doubledNumber = isNaN(num)
+        ? match
+        : parseFloat(
+            ((num * servings) / recipe.servings).toFixed(2)
+          ).toString();
+      return doubledNumber;
+    });
+
+    return resultString;
   };
 
   const addToGrocery = async () => {
@@ -115,23 +123,7 @@ const RecipeDetails = () => {
         const formData = new FormData(checkboxElement as HTMLFormElement);
         for (const [index, _] of formData.entries()) {
           const ingredient = recipe.ingredients[+index];
-          const dupElement = items.findIndex(
-            (ing) =>
-              ing.element === ingredient.element && ing.unit === ingredient.unit
-          );
-          if (dupElement === -1) {
-            items.push({
-              ...ingredient,
-              amount: calculateAmount(ingredient.amount),
-            });
-          } else {
-            items[dupElement] = {
-              ...items[dupElement],
-              amount:
-                (items[dupElement].amount ?? 0) +
-                calculateAmount(ingredient.amount),
-            };
-          }
+          items.push({ ...ingredient, text: calculateAmount(ingredient.text) });
         }
         updateGroceryList(auth()?.username, items);
       } else {
@@ -274,7 +266,7 @@ const RecipeDetails = () => {
                 {recipe?.ingredients.map((ing, index) =>
                   ing.isDivider ? (
                     <Typography variant="h6" key={index}>
-                      {ing.element}
+                      {ing.text}
                     </Typography>
                   ) : (
                     <div
@@ -287,11 +279,7 @@ const RecipeDetails = () => {
                         id={`ingredient-checkbox-${index}`}
                       />
                       <label htmlFor={`ingredient-checkbox-${index}`}>
-                        {calculateAmount(ing.amount)}
-                        &nbsp;
-                        {ing.unit}
-                        &nbsp;
-                        {ing.element}
+                        {calculateAmount(ing.text)}
                       </label>
                     </div>
                   )
@@ -302,17 +290,11 @@ const RecipeDetails = () => {
                 {recipe?.ingredients.map((ing, index) =>
                   ing.isDivider ? (
                     <Typography variant="h6" marginLeft={"-30px"} key={index}>
-                      {ing.element}
+                      {ing.text}
                     </Typography>
                   ) : (
                     <Fragment key={index}>
-                      <li>
-                        {calculateAmount(ing.amount)}
-                        &nbsp;
-                        {ing.unit}
-                        &nbsp;
-                        {ing.element}
-                      </li>
+                      <li>{calculateAmount(ing.text)}</li>
                     </Fragment>
                   )
                 )}
@@ -419,7 +401,7 @@ const RecipeDetails = () => {
 
         {recipe.nutritionalValues && (
           <Grid item xs={12}>
-            <NutritionLabel recipe={recipe}/>
+            <NutritionLabel recipe={recipe} />
           </Grid>
         )}
         <Grid item xs={12}>

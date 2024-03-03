@@ -25,11 +25,7 @@ export const GroceryList = () => {
     const initGroceryList = async () => {
       const response = await getGroceryList(username);
       if (response && response.status === 200) {
-        setGroceryList(
-          response.data.grocery.sort((a: Ingredient, b: Ingredient) =>
-            a.element.localeCompare(b.element)
-          )
-        );
+        setGroceryList(response.data.grocery);
       } else {
         alert("Groceries returned " + response?.data + ", server may be down.");
       }
@@ -54,7 +50,7 @@ export const GroceryList = () => {
       }
       const flatCategories: Ingredient[] = [];
       Object.keys(categoryDict).forEach((categoryName) => {
-        flatCategories.push({ isDivider: true, element: categoryName });
+        flatCategories.push({ isDivider: true, text: categoryName });
         categoryDict[categoryName].forEach((ing) => flatCategories.push(ing));
       });
       setCategorizedItems(flatCategories);
@@ -100,9 +96,7 @@ export const GroceryList = () => {
             {(loading
               ? Array.from({ length: 10 }, (_, index) => ({
                   isDivider: index === 0,
-                  amount: "",
-                  unit: "",
-                  element: index === 0 ? "Other" : "",
+                  text: index === 0 ? "Other" : "",
                 }))
               : categorizedItems
             ).map((ing, index) => {
@@ -110,7 +104,7 @@ export const GroceryList = () => {
                 <Grid item container xs={12} key={index}>
                   {ing.isDivider ? (
                     <Grid item>
-                      <Typography variant="h6">{ing.element}</Typography>
+                      <Typography variant="h6">{ing.text}</Typography>
                     </Grid>
                   ) : (
                     <div className="checkbox-container">
@@ -123,7 +117,7 @@ export const GroceryList = () => {
                         <Skeleton className="grocery-item-label-skeleton" />
                       ) : (
                         <label htmlFor={`grocery-checkbox-${index}`}>
-                          {ing.amount} {ing.unit} {ing.element}
+                          {ing.text}
                         </label>
                       )}
                     </div>

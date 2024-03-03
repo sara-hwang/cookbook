@@ -13,11 +13,11 @@ const RecipeSchema = new mongoose.Schema({
   ingredients: [
     {
       isDivider: Boolean,
-      amount: Number,
-      element: String,
-      unit: String,
+      text: String,
       fdcId: Number,
       fdcQuery: String,
+      fdcUnit: String,
+      fdcAmount: Number,
     },
   ],
   steps: [

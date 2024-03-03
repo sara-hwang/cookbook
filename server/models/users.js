@@ -9,11 +9,8 @@ const UserSchema = new mongoose.Schema({
   grocery: {
     type: [
       {
-        amount: Number,
-        element: String,
-        unit: String,
+        text: String,
         fdcId: Number,
-        fdcQuery: String,
       },
     ],
     default: [],

@@ -16,11 +16,11 @@ export type Recipe = {
 
 export type Ingredient = {
   isDivider: boolean;
-  amount?: number;
-  unit?: string;
-  element: string;
+  text: string;
   fdcId?: number;
   fdcQuery?: string;
+  fdcUnit?: string;
+  fdcAmount?: number;
 };
 
 export type FdcIngredient = {
@@ -81,15 +81,6 @@ export type Step = {
 export type TabItem = {
   label: string;
   link: string;
-};
-
-export const UnitMenuItem = {
-  g: ["g", "gram", "gs", "grams"],
-  ml: ["ml", "millilitre", "milliliter", "mls", "millilitres", "milliliters"],
-  tsp: ["tsp", "teaspoon", "tsps", "teaspoons"],
-  tbsp: ["tbsp", "tablespoon", "tbsps", "tablespoons"],
-  cup: ["cup", "cups"],
-  count: ["count", "unit"],
 };
 
 export const EmptyRecipe = {
