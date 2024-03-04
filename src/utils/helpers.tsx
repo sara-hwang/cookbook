@@ -1,6 +1,19 @@
 import { getRecipe, getAllRecipes } from "./api";
 import { Recipe } from "./types";
 
+export const markdownParser = (
+  text: string
+): { text: string; url: string; rest: string } | null => {
+  const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/;
+  const match = text.match(linkRegex);
+
+  if (match) {
+    const [, linkText, linkUrl] = match;
+    return { text: linkText, url: linkUrl, rest: text.replace(linkRegex, "") };
+  }
+  return null;
+};
+
 export async function getRecipeDetails(
   id: string,
   setRecipe: React.Dispatch<React.SetStateAction<Recipe>>

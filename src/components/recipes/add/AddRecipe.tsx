@@ -6,6 +6,7 @@ import {
   Grid,
   IconButton,
   TextField,
+  Tooltip,
   Typography,
 } from "@mui/material";
 import { Field, FieldArray, Form, Formik } from "formik";
@@ -313,7 +314,14 @@ const AddRecipe = () => {
                       alignItems="center"
                     >
                       <Grid item>
-                        <Typography variant="h6">Ingredients</Typography>
+                        <Tooltip
+                          title={
+                            <div className="preserve-newlines">{`To link to other recipes, follow the format:\n[label](recipe-key)\n\nFor example:\n[Couscous salad](greek-couscous-salad)\n\n(not supported for dividers)`}</div>
+                          }
+                          arrow
+                        >
+                          <Typography variant="h6">Ingredients</Typography>
+                        </Tooltip>
                       </Grid>
                       <Grid item>
                         <IconButton

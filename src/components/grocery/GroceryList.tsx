@@ -11,6 +11,7 @@ import { Ingredient } from "../../utils/types";
 import "./Checkbox.css";
 import "../../stylesheets/App.css";
 import ClearGroceryDialog from "./ClearGroceryDialog";
+import { markdownParser } from "../../utils/helpers";
 
 export const GroceryList = () => {
   const auth = useAuthUser();
@@ -100,6 +101,7 @@ export const GroceryList = () => {
                 }))
               : categorizedItems
             ).map((ing, index) => {
+              const parsed = markdownParser(ing.text);
               return (
                 <Grid item container xs={12} key={index}>
                   {ing.isDivider ? (
@@ -117,7 +119,14 @@ export const GroceryList = () => {
                         <Skeleton className="grocery-item-label-skeleton" />
                       ) : (
                         <label htmlFor={`grocery-checkbox-${index}`}>
-                          {ing.text}
+                          {parsed ? (
+                            <>
+                              {parsed.rest}
+                              <a href={`view/${parsed.url}`}>{parsed.text}</a>
+                            </>
+                          ) : (
+                            ing.text
+                          )}
                         </label>
                       )}
                     </div>

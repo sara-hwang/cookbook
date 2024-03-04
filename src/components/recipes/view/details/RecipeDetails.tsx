@@ -25,7 +25,7 @@ import { setSearchTags } from "../../../../redux/searchTags";
 import ChipDisplay from "../../../ChipDisplay";
 import "./RecipeDetails.css";
 import { RootState } from "../../../../redux/store";
-import { getRecipeDetails } from "../../../../utils/helpers";
+import { getRecipeDetails, markdownParser } from "../../../../utils/helpers";
 import { getGroceryList, updateGroceryList } from "../../../../utils/api";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
@@ -263,8 +263,9 @@ const RecipeDetails = () => {
             </Typography>
             {groceryMode ? (
               <form id="grocery-checklist">
-                {recipe?.ingredients.map((ing, index) =>
-                  ing.isDivider ? (
+                {recipe?.ingredients.map((ing, index) => {
+                  const parsed = markdownParser(ing.text);
+                  return ing.isDivider ? (
                     <Typography variant="h6" key={index}>
                       {ing.text}
                     </Typography>
@@ -279,25 +280,42 @@ const RecipeDetails = () => {
                         id={`ingredient-checkbox-${index}`}
                       />
                       <label htmlFor={`ingredient-checkbox-${index}`}>
-                        {calculateAmount(ing.text)}
+                        {parsed ? (
+                          <>
+                            {calculateAmount(parsed.rest)}
+                            <a href={parsed.url}>{parsed.text}</a>
+                          </>
+                        ) : (
+                          calculateAmount(ing.text)
+                        )}
                       </label>
                     </div>
-                  )
-                )}
+                  );
+                })}
               </form>
             ) : (
               <ul>
-                {recipe?.ingredients.map((ing, index) =>
-                  ing.isDivider ? (
+                {recipe?.ingredients.map((ing, index) => {
+                  const parsed = markdownParser(ing.text);
+                  return ing.isDivider ? (
                     <Typography variant="h6" marginLeft={"-30px"} key={index}>
                       {ing.text}
                     </Typography>
                   ) : (
                     <Fragment key={index}>
-                      <li>{calculateAmount(ing.text)}</li>
+                      <li>
+                        {parsed ? (
+                          <>
+                            {calculateAmount(parsed.rest)}
+                            <a href={parsed.url}>{parsed.text}</a>
+                          </>
+                        ) : (
+                          calculateAmount(ing.text)
+                        )}
+                      </li>
                     </Fragment>
-                  )
-                )}
+                  );
+                })}
               </ul>
             )}
           </Grid>
