@@ -39,6 +39,7 @@ import {
 import DeleteRecipeDialog from "./DeleteRecipeDialog";
 import Chat from "./Chat";
 import NutritionLabel from "./NutritionLabel";
+import { defaultTabs } from "../../../../App";
 
 const RecipeDetails = () => {
   const dispatch = useAppDispatch();
@@ -429,7 +430,7 @@ const RecipeDetails = () => {
             size="medium"
             onChipClick={(tag) => {
               dispatch(setSearchTags([tag]));
-              dispatch(setCurrentTab(-3));
+              dispatch(setCurrentTab(-defaultTabs.length));
             }}
           />
         </Grid>

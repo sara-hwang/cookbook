@@ -1,15 +1,11 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { TabItem } from "../utils/types";
+import { defaultTabs } from "../App";
 
 const initialState: { tabsList: TabItem[]; currentTab: number } = {
   tabsList: [],
-  currentTab: -4,
-  // window.location.pathname == "/add"
-  //   ? -2
-  //   : window.location.pathname == "/grocery"
-  //   ? -1
-  //   : -3,
+  currentTab: -(defaultTabs.length + 1),
 };
 
 const findIndex = (tabs: TabItem[], tabLink: string) => {
@@ -24,7 +20,8 @@ export const tabsListSlice = createSlice({
       const index = findIndex(state.tabsList, action.payload);
       if (index > -1) {
         if (index <= state.currentTab) {
-          state.currentTab = state.currentTab == 0 ? -3 : state.currentTab - 1;
+          state.currentTab =
+            state.currentTab == 0 ? -defaultTabs.length : state.currentTab - 1;
         }
         state.tabsList = [
           ...state.tabsList.slice(0, index),

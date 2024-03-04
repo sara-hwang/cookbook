@@ -16,6 +16,7 @@ import {
   Toolbar,
 } from "@mui/material";
 import {
+  CalendarMonth,
   Close,
   ExpandLess,
   ExpandMore,
@@ -68,6 +69,33 @@ const handleCategoryClick = (category: string) => {
   element?.scrollIntoView();
 };
 
+export const defaultTabs = [
+    {
+      label: "View Recipes",
+      icon: <MenuBook fontSize="small" sx={{ marginRight: 1 }} />,
+      link: "/view",
+      index: -4,
+    },
+    {
+      label: "Add Recipe",
+      icon: <PostAdd fontSize="small" sx={{ marginRight: 1 }} />,
+      link: "/add",
+      index: -3,
+    },
+    {
+      label: "Grocery List",
+      icon: <ShoppingCart fontSize="small" sx={{ marginRight: 1 }} />,
+      link: "/grocery",
+      index: -2,
+    },
+    {
+      label: "Meal Planning",
+      icon: <CalendarMonth fontSize="small" sx={{ marginRight: 1 }} />,
+      link: "/plan",
+      index: -1,
+    },
+  ];
+
 export default function ResponsiveDrawer() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { pathname } = useLocation();
@@ -91,7 +119,7 @@ export default function ResponsiveDrawer() {
   };
 
   useEffect(() => {
-    if (currentTab === -4) navigate(pathname);
+    if (currentTab === -(defaultTabs.length + 1)) navigate(pathname);
     else if (
       currentTab < 0 &&
       pathname !== defaultTabs[currentTab + defaultTabs.length].link
@@ -103,12 +131,13 @@ export default function ResponsiveDrawer() {
   }, [currentTab]);
 
   useEffect(() => {
-    if (pathname == "/" || pathname == "/view") {
-      dispatch(setCurrentTab(-3));
-    } else if (pathname == "/add") {
-      dispatch(setCurrentTab(-2));
-    } else if (pathname == "/grocery") {
-      dispatch(setCurrentTab(-1));
+    if (pathname == "/") {
+      dispatch(setCurrentTab(-defaultTabs.length));
+      return
+    }
+    const currTab = defaultTabs.find((tab)=>tab.link === pathname)
+    if (currTab) {
+      dispatch(setCurrentTab(currTab.index));
     }
   }, [pathname]);
 
@@ -131,24 +160,11 @@ export default function ResponsiveDrawer() {
         <LoginDialog isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
       )}
     </>,
-  ];
-
-  const defaultTabs = [
-    {
-      label: "View Recipes",
-      icon: <MenuBook fontSize="small" sx={{ marginRight: 1 }} />,
-      link: "/view",
-    },
-    {
-      label: "Add Recipe",
-      icon: <PostAdd fontSize="small" sx={{ marginRight: 1 }} />,
-      link: "/add",
-    },
-    {
-      label: "Grocery List",
-      icon: <ShoppingCart fontSize="small" sx={{ marginRight: 1 }} />,
-      link: "/grocery",
-    },
+    <>
+      {!isAuthenticated() && (
+        <LoginDialog isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
+      )}
+    </>,
   ];
 
   const handleDrawerToggle = () => {
@@ -178,9 +194,10 @@ export default function ResponsiveDrawer() {
               selected={currentTab === index - defaultTabs.length}
               onClick={(event) => {
                 handleListItemClick(event, index - defaultTabs.length);
-                link === "/view" && (pathname !== "/view"
-                  ? setViewCategories(true)
-                  : setViewCategories(!viewCategories));
+                link === "/view" &&
+                  (pathname !== "/view"
+                    ? setViewCategories(true)
+                    : setViewCategories(!viewCategories));
               }}
             >
               <ListItemIcon>{icon}</ListItemIcon>
@@ -343,6 +360,7 @@ export default function ResponsiveDrawer() {
           <Route path="/add" element={elements[2]} />
           <Route path="/add/:id" element={elements[2]} />
           <Route path="/grocery" element={elements[3]} />
+          <Route path="/plan" element={elements[4]} />
         </Routes>
       </Box>
     </Box>
