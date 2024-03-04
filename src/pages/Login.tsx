@@ -47,7 +47,8 @@ export const LoginDialog = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
             setIsLoginOpen(false);
             if (
               pathname.startsWith("/add") ||
-              pathname.startsWith("/grocery")
+              pathname.startsWith("/grocery") || 
+              pathname.startsWith("/plan")
             ) {
               navigate(-1);
             }
