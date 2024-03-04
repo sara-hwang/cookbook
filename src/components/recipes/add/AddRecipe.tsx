@@ -375,6 +375,12 @@ const AddRecipe = () => {
                   let currStep = 0;
                   return (
                     <>
+                      <BulkEntryDialog
+                        type={bulkEntryType}
+                        popupOpen={popupOpen}
+                        setPopupOpen={setPopupOpen}
+                        arrayHelpers={arrayHelpers}
+                      />
                       <Grid
                         item
                         container
