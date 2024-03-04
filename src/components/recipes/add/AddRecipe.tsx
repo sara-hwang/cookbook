@@ -81,7 +81,9 @@ const getNutritionalValues = async (
         amountInGrams = currUnit.gramWeight * ing.fdcAmount;
       }
       const key = ("_" + nutrient.id) as keyof typeof nutritionObj;
-      nutritionObj[key] += (amountInGrams / 100) * nutrient.amount;
+      nutritionObj[key] +=
+        ((amountInGrams / 100) * nutrient.amount) /
+        (nutrient.unit === "g" ? 1 : 1000);
     });
   }
 

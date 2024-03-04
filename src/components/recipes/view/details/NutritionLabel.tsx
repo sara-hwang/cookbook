@@ -66,14 +66,16 @@ const NutritionLabel = ({ recipe }: NutritionLabelProps) => {
           <tr>
             <th colSpan={2}>
               <b>Cholesterol </b>
-              {Math.round(nutritionalProfile["_1253"] / servings) + "mg"}
+              {Math.round((nutritionalProfile["_1253"] / servings) * 1000) +
+                "mg"}
             </th>
             <td>{/* <b>18%</b> */}</td>
           </tr>
           <tr>
             <th colSpan={2}>
               <b>Sodium </b>
-              {Math.round(nutritionalProfile["_1093"] / servings) + "mg"}
+              {Math.round((nutritionalProfile["_1093"] / servings) * 1000) +
+                "mg"}
             </th>
             <td>{/* <b>2%</b> */}</td>
           </tr>
@@ -110,13 +112,17 @@ const NutritionLabel = ({ recipe }: NutritionLabelProps) => {
           <tr className="thin-end">
             <td colSpan={2}>
               Calcium
-              {" " + Math.round(nutritionalProfile["_1087"] / servings) + "mg"}
+              {" " +
+                Math.round((nutritionalProfile["_1087"] / servings) * 1000) +
+                "mg"}
             </td>
             <td />
           </tr>
           <tr className="thick-end">
             <td colSpan={2}>
-              Iron {Math.round(nutritionalProfile["_1089"] / servings) + "mg"}
+              Iron{" "}
+              {Math.round((nutritionalProfile["_1089"] / servings) * 1000) +
+                "mg"}
             </td>
             <td />
           </tr>
