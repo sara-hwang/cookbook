@@ -4,6 +4,7 @@ import {
   Button,
   CircularProgress,
   Grid,
+  Icon,
   IconButton,
   TextField,
   Tooltip,
@@ -20,7 +21,7 @@ import {
   NutritionalProfile,
   Recipe,
 } from "../../../utils/types";
-import { Add } from "@mui/icons-material";
+import { Add, Info } from "@mui/icons-material";
 import {
   addRecipe,
   deleteRecipe,
@@ -314,13 +315,18 @@ const AddRecipe = () => {
                       alignItems="center"
                     >
                       <Grid item>
+                        <Typography variant="h6">Ingredients</Typography>
+                      </Grid>
+                      <Grid item>
                         <Tooltip
                           title={
-                            <div className="preserve-newlines">{`To link to other recipes, follow the format:\n[label](recipe-key)\n\nFor example:\n[Couscous salad](greek-couscous-salad)\n\n(not supported for dividers)`}</div>
+                            <div className="preserve-newlines">{`To link to other recipes, follow the format:\n[label](recipe-key)\nThe recipe key is whatever follows "/view/" in the URL\n\nFor example:\n[Couscous salad](greek-couscous-salad)\n\n(not supported for dividers)`}</div>
                           }
                           arrow
                         >
-                          <Typography variant="h6">Ingredients</Typography>
+                          <div style={{ height: "20px" }}>
+                            <Info fontSize="small" />
+                          </div>
                         </Tooltip>
                       </Grid>
                       <Grid item>
