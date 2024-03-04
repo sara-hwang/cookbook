@@ -40,6 +40,7 @@ import { RootState } from "./redux/store";
 import { setSearchTags } from "./redux/searchTags";
 import SearchBar from "./components/SearchBar";
 import { RecipeCategories } from "./utils/types";
+import MealPlanCalendar from "./components/plan/MealPlanCalendar";
 
 const drawerWidth = 240;
 
@@ -70,31 +71,31 @@ const handleCategoryClick = (category: string) => {
 };
 
 export const defaultTabs = [
-    {
-      label: "View Recipes",
-      icon: <MenuBook fontSize="small" sx={{ marginRight: 1 }} />,
-      link: "/view",
-      index: -4,
-    },
-    {
-      label: "Add Recipe",
-      icon: <PostAdd fontSize="small" sx={{ marginRight: 1 }} />,
-      link: "/add",
-      index: -3,
-    },
-    {
-      label: "Grocery List",
-      icon: <ShoppingCart fontSize="small" sx={{ marginRight: 1 }} />,
-      link: "/grocery",
-      index: -2,
-    },
-    {
-      label: "Meal Planning",
-      icon: <CalendarMonth fontSize="small" sx={{ marginRight: 1 }} />,
-      link: "/plan",
-      index: -1,
-    },
-  ];
+  {
+    label: "View Recipes",
+    icon: <MenuBook fontSize="small" sx={{ marginRight: 1 }} />,
+    link: "/view",
+    index: -4,
+  },
+  {
+    label: "Add Recipe",
+    icon: <PostAdd fontSize="small" sx={{ marginRight: 1 }} />,
+    link: "/add",
+    index: -3,
+  },
+  {
+    label: "Grocery List",
+    icon: <ShoppingCart fontSize="small" sx={{ marginRight: 1 }} />,
+    link: "/grocery",
+    index: -2,
+  },
+  {
+    label: "Meal Planning",
+    icon: <CalendarMonth fontSize="small" sx={{ marginRight: 1 }} />,
+    link: "/plan",
+    index: -1,
+  },
+];
 
 export default function ResponsiveDrawer() {
   const [mobileOpen, setMobileOpen] = React.useState(false);
@@ -133,9 +134,9 @@ export default function ResponsiveDrawer() {
   useEffect(() => {
     if (pathname == "/") {
       dispatch(setCurrentTab(-defaultTabs.length));
-      return
+      return;
     }
-    const currTab = defaultTabs.find((tab)=>tab.link === pathname)
+    const currTab = defaultTabs.find((tab) => tab.link === pathname);
     if (currTab) {
       dispatch(setCurrentTab(currTab.index));
     }
@@ -161,6 +162,7 @@ export default function ResponsiveDrawer() {
       )}
     </>,
     <>
+      <MealPlanCalendar />
       {!isAuthenticated() && (
         <LoginDialog isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
       )}
