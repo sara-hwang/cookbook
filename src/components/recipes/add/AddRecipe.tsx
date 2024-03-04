@@ -83,7 +83,7 @@ const getNutritionalValues = async (
       const key = ("_" + nutrient.id) as keyof typeof nutritionObj;
       nutritionObj[key] +=
         ((amountInGrams / 100) * nutrient.amount) /
-        (nutrient.unit === "g" ? 1 : 1000);
+        (nutrient.unit === "g" || nutrient.unit === "kcal" ? 1 : 1000);
     });
   }
 
