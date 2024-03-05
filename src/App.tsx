@@ -14,6 +14,8 @@ import {
   ListItemIcon,
   ListItemText,
   Toolbar,
+  Typography,
+  useMediaQuery,
 } from "@mui/material";
 import {
   CalendarMonth,
@@ -41,6 +43,7 @@ import { setSearchTags } from "./redux/searchTags";
 import SearchBar from "./components/SearchBar";
 import { RecipeCategories } from "./utils/types";
 import MealPlanCalendar from "./components/plan/MealPlanCalendar";
+import theme from "./utils/theme";
 
 const drawerWidth = 240;
 
@@ -105,10 +108,12 @@ export default function ResponsiveDrawer() {
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [appBarTitle, setAppBarTitle] = useState("");
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
   const [viewCategories, setViewCategories] = useState(true);
+  const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -147,7 +152,7 @@ export default function ResponsiveDrawer() {
       <ViewRecipes />
     </>,
     <>
-      <RecipeDetails />
+      <RecipeDetails setAppBarTitle={setAppBarTitle} />
     </>,
     <>
       <AddRecipe />
@@ -268,6 +273,10 @@ export default function ResponsiveDrawer() {
     </div>
   );
 
+  useEffect(() => {
+    console.log(defaultTabs.length, currentTab);
+  }, [currentTab]);
+
   return (
     <Box sx={{ display: "flex" }}>
       <CssBaseline />
@@ -275,37 +284,47 @@ export default function ResponsiveDrawer() {
       <AppBar
         position="fixed"
         sx={{
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
-          ml: { sm: `${drawerWidth}px` },
+          width: { md: `calc(100% - ${drawerWidth}px)` },
+          ml: { md: `${drawerWidth}px` },
           zIndex: 2,
         }}
       >
-        <Toolbar sx={{ padding: "10px !important" }}>
-          <IconButton
-            color="inherit"
-            aria-label="open drawer"
-            edge="start"
-            onClick={handleDrawerToggle}
-            sx={{ display: { sm: "none" } }}
-          >
-            <Menu />
-          </IconButton>
-          <SearchBar />
-          <Button
-            color="inherit"
-            disableRipple
-            sx={{ marginLeft: 1 }}
-            onClick={() => {
-              isAuthenticated() ? signOut() : setIsLoginOpen(true);
-            }}
-          >
-            {isAuthenticated() ? "Logout" : "Login"}
-          </Button>
-        </Toolbar>
+        {lsMedium && (
+          <Toolbar sx={{ padding: "10px !important" }}>
+            <IconButton
+              color="inherit"
+              aria-label="open drawer"
+              edge="start"
+              onClick={handleDrawerToggle}
+              sx={{ display: { md: "none" }, padding: "0 16px" }}
+            >
+              <Menu />
+            </IconButton>
+            {currentTab == -defaultTabs.length ? (
+              <SearchBar />
+            ) : (
+              <Typography variant="h6">
+                {currentTab < 0 && currentTab > -defaultTabs.length
+                  ? defaultTabs[defaultTabs.length + currentTab].label
+                  : appBarTitle}
+              </Typography>
+            )}
+            {/* <Button
+              color="inherit"
+              disableRipple
+              sx={{ marginLeft: 1 }}
+              onClick={() => {
+                isAuthenticated() ? signOut() : setIsLoginOpen(true);
+              }}
+            >
+              {isAuthenticated() ? "Logout" : "Login"}
+            </Button> */}
+          </Toolbar>
+        )}
       </AppBar>
       <Box
         component="nav"
-        sx={{ width: { sm: drawerWidth }, flexShrink: { sm: 0 } }}
+        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
         aria-label="sidebar container"
       >
         <Drawer
@@ -316,7 +335,7 @@ export default function ResponsiveDrawer() {
             keepMounted: true, // Better open performance on mobile.
           }}
           sx={{
-            display: { xs: "block", sm: "none" },
+            display: { sm: "block", md: "none" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -328,7 +347,7 @@ export default function ResponsiveDrawer() {
         <Drawer
           variant="permanent"
           sx={{
-            display: { xs: "none", sm: "block" },
+            display: { xs: "none", sm: "none", md: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
               width: drawerWidth,
@@ -344,11 +363,11 @@ export default function ResponsiveDrawer() {
         sx={{
           flexGrow: 1,
           p: 3,
-          width: { sm: `calc(100% - ${drawerWidth}px)` },
+          width: { md: `calc(100% - ${drawerWidth}px)` },
           padding: 0,
         }}
       >
-        <Toolbar />
+        {lsMedium && <Toolbar />}
         <Routes>
           <Route path="/" element={elements[0]} />
           <Route path="/view" element={elements[0]} />

@@ -1,4 +1,4 @@
-import { Box, Fab, Fade, Typography, useScrollTrigger } from "@mui/material";
+import { Box, Fab, Fade, Typography, useMediaQuery, useScrollTrigger } from "@mui/material";
 import { Recipe, EmptyRecipe, RecipeCategories } from "../../../../utils/types";
 import { useEffect, useLayoutEffect, useState } from "react";
 import "./ViewRecipes.css";
@@ -11,6 +11,8 @@ import { Splide, SplideSlide } from "@splidejs/react-splide";
 import "@splidejs/splide/css";
 import RandomButton from "./RandomButton";
 import { KeyboardArrowUp } from "@mui/icons-material";
+import theme from "../../../../utils/theme";
+import SearchBar from "../../../SearchBar";
 
 interface ScrollTopProps {
   children: React.ReactNode;
@@ -44,6 +46,7 @@ const ViewRecipes = () => {
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
   );
+  const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
   const cardSpacing = 10;
   const cardsPerRow = width > 1000 ? 5 : width > 800 ? 4 : width > 600 ? 3 : 2;
   const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
@@ -104,7 +107,10 @@ const ViewRecipes = () => {
     searchTags.length > 0 || searchTitle ? [] : RecipeCategories.slice(0, -1);
 
   return (
-    <Box sx={{ marginTop: `${cardSpacing * 2}px` }}>
+    <Box >
+      <div style={{padding: "15px"}}>
+        <SearchBar />
+      </div>
       {defaultCategories.map((category, index) => {
         const catRecipes = recipes.filter((recipe) =>
           recipe.tags.some((tag) => tag === category.toLowerCase())
@@ -122,7 +128,7 @@ const ViewRecipes = () => {
                 id={category}
                 variant="h4"
                 sx={{
-                  scrollMarginTop: "70px",
+                  scrollMarginTop: lsMedium ? "70px" : "10px",
                 }}
               >
                 {category}
@@ -164,7 +170,7 @@ const ViewRecipes = () => {
             id="All"
             variant="h4"
             sx={{
-              scrollMarginTop: "70px",
+              scrollMarginTop: lsMedium ? "70px" : "10px",
             }}
           >
             {`All (${recipes.length})`}
