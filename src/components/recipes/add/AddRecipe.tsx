@@ -100,7 +100,8 @@ const AddRecipe = () => {
   const { id } = useParams();
   const [initialValues, setInitialValues] = useState<Recipe>(EmptyRecipe);
   const [allTags, setAllTags] = useState<string[]>([]);
-  const [popupOpen, setPopupOpen] = useState(false);
+  const [ingPopupOpen, setIngPopupOpen] = useState(false);
+  const [stepPopupOpen, setStepPopupOpen] = useState(false);
   const [bulkEntryType, setBulkEntryType] = useState<"ingredient" | "step">(
     "ingredient"
   );
@@ -302,8 +303,8 @@ const AddRecipe = () => {
                   <>
                     <BulkEntryDialog
                       type={bulkEntryType}
-                      popupOpen={popupOpen}
-                      setPopupOpen={setPopupOpen}
+                      popupOpen={ingPopupOpen}
+                      setPopupOpen={setIngPopupOpen}
                       arrayHelpers={arrayHelpers}
                     />
                     <Grid
@@ -363,7 +364,7 @@ const AddRecipe = () => {
                           variant="outlined"
                           onClick={() => {
                             setBulkEntryType("ingredient");
-                            setPopupOpen(true);
+                            setIngPopupOpen(true);
                           }}
                         >
                           Bulk Entry
@@ -393,8 +394,8 @@ const AddRecipe = () => {
                     <>
                       <BulkEntryDialog
                         type={bulkEntryType}
-                        popupOpen={popupOpen}
-                        setPopupOpen={setPopupOpen}
+                        popupOpen={stepPopupOpen}
+                        setPopupOpen={setStepPopupOpen}
                         arrayHelpers={arrayHelpers}
                       />
                       <Grid
@@ -438,7 +439,7 @@ const AddRecipe = () => {
                             variant="outlined"
                             onClick={() => {
                               setBulkEntryType("step");
-                              setPopupOpen(true);
+                              setStepPopupOpen(true);
                             }}
                           >
                             Bulk Entry
