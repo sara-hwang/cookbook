@@ -107,4 +107,5 @@ export const RecipeCategories = [
   "Vegan",
   "Easy",
   "Instant Pot",
+  "All"
 ];

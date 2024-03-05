@@ -227,12 +227,6 @@ export default function ResponsiveDrawer() {
                       <ListItemText primary={category} />
                     </ListItemButton>
                   ))}
-                  <ListItemButton
-                    sx={{ pl: "80px" }}
-                    onClick={() => handleCategoryClick("All")}
-                  >
-                    <ListItemText primary="All" />
-                  </ListItemButton>
                 </List>
               </Collapse>
             )}

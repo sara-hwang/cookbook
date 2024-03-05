@@ -101,7 +101,7 @@ const ViewRecipes = () => {
   }, [recipesList, searchTitle, searchTags]);
 
   const defaultCategories =
-    searchTags.length > 0 || searchTitle ? [] : RecipeCategories;
+    searchTags.length > 0 || searchTitle ? [] : RecipeCategories.slice(0, -1);
 
   return (
     <Box sx={{ marginTop: `${cardSpacing * 2}px` }}>
