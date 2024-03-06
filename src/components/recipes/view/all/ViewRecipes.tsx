@@ -1,4 +1,11 @@
-import { Box, Fab, Fade, Typography, useMediaQuery, useScrollTrigger } from "@mui/material";
+import {
+  Box,
+  Fab,
+  Fade,
+  Typography,
+  useMediaQuery,
+  useScrollTrigger,
+} from "@mui/material";
 import { Recipe, EmptyRecipe, RecipeCategories } from "../../../../utils/types";
 import { useEffect, useLayoutEffect, useState } from "react";
 import "./ViewRecipes.css";
@@ -107,10 +114,8 @@ const ViewRecipes = () => {
     searchTags.length > 0 || searchTitle ? [] : RecipeCategories.slice(0, -1);
 
   return (
-    <Box >
-      <div style={{padding: "15px"}}>
-        <SearchBar />
-      </div>
+    <Box>
+      <div style={{ padding: "15px" }}>{!lsMedium && <SearchBar />}</div>
       {defaultCategories.map((category, index) => {
         const catRecipes = recipes.filter((recipe) =>
           recipe.tags.some((tag) => tag === category.toLowerCase())
