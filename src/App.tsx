@@ -22,9 +22,11 @@ import {
   Close,
   ExpandLess,
   ExpandMore,
+  Logout,
   Menu,
   MenuBook,
   PostAdd,
+  Settings,
   ShoppingCart,
 } from "@mui/icons-material";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
@@ -35,11 +37,10 @@ import ViewRecipes from "./components/recipes/view/all/ViewRecipes";
 import AddRecipe from "./components/recipes/add/AddRecipe";
 import RecipeDetails from "./components/recipes/view/details/RecipeDetails";
 import LoginDialog from "./pages/Login";
-import { useIsAuthenticated, useSignOut } from "react-auth-kit";
+import { useAuthUser, useIsAuthenticated, useSignOut } from "react-auth-kit";
 import GroceryList from "./components/grocery/GroceryList";
 import { popTab, setCurrentTab } from "./redux/tabsList";
 import { RootState } from "./redux/store";
-import { setSearchTags } from "./redux/searchTags";
 import SearchBar from "./components/SearchBar";
 import { RecipeCategories } from "./utils/types";
 import MealPlanCalendar from "./components/plan/MealPlanCalendar";
@@ -109,12 +110,15 @@ export default function ResponsiveDrawer() {
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [isUserOpen, setIsUserOpen] = useState(false);
   const [appBarTitle, setAppBarTitle] = useState("");
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
   const [viewCategories, setViewCategories] = useState(true);
   const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
+
+  const authUser = useAuthUser();
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -181,7 +185,52 @@ export default function ResponsiveDrawer() {
 
   const drawer = (
     <div>
-      <Toolbar></Toolbar>
+      <Toolbar className="user-login-sidebar">
+        {isAuthenticated() ? (
+          <div className="full-width">
+            <Button
+              disableRipple
+              fullWidth
+              onClick={() => setIsUserOpen(!isUserOpen)}
+            >
+              <Typography variant="h5">
+                <span>{`${authUser()?.username} `}</span>
+                <span>{isUserOpen ? <ExpandLess /> : <ExpandMore />}</span>
+              </Typography>
+            </Button>
+            <Collapse in={isUserOpen} timeout="auto" unmountOnExit>
+              <List component="div" disablePadding>
+                <ListItemButton disableRipple disabled>
+                  <ListItemIcon>
+                    <Settings fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary={"Settings"} />
+                </ListItemButton>
+                <ListItemButton
+                  disableRipple
+                  onClick={() => {
+                    setIsUserOpen(false);
+                    signOut();
+                  }}
+                >
+                  <ListItemIcon>
+                    <Logout fontSize="small" />
+                  </ListItemIcon>
+                  <ListItemText primary={"Logout"} />
+                </ListItemButton>
+              </List>
+            </Collapse>
+          </div>
+        ) : (
+          <Button
+            color="inherit"
+            disableRipple
+            onClick={() => setIsLoginOpen(true)}
+          >
+            Login
+          </Button>
+        )}
+      </Toolbar>
       <List>
         {defaultTabs.map(({ label, icon, link }, index) => (
           <React.Fragment key={link}>
@@ -298,16 +347,6 @@ export default function ResponsiveDrawer() {
                   : appBarTitle}
               </Typography>
             )}
-            {/* <Button
-              color="inherit"
-              disableRipple
-              sx={{ marginLeft: 1 }}
-              onClick={() => {
-                isAuthenticated() ? signOut() : setIsLoginOpen(true);
-              }}
-            >
-              {isAuthenticated() ? "Logout" : "Login"}
-            </Button> */}
           </Toolbar>
         )}
       </AppBar>

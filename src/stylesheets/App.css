@@ -1,3 +1,7 @@
+.full-width {
+  width: 100%;
+}
+
 .text-field-input {
   margin-right: 10px;
   margin-left: 10px;
@@ -35,4 +39,9 @@
 .tab-item:hover .MuiIconButton-root {
   visibility: visible;
   color: red;
+}
+
+.user-login-sidebar {
+  justify-content: center;
+  padding: 10px 0 !important;
 }
