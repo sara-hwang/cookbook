@@ -231,6 +231,7 @@ export default function ResponsiveDrawer() {
           </Button>
         )}
       </Toolbar>
+      <Divider />
       <List>
         {defaultTabs.map(({ label, icon, link }, index) => (
           <React.Fragment key={link}>
