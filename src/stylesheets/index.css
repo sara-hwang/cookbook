@@ -6,6 +6,10 @@ body {
   -moz-osx-font-smoothing: grayscale;
 }
 
+html {
+  background-color: #f1f8e9;
+}
+
 .MuiTypography-root.MuiTypography-h4 {
   /* font-family: "Roboto", "Helvetica", "Arial", sans-serif; */
   font-weight: bold;

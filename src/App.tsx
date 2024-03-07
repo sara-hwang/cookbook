@@ -44,6 +44,7 @@ import SearchBar from "./components/SearchBar";
 import { RecipeCategories } from "./utils/types";
 import MealPlanCalendar from "./components/plan/MealPlanCalendar";
 import theme from "./utils/theme";
+import { lightGreen } from "@mui/material/colors";
 
 const drawerWidth = 240;
 
@@ -180,19 +181,7 @@ export default function ResponsiveDrawer() {
 
   const drawer = (
     <div>
-      <Toolbar>
-        <img
-          src="/logo.png"
-          width="220"
-          height="100"
-          style={{ cursor: "pointer", marginTop: "10px", marginLeft: "-10px" }}
-          onClick={() => {
-            dispatch(setCurrentTab(-defaultTabs.length));
-            dispatch(setSearchTags([]));
-            window.scrollTo(0, 0);
-          }}
-        />
-      </Toolbar>
+      <Toolbar></Toolbar>
       <List>
         {defaultTabs.map(({ label, icon, link }, index) => (
           <React.Fragment key={link}>
@@ -278,7 +267,7 @@ export default function ResponsiveDrawer() {
   }, [currentTab]);
 
   return (
-    <Box sx={{ display: "flex" }}>
+    <Box sx={{ display: "flex", backgroundColor: lightGreen[50] }}>
       <CssBaseline />
       <LoginDialog isLoginOpen={isLoginOpen} setIsLoginOpen={setIsLoginOpen} />
       <AppBar
