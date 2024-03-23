@@ -5,12 +5,9 @@ import { Recipe } from "../utils/types";
 import SearchIcon from "@mui/icons-material/Search";
 import { setSearchTags, setSearchTitle } from "../redux/searchTags";
 import ChipDisplay from "./ChipDisplay";
-import { useNavigate, useLocation } from "react-router-dom";
 
 const SearchBar = () => {
   const dispatch = useAppDispatch();
-  const navigate = useNavigate();
-  const { pathname } = useLocation();
 
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
@@ -43,9 +40,6 @@ const SearchBar = () => {
       key={searchKey}
       options={suggestions}
       value={searchTags}
-      onFocus={() => {
-        if (pathname !== "/view") navigate("/view");
-      }}
       onChange={(e, value) => dispatch(setSearchTags(value))}
       renderTags={(value: readonly string[], getTagProps) => (
         <ChipDisplay tags={value} size="small" getTagProps={getTagProps} />
