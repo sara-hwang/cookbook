@@ -265,10 +265,9 @@ export default function ResponsiveDrawer() {
                   {RecipeCategories.map((category) => (
                     <ListItemButton
                       key={category}
-                      sx={{ pl: "80px" }}
                       onClick={() => handleCategoryClick(category)}
                     >
-                      <ListItemText primary={category} />
+                      <ListItemText inset primary={category} />
                     </ListItemButton>
                   ))}
                 </List>
