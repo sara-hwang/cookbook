@@ -24,6 +24,9 @@ import CloseIcon from "@mui/icons-material/Close";
 import SearchBar from "../SearchBar";
 import { Recipe } from "../../utils/types";
 import { getRecipesList } from "../../utils/helpers";
+import { setRecipesList } from "../../redux/recipesList";
+import { useAppDispatch, useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../redux/store";
 
 interface IProps {
   isAddOpen: boolean;
@@ -31,19 +34,56 @@ interface IProps {
 }
 
 export const AddMealDialog = ({ isAddOpen, setIsAddOpen }: IProps) => {
+  const { recipesList } = useAppSelector(
+    (state: RootState) => state.recipesList
+  );
+  const dispatch = useAppDispatch();
   const [errorMessage, setErrorMessage] = useState("");
-  const [mealPrepRecipes, setMealPrepRecipes] = useState<Recipe[]>([]);
+  const [searchTags, setSearchTags] = useState<string[]>([]);
+  const [searchTitle, setSearchTitle] = useState("");
+  const [filteredRecipes, setFilteredRecipes] = useState<Recipe[]>([]);
+
+  useEffect(() => {
+    const tagsFilter =
+      searchTags.length > 0
+        ? recipesList.filter(
+            (recipe: Recipe) =>
+              searchTags.length &&
+              searchTags.every((tag) => recipe.tags.includes(tag))
+          )
+        : recipesList;
+    const titleFilter = searchTitle
+      ? recipesList.filter((recipe: Recipe) =>
+          recipe.title.toLowerCase().includes(searchTitle.toLowerCase())
+        )
+      : recipesList;
+    setFilteredRecipes(
+      tagsFilter.filter((recipe) => titleFilter.includes(recipe))
+    );
+    // setKeys(keys.map((key) => (key *= -1)));
+    // setLoading(true);
+  }, [recipesList, searchTitle, searchTags]);
 
   useEffect(() => {
     const initMealPrep = async () => {
       if (!isAddOpen) return;
+      // setLoading(true);
       const recipes = await getRecipesList();
-      setMealPrepRecipes(recipes);
+      // setLoading(false);
+      dispatch(
+        setRecipesList(
+          recipes.sort((a: Recipe, b: Recipe) => b.dateAdded - a.dateAdded)
+        )
+      );
     };
 
     setErrorMessage("Fill in all fields");
     initMealPrep();
   }, [isAddOpen]);
+
+  useEffect(() => {
+    setSearchTitle("");
+  }, [searchTags]);
 
   const validationSchema = yup.object({
     recipe: yup.string().required().max(50),
@@ -111,7 +151,12 @@ export const AddMealDialog = ({ isAddOpen, setIsAddOpen }: IProps) => {
                       xs={12}
                       sx={{ marginTop: "10px", width: "100%" }}
                     >
-                      <SearchBar />
+                      <SearchBar
+                        searchKey={0}
+                        searchTags={searchTags}
+                        setSearchTags={setSearchTags}
+                        setSearchTitle={setSearchTitle}
+                      />
                     </Grid>
                     <Grid item xs={12} sx={{ width: "100%" }}>
                       <FormControl fullWidth size="small">
@@ -170,12 +215,12 @@ export const AddMealDialog = ({ isAddOpen, setIsAddOpen }: IProps) => {
                         bgcolor: "background.paper",
                         position: "relative",
                         overflow: "auto",
-                        maxHeight: 300,
+                        height: 300,
                         "& ul": { padding: 0 },
                       }}
                       subheader={<li />}
                     >
-                      {mealPrepRecipes.map((recipe) => (
+                      {filteredRecipes.map((recipe) => (
                         <ListItem key={recipe.key} disablePadding>
                           <ListItemButton>
                             <ListItemAvatar>

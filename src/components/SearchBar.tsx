@@ -1,19 +1,35 @@
 import { Autocomplete, InputAdornment, TextField } from "@mui/material";
-import { useAppDispatch, useAppSelector } from "../redux/hooks";
-import { RootState } from "../redux/store";
+import { useAppSelector } from "../redux/hooks";
 import { Recipe } from "../utils/types";
 import SearchIcon from "@mui/icons-material/Search";
-import { setSearchTags, setSearchTitle } from "../redux/searchTags";
 import ChipDisplay from "./ChipDisplay";
+import { RootState } from "../redux/store";
 
-const SearchBar = () => {
-  const dispatch = useAppDispatch();
+interface SearchBarProps {
+  searchKey: number;
+  searchTags: string[];
+  setSearchTags:
+    | ((value: string[]) => {
+        payload: string[];
+        type: "searchTags/setSearchTags";
+      })
+    | React.Dispatch<React.SetStateAction<string[]>>;
+  setSearchTitle:
+    | ((value: string) => {
+        payload: string;
+        type: "searchTags/setSearchTitle";
+      })
+    | React.Dispatch<React.SetStateAction<string>>;
+}
 
+const SearchBar = ({
+  searchKey,
+  searchTags,
+  setSearchTags,
+  setSearchTitle,
+}: SearchBarProps) => {
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
-  );
-  const { searchTags, searchKey } = useAppSelector(
-    (state: RootState) => state.searchTags
   );
 
   const suggestions = [
@@ -40,12 +56,12 @@ const SearchBar = () => {
       key={searchKey}
       options={suggestions}
       value={searchTags}
-      onChange={(e, value) => dispatch(setSearchTags(value))}
+      onChange={(e, value) => setSearchTags(value)}
       renderTags={(value: readonly string[], getTagProps) => (
         <ChipDisplay tags={value} size="small" getTagProps={getTagProps} />
       )}
       onInputChange={(event, newInputValue, reason) => {
-        reason === "clear" && dispatch(setSearchTitle(""));
+        reason === "clear" && setSearchTitle("");
       }}
       renderInput={(params) => (
         <TextField
@@ -66,7 +82,7 @@ const SearchBar = () => {
               </>
             ),
           }}
-          onChange={(e) => dispatch(setSearchTitle(e.target.value))}
+          onChange={(e) => setSearchTitle(e.target.value)}
           placeholder="Start typing to search by title or press enter to search for a tag"
         />
       )}

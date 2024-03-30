@@ -20,6 +20,7 @@ import RandomButton from "./RandomButton";
 import { KeyboardArrowUp } from "@mui/icons-material";
 import theme from "../../../../utils/theme";
 import SearchBar from "../../../SearchBar";
+import { setSearchTags, setSearchTitle } from "../../../../redux/searchTags";
 
 interface ScrollTopProps {
   children: React.ReactNode;
@@ -47,7 +48,7 @@ const ViewRecipes = () => {
   const [loading, setLoading] = useState(true);
   const [width, setWidth] = useState(0);
   const [keys, setKeys] = useState([1, 2, 3, 4, 5, 6]);
-  const { searchTags, searchTitle } = useAppSelector(
+  const { searchKey, searchTags, searchTitle } = useAppSelector(
     (state: RootState) => state.searchTags
   );
   const { recipesList } = useAppSelector(
@@ -115,7 +116,16 @@ const ViewRecipes = () => {
 
   return (
     <Box>
-      <div style={{ padding: "15px" }}>{!lsMedium && <SearchBar />}</div>
+      <div style={{ padding: "15px" }}>
+        {!lsMedium && (
+          <SearchBar
+            searchTags={searchTags}
+            searchKey={searchKey}
+            setSearchTags={(value: string[]) => dispatch(setSearchTags(value))}
+            setSearchTitle={(value: string) => dispatch(setSearchTitle(value))}
+          />
+        )}
+      </div>
       {defaultCategories.map((category, index) => {
         const catRecipes = recipes.filter((recipe) =>
           recipe.tags.some((tag) => tag === category.toLowerCase())

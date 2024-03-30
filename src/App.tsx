@@ -46,6 +46,7 @@ import { RecipeCategories } from "./utils/types";
 import MealPlanCalendar from "./components/plan/MealPlanCalendar";
 import theme from "./utils/theme";
 import { lightGreen } from "@mui/material/colors";
+import { setSearchTags, setSearchTitle } from "./redux/searchTags";
 
 const drawerWidth = 240;
 
@@ -117,7 +118,12 @@ export default function ResponsiveDrawer() {
   );
   const [viewCategories, setViewCategories] = useState(true);
   const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
-
+  const { recipesList } = useAppSelector(
+    (state: RootState) => state.recipesList
+  );
+  const { searchTags, searchKey } = useAppSelector(
+    (state: RootState) => state.searchTags
+  );
   const authUser = useAuthUser();
 
   const handleListItemClick = (
@@ -339,7 +345,16 @@ export default function ResponsiveDrawer() {
               <Menu />
             </IconButton>
             {currentTab == -defaultTabs.length ? (
-              <SearchBar />
+              <SearchBar
+                searchTags={searchTags}
+                searchKey={searchKey}
+                setSearchTags={(value: string[]) =>
+                  dispatch(setSearchTags(value))
+                }
+                setSearchTitle={(value: string) =>
+                  dispatch(setSearchTitle(value))
+                }
+              />
             ) : (
               <Typography variant="h6">
                 {currentTab < 0 && currentTab > -defaultTabs.length
