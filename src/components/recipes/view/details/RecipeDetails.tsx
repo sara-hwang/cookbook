@@ -396,48 +396,50 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
               />
             )}
           </Grid>
+          {recipe.nutritionalValues && (
+            <Grid item xs={12}>
+              <NutritionLabel recipe={recipe} />
+            </Grid>
+          )}
         </Grid>
-
-        <Grid
-          item
-          container
-          xs={12}
-          lg="auto"
-          className={gtLarge ? "post-it-note-container" : undefined}
-        >
-          {recipe.notes && (
+        {(recipe.notes || recipe.tags.length > 0) && (
+          <Grid
+            item
+            container
+            xs={12}
+            lg="auto"
+            className={gtLarge ? "post-it-note-container" : undefined}
+          >
             <Grid
               item
               container
               spacing={2}
               className={gtLarge ? "post-it-note" : undefined}
             >
-              <Grid item xs={12}>
-                <Typography variant="h6">{`Chef's Notes`}</Typography>
-                <div className="preserve-newlines">{recipe.notes}</div>
-              </Grid>
+              {recipe.notes && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">{`Chef's Notes`}</Typography>
+                  <div className="preserve-newlines">{recipe.notes}</div>
+                </Grid>
+              )}
+              {recipe.tags.length > 0 && (
+                <Grid item xs={12}>
+                  <Typography variant="h6">Tags</Typography>
+                  <ChipDisplay
+                    tags={recipe.tags}
+                    size="medium"
+                    onChipClick={(tag) => {
+                      dispatch(setSearchTags([tag]));
+                      dispatch(setCurrentTab(-defaultTabs.length));
+                    }}
+                  />
+                </Grid>
+              )}
             </Grid>
-          )}
-          <Grid item>
-            <Chat recipe={recipeString} />
-          </Grid>
-        </Grid>
-
-        {recipe.nutritionalValues && (
-          <Grid item xs={12}>
-            <NutritionLabel recipe={recipe} />
           </Grid>
         )}
-        <Grid item xs={12}>
-          <Typography variant="h6">Tags</Typography>
-          <ChipDisplay
-            tags={recipe.tags}
-            size="medium"
-            onChipClick={(tag) => {
-              dispatch(setSearchTags([tag]));
-              dispatch(setCurrentTab(-defaultTabs.length));
-            }}
-          />
+        <Grid item>
+          <Chat recipe={recipeString} />
         </Grid>
       </Grid>
     </Box>
