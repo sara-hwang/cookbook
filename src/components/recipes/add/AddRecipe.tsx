@@ -204,7 +204,10 @@ const AddRecipe = () => {
         data = {
           ...data,
           key: key,
-          photo: images?.original,
+          photo:
+            initialValues.photo === undefined
+              ? [images?.original]
+              : [images?.original, ...initialValues.photo],
           thumbnail: images?.thumbnail,
           ingredients: data.ingredients,
         };

@@ -40,6 +40,7 @@ import DeleteRecipeDialog from "./DeleteRecipeDialog";
 import Chat from "./Chat";
 import NutritionLabel from "./NutritionLabel";
 import { defaultTabs } from "../../../../App";
+import RecipePhotos from "./RecipePhotos";
 
 interface RecipeDetailsProps {
   setAppBarTitle: React.Dispatch<React.SetStateAction<string>>;
@@ -387,13 +388,9 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
               </div>
             )}
           </Grid>
-          <Grid item xs={12}>
-            {recipe?.photo && (
-              <img
-                src={recipe?.photo}
-                alt={recipe.title}
-                className="recipe-details-photo"
-              />
+          <Grid item xs={12} sx={{ padding: "16px" }}>
+            {recipe?.photo && recipe.photo.length > 0 && (
+              <RecipePhotos photos={recipe.photo} />
             )}
           </Grid>
           {recipe.nutritionalValues && (

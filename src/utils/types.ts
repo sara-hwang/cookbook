@@ -5,7 +5,7 @@ export type Recipe = {
   steps: Step[];
   servings: number;
   servingDescription: string;
-  photo?: string;
+  photo?: string[];
   thumbnail?: string;
   tags: string[];
   url: string;
@@ -107,5 +107,5 @@ export const RecipeCategories = [
   "Vegan",
   "Easy",
   "Instant Pot",
-  "All"
+  "All",
 ];

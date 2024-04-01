@@ -11,9 +11,19 @@ h6 + ul {
   margin: 0 5px 0 10px;
 }
 
-.recipe-details-photo {
+.recipe-photo-square {
+  height: 400px;
+  background-color: rgba(0, 0, 0, 0.9);
+  display: flex;
+  justify-content: center;
+  align-items: center;
   max-width: 100%;
-  width: 400px;
+  max-height: 100%;
+}
+
+.recipe-photo-square img {
+  max-width: 100%;
+  max-height: 100%;
 }
 
 .MuiGrid-container.MuiGrid-item.post-it-note {

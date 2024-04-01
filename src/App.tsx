@@ -311,10 +311,6 @@ export default function ResponsiveDrawer() {
     </div>
   );
 
-  useEffect(() => {
-    console.log(defaultTabs.length, currentTab);
-  }, [currentTab]);
-
   return (
     <Box sx={{ display: "flex", backgroundColor: lightGreen[50] }}>
       <CssBaseline />
