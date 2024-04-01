@@ -68,6 +68,7 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
     setAnchorEl(event.currentTarget);
   };
   const gtLarge = useMediaQuery(theme.breakpoints.up("lg"));
+  const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
 
   let stepNumber = 0;
 
@@ -152,7 +153,7 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
           alignItems="flex-start"
         >
           <Grid item xs={11}>
-            <Typography variant="h4">{recipe.title}</Typography>
+            {!lsMedium && <Typography variant="h4">{recipe.title}</Typography>}
             <div>
               {recipe.dateAdded
                 ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
