@@ -204,10 +204,9 @@ const AddRecipe = () => {
         data = {
           ...data,
           key: key,
-          photo:
-            initialValues.photo === undefined
-              ? [images?.original]
-              : [images?.original, ...initialValues.photo],
+          photo: !images
+            ? initialValues.photo
+            : [images.original].concat(initialValues.photo),
           thumbnail: images?.thumbnail,
           ingredients: data.ingredients,
         };
