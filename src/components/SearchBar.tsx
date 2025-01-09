@@ -15,7 +15,7 @@ const SearchBar = () => {
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
   );
-  const { searchTags, searchKey } = useAppSelector(
+  const { searchTags, searchKey, searchTitle } = useAppSelector(
     (state: RootState) => state.searchTags
   );
 
@@ -74,6 +74,7 @@ const SearchBar = () => {
           }}
           onChange={(e) => dispatch(setSearchTitle(e.target.value))}
           placeholder="Start typing to search by title or press enter to search for a tag"
+          value={searchTitle}
         />
       )}
     />
