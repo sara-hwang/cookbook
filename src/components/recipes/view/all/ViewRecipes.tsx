@@ -131,7 +131,7 @@ const ViewRecipes = () => {
             <div className="spaced-apart">
               <Typography
                 id={category}
-                variant="h4"
+                variant="h6"
                 sx={{
                   scrollMarginTop: lsMedium ? "70px" : "10px",
                 }}
@@ -173,7 +173,7 @@ const ViewRecipes = () => {
         >
           <Typography
             id="All"
-            variant="h4"
+            variant="h5"
             sx={{
               scrollMarginTop: lsMedium ? "70px" : "10px",
             }}
