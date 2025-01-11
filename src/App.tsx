@@ -324,9 +324,14 @@ export default function ResponsiveDrawer() {
         }}
       >
         {lsMedium && (
-          <Toolbar sx={{ padding: "10px !important" }}>
+          <Toolbar
+            sx={{
+              padding: "10px !important",
+              backgroundColor: lightGreen[50],
+            }}
+          >
             <IconButton
-              color="inherit"
+              color="primary"
               aria-label="open drawer"
               edge="start"
               onClick={handleDrawerToggle}
