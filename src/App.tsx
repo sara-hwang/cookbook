@@ -342,7 +342,7 @@ export default function ResponsiveDrawer() {
             {currentTab == -defaultTabs.length ? (
               <SearchBar />
             ) : (
-              <Typography variant="h6">
+              <Typography color="primary" variant="h6">
                 {currentTab < 0 && currentTab > -defaultTabs.length
                   ? defaultTabs[defaultTabs.length + currentTab].label
                   : appBarTitle}
