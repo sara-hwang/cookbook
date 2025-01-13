@@ -20,6 +20,7 @@ import {
 import {
   CalendarMonth,
   Close,
+  EditNote,
   ExpandLess,
   ExpandMore,
   Logout,
@@ -44,6 +45,7 @@ import { RootState } from "./redux/store";
 import SearchBar from "./components/SearchBar";
 import { RecipeCategories } from "./utils/types";
 import MealPlanCalendar from "./components/plan/MealPlanCalendar";
+import MealLog from "./components/log/MealLog";
 import theme from "./utils/theme";
 import { lightGreen } from "@mui/material/colors";
 
@@ -80,24 +82,30 @@ export const defaultTabs = [
     label: "View Recipes",
     icon: <MenuBook fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/view",
-    index: -4,
+    index: -5,
   },
   {
     label: "Add Recipe",
     icon: <PostAdd fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/add",
-    index: -3,
+    index: -4,
   },
   {
     label: "Grocery List",
     icon: <ShoppingCart fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/grocery",
-    index: -2,
+    index: -3,
   },
   {
     label: "Meal Planning",
     icon: <CalendarMonth fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/plan",
+    index: -2,
+  },
+  {
+    label: "Meal Logging",
+    icon: <EditNote fontSize="small" sx={{ marginRight: 1 }} />,
+    link: "/log",
     index: -1,
   },
 ];
@@ -173,6 +181,12 @@ export default function ResponsiveDrawer() {
     </>,
     <>
       <MealPlanCalendar />
+      {!isAuthenticated() && (
+        <LoginDialog isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
+      )}
+    </>,
+    <>
+      <MealLog />
       {!isAuthenticated() && (
         <LoginDialog isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
       )}
@@ -405,6 +419,7 @@ export default function ResponsiveDrawer() {
           <Route path="/add/:id" element={elements[2]} />
           <Route path="/grocery" element={elements[3]} />
           <Route path="/plan" element={elements[4]} />
+          <Route path="/log" element={elements[5]} />
         </Routes>
       </Box>
     </Box>
