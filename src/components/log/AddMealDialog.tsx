@@ -6,13 +6,15 @@ import {
   DialogTitle,
   Grid,
   IconButton,
-  InputAdornment,
   TextField,
 } from "@mui/material";
 import { Field, Form, Formik } from "formik";
 import * as yup from "yup";
 import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
+import { useAppSelector } from "../../redux/hooks";
+import { RootState } from "../../redux/store";
+import { getRecipesList } from "../../utils/helpers";
 interface AddMealDialogProps {
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
@@ -22,15 +24,29 @@ export const AddMealDialog = ({
   dialogOpen,
   setDialogOpen,
 }: AddMealDialogProps) => {
-  const [errorMessage, setErrorMessage] = useState("");
+  const [recipeTitles, setRecipeTitles] = useState<
+    { label: string; id: string }[]
+  >([]);
+  let { recipesList } = useAppSelector((state: RootState) => state.recipesList);
+
   useEffect(() => {
-    setErrorMessage("");
-  }, [dialogOpen]);
+    const generateRecipeTitles = async () => {
+      if (!recipesList || recipesList.length == 0) {
+        recipesList = await getRecipesList();
+      }
+      setRecipeTitles(
+        recipesList.map((recipe) => {
+          return { label: recipe.title, id: recipe.key };
+        })
+      );
+    };
+    generateRecipeTitles();
+  }, []);
 
   const validationSchema = yup.object({
-    name: yup.string().required().max(50),
-    food: yup.string().required().max(50),
-    portion: yup.number().required(),
+    mealName: yup.string().required("Required").max(50),
+    recipe: yup.string().required("Required").max(500),
+    portions: yup.number().required("Required").min(0),
   });
 
   return (
@@ -47,20 +63,25 @@ export const AddMealDialog = ({
       </DialogTitle>
       <DialogContent>
         <Formik
-          validateOnChange={false}
-          validateOnBlur={false}
-          initialValues={{ name: "", password: "", portions: 1 }}
+          initialValues={{ mealName: "", recipe: "", portions: 1 }}
           enableReinitialize={true}
           validationSchema={validationSchema}
           onSubmit={async (data: {
-            name: string;
-            password: string;
+            mealName: string;
+            recipe: string;
             portions: number;
           }) => {
-            return true;
+            console.log(data);
           }}
         >
-          {({ errors, isValid, isSubmitting, dirty }) => (
+          {({
+            dirty,
+            errors,
+            isValid,
+            isSubmitting,
+            setFieldValue,
+            submitForm,
+          }) => (
             <Form>
               <Grid
                 container
@@ -71,25 +92,35 @@ export const AddMealDialog = ({
               >
                 <Grid item sx={{ marginTop: "10px", width: "100%" }}>
                   <Field
-                    name="meal name"
+                    name="mealName"
                     type="input"
-                    as={Autocomplete}
+                    as={TextField}
                     label="Meal Name"
                     size="small"
-                    error={errors.name !== undefined}
-                    helperText={errors.name}
+                    error={errors.mealName !== undefined}
+                    helperText={errors.mealName}
                     sx={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item xs={12}>
-                  <Field
-                    name="recipe"
-                    type={"input"}
-                    as={TextField}
-                    label="food"
-                    size="small"
-                    error={errors.password !== undefined}
-                    helperText={errors.password}
+                <Grid item sx={{ marginTop: "10px", width: "100%" }}>
+                  <Autocomplete
+                    fullWidth
+                    options={recipeTitles}
+                    onChange={(e, value) => {
+                      setFieldValue("recipe", value?.id);
+                    }}
+                    renderInput={(params) => (
+                      <TextField
+                        {...params}
+                        error={errors.recipe !== undefined}
+                        helperText={errors.recipe}
+                        size="small"
+                        sx={{ backgroundColor: "white" }}
+                        hiddenLabel
+                        variant="outlined"
+                        placeholder="Search for your recipe"
+                      />
+                    )}
                   />
                 </Grid>
                 <Grid item sx={{ marginTop: "10px", width: "100%" }}>
@@ -107,16 +138,11 @@ export const AddMealDialog = ({
                     sx={{ width: "100%" }}
                   />
                 </Grid>
-                {errorMessage && (
-                  <Grid item xs={12} sx={{ color: "red" }}>
-                    {errorMessage}
-                  </Grid>
-                )}
                 <Grid item>
                   <Button
                     variant="contained"
                     disabled={!dirty || !isValid || isSubmitting}
-                    type="submit"
+                    onClick={submitForm}
                   >
                     Save
                   </Button>
