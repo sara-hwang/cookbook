@@ -53,7 +53,6 @@
     "mini-css-extract-plugin": "^2.4.5",
     "mongoose": "^7.6.1",
     "mui": "^0.0.1",
-    "mui-datatables": "^4.3.0",
     "multer": "^1.4.5-lts.1",
     "nodemon": "^3.0.1",
     "openai": "^4.24.6",
@@ -126,7 +125,6 @@
   "license": "ISC",
   "devDependencies": {
     "@babel/plugin-proposal-private-property-in-object": "7.21.11",
-    "@types/mui-datatables": "^4.3.6",
     "@types/node": "^20.8.6",
     "eslint": "^8.51.0",
     "eslint-config-prettier": "^9.0.0",
