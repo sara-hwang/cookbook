@@ -12,8 +12,8 @@ const MealLog = () => {
       )}
       <Box sx={{ padding: "24px" }}>
         <Grid container spacing={2}>
-          <Grid item container justifyContent="flex-end" spacing={1}>
-            <Grid item>
+          <Grid container justifyContent="flex-end" spacing={1}>
+            <Grid>
               <Button variant="contained" onClick={() => setDialogOpen(true)}>
                 Add Meal
               </Button>

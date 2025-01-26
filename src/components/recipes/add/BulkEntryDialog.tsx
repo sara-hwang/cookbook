@@ -26,10 +26,10 @@ const BulkEntryDialog = ({
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item xs={12}>
+          <Grid size={12}>
             Enter one {type} per line:
           </Grid>
-          <Grid item>
+          <Grid>
             <TextField
               fullWidth
               multiline
@@ -43,14 +43,8 @@ const BulkEntryDialog = ({
               onChange={(event) => setValue(event.target.value)}
             />
           </Grid>
-          <Grid
-            item
-            container
-            direction="row"
-            justifyContent="flex-end"
-            spacing={1}
-          >
-            <Grid item>
+          <Grid container direction="row" justifyContent="flex-end" spacing={1}>
+            <Grid>
               <Button
                 variant="outlined"
                 onClick={() => {
@@ -61,7 +55,7 @@ const BulkEntryDialog = ({
                 Cancel
               </Button>
             </Grid>
-            <Grid item>
+            <Grid>
               <Button
                 variant="contained"
                 disabled={!value}

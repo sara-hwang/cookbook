@@ -92,7 +92,7 @@ export const LoginDialog = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
                 alignItems="center"
                 spacing={2}
               >
-                <Grid item sx={{ marginTop: "10px", width: "100%" }}>
+                <Grid sx={{ marginTop: "10px", width: "100%" }}>
                   <Field
                     name="username"
                     type="input"
@@ -104,7 +104,7 @@ export const LoginDialog = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
                     sx={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Field
                     name="password"
                     type={showPassword ? "input" : "password"}
@@ -135,11 +135,11 @@ export const LoginDialog = ({ isLoginOpen, setIsLoginOpen }: IProps) => {
                   />
                 </Grid>
                 {errorMessage && (
-                  <Grid item xs={12} sx={{ color: "red" }}>
+                  <Grid sx={{ color: "red" }} size={12}>
                     {errorMessage}
                   </Grid>
                 )}
-                <Grid item>
+                <Grid>
                   <Button
                     variant="contained"
                     disabled={!dirty || !isValid || isSubmitting}

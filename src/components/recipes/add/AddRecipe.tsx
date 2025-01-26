@@ -250,7 +250,7 @@ const AddRecipe = () => {
         <Form>
           <Box sx={{ display: "flex", padding: "24px" }}>
             <Grid container spacing={2}>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Field
                   placeholder="My Recipe Title"
                   name="title"
@@ -263,7 +263,11 @@ const AddRecipe = () => {
                   helperText={errors.title}
                 />
               </Grid>
-              <Grid item xs={12} md={9}>
+              <Grid
+                size={{
+                  xs: 12,
+                  md: 9
+                }}>
                 <Field
                   placeholder="eg. https://www.allrecipes.com/"
                   name="url"
@@ -274,8 +278,8 @@ const AddRecipe = () => {
                   size="small"
                 />
               </Grid>
-              <Grid item container direction={"row"} spacing={2}>
-                <Grid item>
+              <Grid container direction={"row"} spacing={2}>
+                <Grid>
                   <Field
                     name="servings"
                     type="number"
@@ -289,7 +293,7 @@ const AddRecipe = () => {
                     helperText={errors.servings}
                   />
                 </Grid>
-                <Grid item>
+                <Grid>
                   <Field
                     placeholder="eg. 2 cookies (100 g)"
                     name="servingDescription"
@@ -309,18 +313,11 @@ const AddRecipe = () => {
                       setPopupOpen={setIngPopupOpen}
                       arrayHelpers={arrayHelpers}
                     />
-                    <Grid
-                      item
-                      container
-                      xs={12}
-                      spacing={1}
-                      direction="row"
-                      alignItems="center"
-                    >
-                      <Grid item>
+                    <Grid container spacing={1} direction="row" alignItems="center" size={12}>
+                      <Grid>
                         <Typography variant="h6">Ingredients</Typography>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <Tooltip
                           title={
                             <div className="preserve-newlines">{`To link to other recipes, follow the format:\n[label](recipe-key)\nThe recipe key is whatever follows "/view/" in the URL\n\nFor example:\n[Couscous salad](greek-couscous-salad)\n\n(not supported for dividers)`}</div>
@@ -332,7 +329,7 @@ const AddRecipe = () => {
                           </div>
                         </Tooltip>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <IconButton
                           onClick={() => {
                             arrayHelpers.push({
@@ -348,7 +345,7 @@ const AddRecipe = () => {
                           <Add />
                         </IconButton>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <Button
                           variant="outlined"
                           onClick={() => {
@@ -361,7 +358,7 @@ const AddRecipe = () => {
                           Add Divider
                         </Button>
                       </Grid>
-                      <Grid item>
+                      <Grid>
                         <Button
                           variant="outlined"
                           onClick={() => {
@@ -400,18 +397,11 @@ const AddRecipe = () => {
                         setPopupOpen={setStepPopupOpen}
                         arrayHelpers={arrayHelpers}
                       />
-                      <Grid
-                        item
-                        container
-                        xs={12}
-                        spacing={1}
-                        direction="row"
-                        alignItems="center"
-                      >
-                        <Grid item>
+                      <Grid container spacing={1} direction="row" alignItems="center" size={12}>
+                        <Grid>
                           <Typography variant="h6">Steps </Typography>
                         </Grid>
-                        <Grid item>
+                        <Grid>
                           <IconButton
                             onClick={() => {
                               arrayHelpers.push({
@@ -423,7 +413,7 @@ const AddRecipe = () => {
                             <Add />
                           </IconButton>
                         </Grid>
-                        <Grid item>
+                        <Grid>
                           <Button
                             variant="outlined"
                             onClick={() => {
@@ -436,7 +426,7 @@ const AddRecipe = () => {
                             Add Divider
                           </Button>
                         </Grid>
-                        <Grid item>
+                        <Grid>
                           <Button
                             variant="outlined"
                             onClick={() => {
@@ -466,7 +456,7 @@ const AddRecipe = () => {
                   );
                 }}
               </FieldArray>
-              <Grid item xs={12}>
+              <Grid size={12}>
                 <Typography variant="h6">Photo</Typography>
                 <Field
                   name="photo"
@@ -476,7 +466,11 @@ const AddRecipe = () => {
                   setSelectedImage={setSelectedImage}
                 />
               </Grid>
-              <Grid item xs={12} md={9}>
+              <Grid
+                size={{
+                  xs: 12,
+                  md: 9
+                }}>
                 <Typography variant="h6">{`Chef's Notes`}</Typography>
                 <Field
                   name="notes"
@@ -488,7 +482,11 @@ const AddRecipe = () => {
                   minRows={3}
                 />
               </Grid>
-              <Grid item xs={12} md={9}>
+              <Grid
+                size={{
+                  xs: 12,
+                  md: 9
+                }}>
                 <Typography variant="h6">Tags</Typography>
                 <Autocomplete
                   multiple
@@ -515,8 +513,8 @@ const AddRecipe = () => {
                   }}
                 />
               </Grid>
-              <Grid item container justifyContent="flex-end" spacing={1}>
-                <Grid item>
+              <Grid container justifyContent="flex-end" spacing={1}>
+                <Grid>
                   <Button
                     variant="outlined"
                     onClick={() => saveDraft(values)}
@@ -525,7 +523,7 @@ const AddRecipe = () => {
                     Save Draft
                   </Button>
                 </Grid>
-                <Grid item>
+                <Grid>
                   <Button
                     variant="contained"
                     disabled={!isValid || isSubmitting}

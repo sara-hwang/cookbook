@@ -20,22 +20,16 @@ const ClearGroceryDialog = ({
           justifyContent="flex-start"
           spacing={2}
         >
-          <Grid item>
+          <Grid>
             Are you sure you want to delete all items in this list?
           </Grid>
-          <Grid
-            item
-            container
-            direction="row"
-            justifyContent="flex-end"
-            spacing={1}
-          >
-            <Grid item>
+          <Grid container direction="row" justifyContent="flex-end" spacing={1}>
+            <Grid>
               <Button variant="outlined" onClick={() => setPopupOpen(false)}>
                 Cancel
               </Button>
             </Grid>
-            <Grid item>
+            <Grid>
               <Button
                 variant="contained"
                 onClick={() => {

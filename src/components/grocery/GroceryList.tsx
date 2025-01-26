@@ -90,8 +90,8 @@ export const GroceryList = () => {
       />
       <form id="grocery-checklist">
         <Grid container spacing={3}>
-          <Grid item container spacing={1}>
-            <Grid item xs={12}>
+          <Grid container spacing={1}>
+            <Grid size={12}>
               <Typography variant="h4">Grocery List</Typography>
             </Grid>
             {(loading
@@ -103,9 +103,9 @@ export const GroceryList = () => {
             ).map((ing, index) => {
               const parsed = markdownParser(ing.text);
               return (
-                <Grid item container xs={12} key={index}>
+                <Grid container key={index} size={12}>
                   {ing.isDivider ? (
-                    <Grid item>
+                    <Grid>
                       <Typography variant="h6">{ing.text}</Typography>
                     </Grid>
                   ) : (
@@ -135,7 +135,7 @@ export const GroceryList = () => {
               );
             })}
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <div className="spaced-apart">
               <div>
                 <Button variant="contained" onClick={update}>

@@ -145,14 +145,12 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
       <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
       <Grid container direction="row" spacing={2}>
         <Grid
-          item
           container
-          xs={12}
           direction="row"
           justifyContent="space-between"
           alignItems="flex-start"
-        >
-          <Grid item xs={11}>
+          size={12}>
+          <Grid size={11}>
             {!lsMedium && <Typography variant="h4">{recipe.title}</Typography>}
             <div>
               {recipe.dateAdded
@@ -161,7 +159,7 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
             </div>
             {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
           </Grid>
-          <Grid item xs={1}>
+          <Grid size={1}>
             <IconButton disableTouchRipple onClick={handleClick}>
               <MoreVert />
             </IconButton>
@@ -205,8 +203,14 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
             </Menu>
           </Grid>
         </Grid>
-        <Grid item container spacing={2} xs={12} lg>
-          <Grid item xs={12}>
+        <Grid
+          container
+          spacing={2}
+          size={{
+            xs: 12,
+            lg: "grow"
+          }}>
+          <Grid size={12}>
             <div className="side-by-side-container">
               <p>Servings: &nbsp;</p>
               <TextField
@@ -224,11 +228,11 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
             </div>
           </Grid>
           {recipe.servingDescription && (
-            <Grid item xs={12}>
+            <Grid size={12}>
               Serving size: {recipe.servingDescription}
             </Grid>
           )}
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="h6">
               Ingredients
               <Tooltip
@@ -327,7 +331,7 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
               </ul>
             )}
           </Grid>
-          <Grid item xs={12}>
+          <Grid size={12}>
             <Typography variant="h6">
               Steps
               <Tooltip
@@ -389,39 +393,34 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
               </div>
             )}
           </Grid>
-          <Grid item xs={12} sx={{ padding: "16px" }}>
+          <Grid sx={{ padding: "16px" }} size={12}>
             {recipe?.photo && recipe.photo.length > 0 && (
               <RecipePhotos photos={recipe.photo} />
             )}
           </Grid>
           {recipe.nutritionalValues && (
-            <Grid item xs={12}>
+            <Grid size={12}>
               <NutritionLabel recipe={recipe} />
             </Grid>
           )}
         </Grid>
         {(recipe.notes || recipe.tags.length > 0) && (
           <Grid
-            item
             container
-            xs={12}
-            lg="auto"
             className={gtLarge ? "post-it-note-container" : undefined}
-          >
-            <Grid
-              item
-              container
-              spacing={2}
-              className={gtLarge ? "post-it-note" : undefined}
-            >
+            size={{
+              xs: 12,
+              lg: "auto"
+            }}>
+            <Grid container spacing={2} className={gtLarge ? "post-it-note" : undefined}>
               {recipe.notes && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Typography variant="h6">{`Chef's Notes`}</Typography>
                   <div className="preserve-newlines">{recipe.notes}</div>
                 </Grid>
               )}
               {recipe.tags.length > 0 && (
-                <Grid item xs={12}>
+                <Grid size={12}>
                   <Typography variant="h6">Tags</Typography>
                   <ChipDisplay
                     tags={recipe.tags}
@@ -436,7 +435,7 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
             </Grid>
           </Grid>
         )}
-        <Grid item>
+        <Grid>
           <Chat recipe={recipeString} />
         </Grid>
       </Grid>

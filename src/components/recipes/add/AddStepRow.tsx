@@ -22,13 +22,13 @@ const AddStepRow = ({
   values,
 }: AddStepRowProps) => {
   return (
-    <Grid item container xs={12} spacing={1}>
+    <Grid container spacing={1} size={12}>
       {!step.isDivider && (
-        <Grid item>
+        <Grid>
           <Typography variant="h6">{currStep}.</Typography>
         </Grid>
       )}
-      <Grid item xs>
+      <Grid size="grow">
         <Field
           name={`steps.${index}.text`}
           placeholder={step.isDivider ? "Section name..." : "Instructions..."}
@@ -49,7 +49,7 @@ const AddStepRow = ({
           }
         />
       </Grid>
-      <Grid item>
+      <Grid>
         {values.steps.length > 1 && (
           <IconButton
             onClick={() =>
@@ -65,7 +65,7 @@ const AddStepRow = ({
           </IconButton>
         )}
       </Grid>
-      <Grid item>
+      <Grid>
         <IconButton
           disableRipple
           className="delete-element-button"

@@ -70,9 +70,9 @@ const AddIngredientRow = ({
   };
 
   return (
-    <Grid item container xs={12} spacing={1}>
+    <Grid container spacing={1} size={12}>
       {!ingredient.isDivider && (
-        <Grid item>
+        <Grid>
           <a
             href={
               values.ingredients[index].fdcId
@@ -89,7 +89,7 @@ const AddIngredientRow = ({
           </a>
         </Grid>
       )}
-      <Grid item xs>
+      <Grid size="grow">
         <Field
           name={`ingredients.${index}.text`}
           as={TextField}
@@ -110,8 +110,8 @@ const AddIngredientRow = ({
         />
       </Grid>
       {!ingredient.isDivider && (
-        <Grid item container xs={7} direction="row" spacing={1}>
-          <Grid item xs>
+        <Grid container direction="row" spacing={1} size={7}>
+          <Grid size="grow">
             <Autocomplete
               freeSolo
               size="small"
@@ -137,7 +137,7 @@ const AddIngredientRow = ({
               )}
             />
           </Grid>
-          <Grid item>
+          <Grid>
             <Field
               name={`ingredients.${index}.fdcAmount`}
               type="number"
@@ -161,7 +161,7 @@ const AddIngredientRow = ({
               }
             />
           </Grid>
-          <Grid item>
+          <Grid>
             <Field
               name={`ingredients.${index}.fdcUnit`}
               type="number"
@@ -197,7 +197,7 @@ const AddIngredientRow = ({
           </Grid>
         </Grid>
       )}
-      <Grid item>
+      <Grid>
         {values.ingredients.length > 1 && (
           <IconButton
             onClick={() =>
@@ -213,7 +213,7 @@ const AddIngredientRow = ({
           </IconButton>
         )}
       </Grid>
-      <Grid item>
+      <Grid>
         <IconButton
           onClick={() => arrayHelpers.remove(index)}
           disableRipple

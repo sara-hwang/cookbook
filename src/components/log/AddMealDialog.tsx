@@ -90,7 +90,7 @@ export const AddMealDialog = ({
                 alignItems="center"
                 spacing={2}
               >
-                <Grid item sx={{ marginTop: "10px", width: "100%" }}>
+                <Grid sx={{ marginTop: "10px", width: "100%" }}>
                   <Field
                     name="mealName"
                     type="input"
@@ -102,7 +102,7 @@ export const AddMealDialog = ({
                     sx={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item sx={{ marginTop: "10px", width: "100%" }}>
+                <Grid sx={{ marginTop: "10px", width: "100%" }}>
                   <Autocomplete
                     fullWidth
                     options={recipeTitles}
@@ -123,7 +123,7 @@ export const AddMealDialog = ({
                     )}
                   />
                 </Grid>
-                <Grid item sx={{ marginTop: "10px", width: "100%" }}>
+                <Grid sx={{ marginTop: "10px", width: "100%" }}>
                   <Field
                     name="portions"
                     type="number"
@@ -138,7 +138,7 @@ export const AddMealDialog = ({
                     sx={{ width: "100%" }}
                   />
                 </Grid>
-                <Grid item>
+                <Grid>
                   <Button
                     variant="contained"
                     disabled={!dirty || !isValid || isSubmitting}
