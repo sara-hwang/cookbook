@@ -1,3 +1,11 @@
+export type MealEntry = {
+  date: Date;
+  mealName: string;
+  recipe: string;
+  portions: number;
+  user: string;
+};
+
 export type Recipe = {
   key: string;
   title: string;

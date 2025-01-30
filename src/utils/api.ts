@@ -3,10 +3,12 @@ import {
   FdcNutrientId,
   Ingredient,
   IngredientPortion,
+  MealEntry,
   Nutrient,
   Recipe,
 } from "./types";
 import qs from "qs";
+import { extractDate } from "./helpers";
 
 const URI = process.env.REACT_APP_SERVER_URI;
 const FDC_API_KEY = process.env.REACT_APP_FDC_API_KEY;
@@ -37,6 +39,19 @@ export const getGroceryList = async (user: string) => {
 export const updateGroceryList = async (user: string, item: Ingredient[]) => {
   try {
     const response = await axios.put(`${URI}/user/${user}/grocery`, item);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
+export const addMealEntry = async (data: MealEntry) => {
+  try {
+    const response = await axios.post(`${URI}/log/add`, {
+      ...data,
+      date: extractDate(data.date),
+    });
     return response;
   } catch (e) {
     const error = e as AxiosError;

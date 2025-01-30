@@ -3,6 +3,7 @@ const express = require("express");
 const mongoose = require("mongoose");
 const cors = require("cors");
 const RecipeModel = require("./models/recipes");
+const MealEntryModel = require("./models/mealEntry");
 const jwt = require("jsonwebtoken");
 const UserModel = require("./models/users");
 const IngredientModel = require("./models/ingredients");
@@ -120,6 +121,20 @@ app.post("/recipes/add", async (req, res) => {
       res.status(500);
       res.json(error.message);
     }
+  }
+});
+
+app.post("/log/add", async (req, res) => {
+  const obj = req.body;
+  try {
+    let response = await MealEntryModel.create(obj);
+    res.status(200);
+    res.json(response);
+    console.log("added meal log");
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
   }
 });
 

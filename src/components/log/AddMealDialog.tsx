@@ -8,7 +8,7 @@ import {
   IconButton,
   TextField,
 } from "@mui/material";
-import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFns";
+import { AdapterDateFns } from "@mui/x-date-pickers/AdapterDateFnsV3";
 import { LocalizationProvider } from "@mui/x-date-pickers/LocalizationProvider";
 import { DatePicker } from "@mui/x-date-pickers/DatePicker";
 import { Field, Form, Formik } from "formik";
@@ -18,20 +18,20 @@ import CloseIcon from "@mui/icons-material/Close";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
 import { getRecipesList } from "../../utils/helpers";
+import { MealEntry } from "../../utils/types";
+import { useAuthUser } from "react-auth-kit";
+import { addMealEntry } from "../../utils/api";
 
 interface AddMealDialogProps {
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const extractDate = (date: Date) => {
-  return date.toISOString().split("T")[0];
-};
-
 export const AddMealDialog = ({
   dialogOpen,
   setDialogOpen,
 }: AddMealDialogProps) => {
+  const authUser = useAuthUser();
   const [recipeTitles, setRecipeTitles] = useState<
     { label: string; id: string }[]
   >([]);
@@ -52,7 +52,6 @@ export const AddMealDialog = ({
   }, []);
 
   const validationSchema = yup.object({
-    date: yup.string().required("Required"),
     mealName: yup.string().required("Required").max(50),
     recipe: yup.string().required("Required").max(500),
     portions: yup.number().required("Required").min(0),
@@ -78,16 +77,18 @@ export const AddMealDialog = ({
               mealName: "",
               recipe: "",
               portions: 1,
+              user: authUser()?.username,
             }}
             enableReinitialize={true}
             validationSchema={validationSchema}
-            onSubmit={async (data: {
-              date: Date;
-              mealName: string;
-              recipe: string;
-              portions: number;
-            }) => {
-              console.log(data);
+            onSubmit={async (data: MealEntry, { resetForm }) => {
+              const response = await addMealEntry(data);
+              if (response && response.status === 200) {
+                resetForm();
+                setDialogOpen(false);
+              } else {
+                alert(response?.data);
+              }
             }}
           >
             {({
@@ -113,12 +114,7 @@ export const AddMealDialog = ({
                       as={DatePicker}
                       label="Date"
                       size="small"
-                      error={errors.date !== undefined}
-                      helperText={errors.date}
                       sx={{ width: "100%" }}
-                      onChange={(value: Date) => {
-                        setFieldValue("date", extractDate(value));
-                      }}
                     />
                   </Grid>
                   <Grid sx={{ marginTop: "10px", width: "100%" }}>

@@ -14,6 +14,10 @@ export const markdownParser = (
   return null;
 };
 
+export const extractDate = (date: Date) => {
+  return date.toISOString().split("T")[0];
+};
+
 export async function getRecipeDetails(
   id: string,
   setRecipe: React.Dispatch<React.SetStateAction<Recipe>>
