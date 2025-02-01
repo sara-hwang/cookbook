@@ -1,6 +1,6 @@
 export type MealEntry = {
   date: Date;
-  mealName: string;
+  name: string;
   recipe: string;
   portions: number;
   user: string;
