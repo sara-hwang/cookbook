@@ -52,7 +52,7 @@ export const AddMealDialog = ({
   }, []);
 
   const validationSchema = yup.object({
-    name: yup.string().required("Required").max(50),
+    title: yup.string().required("Required").max(50),
     recipe: yup.string().required("Required").max(500),
     portions: yup.number().required("Required").min(0),
   });
@@ -74,7 +74,7 @@ export const AddMealDialog = ({
           <Formik
             initialValues={{
               date: new Date(),
-              name: "",
+              title: "",
               recipe: "",
               portions: 1,
               user: authUser()?.username,
@@ -119,13 +119,13 @@ export const AddMealDialog = ({
                   </Grid>
                   <Grid sx={{ marginTop: "10px", width: "100%" }}>
                     <Field
-                      name="name"
+                      name="title"
                       type="input"
                       as={TextField}
-                      label="Meal Name"
+                      label="Meal Title"
                       size="small"
-                      error={errors.name !== undefined}
-                      helperText={errors.name}
+                      error={errors.title !== undefined}
+                      helperText={errors.title}
                       sx={{ width: "100%" }}
                     />
                   </Grid>

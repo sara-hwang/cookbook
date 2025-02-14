@@ -1,6 +1,6 @@
 export type MealEntry = {
   date: Date;
-  name: string;
+  title: string;
   recipe: string;
   portions: number;
   user: string;
