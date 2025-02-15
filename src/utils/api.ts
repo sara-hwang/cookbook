@@ -59,6 +59,16 @@ export const addMealEntry = async (data: MealEntry) => {
   }
 };
 
+export const getMealEntry = async (user: string) => {
+  try {
+    const response = await axios.get(`${URI}/users/${user}/logs`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
 export const upload = async (file: FormData) => {
   try {
     const response = await axios.post(`${URI}/image/upload`, file);
