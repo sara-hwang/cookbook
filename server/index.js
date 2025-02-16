@@ -138,6 +138,19 @@ app.post("/log/add", async (req, res) => {
   }
 });
 
+app.get("/users/:userId/logs", async (req, res) => {
+    console.log(`Getting meal logs for user: ${req.params.userId}`);
+    try {
+      let response = await MealEntryModel.find({ user: req.params.userId });
+      res.status(200);
+      res.json(response);
+    } catch (error) {
+      console.log(error);
+      res.status(400);
+      res.json(error);
+    }
+})
+
 app.post("/image/upload", upload.single("image"), async (req, res) => {
   const AUTH = "Client-ID " + process.env.IMGUR_CLIENT_ID;
   const data = {
