@@ -8,16 +8,48 @@ import { MealEntry } from "../../utils/types";
 const MealLog = () => {
   const authUser = useAuthUser();
   const [dialogOpen, setDialogOpen] = useState(false);
-  const [meals, setMeals] = useState<MealEntry[]>([]);
+  const [meals, setMeals] = useState<Map<string, MealEntry[]>>(new Map());
 
   useEffect(() => {
     getMeals();
+    console.log(meals);
   }, []);
 
   const getMeals = async () => {
     const mealEntries = await getMealEntry(authUser()?.username);
-    setMeals(mealEntries?.data);
-    console.log(mealEntries?.data);
+    if (!mealEntries) {
+      return;
+    }
+    const updatedMeals = new Map();
+    mealEntries.data.forEach((entry: MealEntry) => {
+      const currentMeals = updatedMeals.get(entry.date);
+      if (currentMeals == undefined) {
+        updatedMeals.set(entry.date, [entry]);
+      } else {
+        updatedMeals.set(entry.date, [...currentMeals, entry]);
+      }
+    });
+    setMeals(updatedMeals);
+  };
+
+  const renderMeals = () => {
+    const renderedMeals = [];
+    for (const [key, value] of meals) {
+      renderedMeals.push(
+        <Grid size={12}>
+          <Typography>{key}</Typography>
+          {value.map((meal, index) => {
+            return (
+              <Grid key={index}>
+                <Typography>{`${meal.title}: `}</Typography>
+                <Typography>{`${meal.portions} serving ${meal.recipe}`}</Typography>
+              </Grid>
+            );
+          })}
+        </Grid>
+      );
+    }
+    return renderedMeals;
   };
 
   return (
@@ -34,20 +66,7 @@ const MealLog = () => {
             </Button>
           </Grid>
         </Grid>
-        <Grid container>
-          <>
-            {meals.map((meal, index) => {
-              return (
-                <Grid key={index}>
-                  <Typography>{String(meal.date)}</Typography>
-                  <Typography>{`${meal.title}: `}</Typography>
-                  <Typography>{meal.recipe}</Typography>
-                  <Typography>{meal.portions}</Typography>
-                </Grid>
-              );
-            })}
-          </>
-        </Grid>
+        <Grid container spacing={2}>{renderMeals().map((element) => element)}</Grid>
       </Box>
     </>
   );
