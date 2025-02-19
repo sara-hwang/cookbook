@@ -20,11 +20,10 @@ export const extractDate = (date: Date) => {
 
 export async function getRecipeDetails(
   id: string,
-  setRecipe: React.Dispatch<React.SetStateAction<Recipe>>
 ) {
   const response = await getRecipe(id);
   if (response && response.status === 200) {
-    setRecipe(response.data);
+    return (response.data);
   } else {
     alert("Recipe returned " + response?.data + ", server may be down.");
   }

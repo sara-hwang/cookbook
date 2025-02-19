@@ -113,9 +113,14 @@ const AddRecipe = () => {
     initTags();
   }, []);
 
+  const asyncGetRecipeDetails = async (id: string) => {
+    const recipe = await getRecipeDetails(id);
+    setInitialValues(recipe);
+  };
+
   useEffect(() => {
     if (id !== undefined) {
-      getRecipeDetails(id, setInitialValues);
+      asyncGetRecipeDetails(id);
     } else {
       setInitialValues(draft);
     }
@@ -266,8 +271,9 @@ const AddRecipe = () => {
               <Grid
                 size={{
                   xs: 12,
-                  md: 9
-                }}>
+                  md: 9,
+                }}
+              >
                 <Field
                   placeholder="eg. https://www.allrecipes.com/"
                   name="url"
@@ -313,7 +319,13 @@ const AddRecipe = () => {
                       setPopupOpen={setIngPopupOpen}
                       arrayHelpers={arrayHelpers}
                     />
-                    <Grid container spacing={1} direction="row" alignItems="center" size={12}>
+                    <Grid
+                      container
+                      spacing={1}
+                      direction="row"
+                      alignItems="center"
+                      size={12}
+                    >
                       <Grid>
                         <Typography variant="h6">Ingredients</Typography>
                       </Grid>
@@ -397,7 +409,13 @@ const AddRecipe = () => {
                         setPopupOpen={setStepPopupOpen}
                         arrayHelpers={arrayHelpers}
                       />
-                      <Grid container spacing={1} direction="row" alignItems="center" size={12}>
+                      <Grid
+                        container
+                        spacing={1}
+                        direction="row"
+                        alignItems="center"
+                        size={12}
+                      >
                         <Grid>
                           <Typography variant="h6">Steps </Typography>
                         </Grid>
@@ -469,8 +487,9 @@ const AddRecipe = () => {
               <Grid
                 size={{
                   xs: 12,
-                  md: 9
-                }}>
+                  md: 9,
+                }}
+              >
                 <Typography variant="h6">{`Chef's Notes`}</Typography>
                 <Field
                   name="notes"
@@ -485,8 +504,9 @@ const AddRecipe = () => {
               <Grid
                 size={{
                   xs: 12,
-                  md: 9
-                }}>
+                  md: 9,
+                }}
+              >
                 <Typography variant="h6">Tags</Typography>
                 <Autocomplete
                   multiple

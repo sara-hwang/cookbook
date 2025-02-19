@@ -72,15 +72,22 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
 
   let stepNumber = 0;
 
-  useEffect(() => {
+  const asyncGetRecipeDetails = async (id: string) => {
     if (id !== undefined) {
       if (recipesList.length === 0) {
-        getRecipeDetails(id, setRecipe);
+        const recipe = await getRecipeDetails(id);
+        setRecipe(recipe);
       } else {
         setRecipe(
           recipesList.find((recipe) => recipe.key === id) ?? EmptyRecipe
         );
       }
+    }
+  };
+
+  useEffect(() => {
+    if (id) {
+      asyncGetRecipeDetails(id);
     }
   }, [id]);
 
@@ -149,7 +156,8 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
           direction="row"
           justifyContent="space-between"
           alignItems="flex-start"
-          size={12}>
+          size={12}
+        >
           <Grid size={11}>
             {!lsMedium && <Typography variant="h4">{recipe.title}</Typography>}
             <div>
@@ -208,8 +216,9 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
           spacing={2}
           size={{
             xs: 12,
-            lg: "grow"
-          }}>
+            lg: "grow",
+          }}
+        >
           <Grid size={12}>
             <div className="side-by-side-container">
               <p>Servings: &nbsp;</p>
@@ -228,9 +237,7 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
             </div>
           </Grid>
           {recipe.servingDescription && (
-            <Grid size={12}>
-              Serving size: {recipe.servingDescription}
-            </Grid>
+            <Grid size={12}>Serving size: {recipe.servingDescription}</Grid>
           )}
           <Grid size={12}>
             <Typography variant="h6">
@@ -410,9 +417,14 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
             className={gtLarge ? "post-it-note-container" : undefined}
             size={{
               xs: 12,
-              lg: "auto"
-            }}>
-            <Grid container spacing={2} className={gtLarge ? "post-it-note" : undefined}>
+              lg: "auto",
+            }}
+          >
+            <Grid
+              container
+              spacing={2}
+              className={gtLarge ? "post-it-note" : undefined}
+            >
               {recipe.notes && (
                 <Grid size={12}>
                   <Typography variant="h6">{`Chef's Notes`}</Typography>
