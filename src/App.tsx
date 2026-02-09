@@ -4,32 +4,39 @@ import {
   Box,
   Button,
   Collapse,
+  Container,
   CssBaseline,
   Divider,
   Drawer,
+  Grid,
+  Icon,
   IconButton,
   List,
   ListItem,
   ListItemButton,
   ListItemIcon,
   ListItemText,
+  Menu,
+  MenuItem,
   Toolbar,
   Typography,
   useMediaQuery,
 } from "@mui/material";
 import {
+  AccountCircle,
   CalendarMonth,
   Close,
   EditNote,
   ExpandLess,
   ExpandMore,
   Logout,
-  Menu,
   MenuBook,
   PostAdd,
+  Search,
   Settings,
   ShoppingCart,
 } from "@mui/icons-material";
+import MenuIcon from "@mui/icons-material/Menu";
 import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { styled } from "@mui/material/styles";
@@ -43,13 +50,12 @@ import GroceryList from "./components/grocery/GroceryList";
 import { popTab, setCurrentTab } from "./redux/tabsList";
 import { RootState } from "./redux/store";
 import SearchBar from "./components/SearchBar";
-import { RecipeCategories } from "./utils/types";
 import MealPlanCalendar from "./components/plan/MealPlanCalendar";
 import MealLog from "./components/log/MealLog";
 import theme from "./utils/theme";
-import { lightGreen } from "@mui/material/colors";
 
 const drawerWidth = 240;
+const topBarHeight = "70px";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -72,45 +78,35 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-const handleCategoryClick = (category: string) => {
-  const element = document.getElementById(category);
-  element?.scrollIntoView();
-};
-
 export const defaultTabs = [
   {
     label: "View Recipes",
     icon: <MenuBook fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/view",
-    index: -5,
+    index: -4,
   },
   {
     label: "Add Recipe",
     icon: <PostAdd fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/add",
-    index: -4,
+    index: -3,
   },
   {
     label: "Grocery List",
     icon: <ShoppingCart fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/grocery",
-    index: -3,
+    index: -2,
   },
   {
     label: "Meal Planning",
     icon: <CalendarMonth fontSize="small" sx={{ marginRight: 1 }} />,
     link: "/plan",
-    index: -2,
-  },
-  {
-    label: "Meal Logging",
-    icon: <EditNote fontSize="small" sx={{ marginRight: 1 }} />,
-    link: "/log",
     index: -1,
   },
 ];
 
-export default function ResponsiveDrawer() {
+export default function App() {
+  const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -118,15 +114,9 @@ export default function ResponsiveDrawer() {
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
-  const [isUserOpen, setIsUserOpen] = useState(false);
-  const [appBarTitle, setAppBarTitle] = useState("");
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
-  const [viewCategories, setViewCategories] = useState(true);
-  const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
-
-  const authUser = useAuthUser();
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -134,7 +124,6 @@ export default function ResponsiveDrawer() {
   ) => {
     dispatch(setCurrentTab(index));
     setMobileOpen(false);
-    setViewCategories(false);
   };
 
   useEffect(() => {
@@ -165,7 +154,7 @@ export default function ResponsiveDrawer() {
       <ViewRecipes />
     </>,
     <>
-      <RecipeDetails setAppBarTitle={setAppBarTitle} />
+      <RecipeDetails />
     </>,
     <>
       <AddRecipe />
@@ -197,100 +186,205 @@ export default function ResponsiveDrawer() {
     setMobileOpen(!mobileOpen);
   };
 
-  const drawer = (
-    <div>
-      <Toolbar className="user-login-sidebar">
-        {isAuthenticated() ? (
-          <div className="full-width">
-            <Button
-              disableRipple
-              fullWidth
-              onClick={() => setIsUserOpen(!isUserOpen)}
-            >
-              <Typography variant="h5">
-                <span>{`${authUser()?.username} `}</span>
-                <span>{isUserOpen ? <ExpandLess /> : <ExpandMore />}</span>
-              </Typography>
-            </Button>
-            <Collapse in={isUserOpen} timeout="auto" unmountOnExit>
-              <List component="div" disablePadding>
-                <ListItemButton disableRipple disabled>
-                  <ListItemIcon>
-                    <Settings fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary={"Settings"} />
-                </ListItemButton>
-                <ListItemButton
-                  disableRipple
-                  onClick={() => {
-                    setIsUserOpen(false);
-                    signOut();
-                  }}
-                >
-                  <ListItemIcon>
-                    <Logout fontSize="small" />
-                  </ListItemIcon>
-                  <ListItemText primary={"Logout"} />
-                </ListItemButton>
-              </List>
-            </Collapse>
-          </div>
-        ) : (
-          <Button
-            color="inherit"
-            disableRipple
-            onClick={() => setIsLoginOpen(true)}
-          >
-            Login
-          </Button>
-        )}
-      </Toolbar>
-      <Divider />
-      <List>
-        {defaultTabs.map(({ label, icon, link }, index) => (
-          <React.Fragment key={link}>
-            <ListItemButton
-              disableRipple
-              selected={currentTab === index - defaultTabs.length}
-              onClick={(event) => {
-                handleListItemClick(event, index - defaultTabs.length);
-                link === "/view" &&
-                  (pathname !== "/view"
-                    ? setViewCategories(true)
-                    : setViewCategories(!viewCategories));
+  const TopNav = () => {
+    const authUser = useAuthUser();
+    const isAuthenticated = useIsAuthenticated();
+    const signOut = useSignOut();
+
+    const [anchorElUser, setAnchorElUser] = React.useState<null | HTMLElement>(
+      null
+    );
+
+    const handleOpenUserMenu = (event: React.MouseEvent<HTMLElement>) => {
+      setAnchorElUser(event.currentTarget);
+    };
+
+    const handleCloseUserMenu = () => {
+      setAnchorElUser(null);
+    };
+
+    return (
+      <AppBar color="lightCream" elevation={0} position="fixed">
+        <Container maxWidth="xl">
+          <Toolbar>
+            {lsMedium && (
+              <IconButton
+                color="primary"
+                aria-label="open drawer"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{ display: { md: "none" }, padding: "0px 16px 0px 0px" }}
+              >
+                <MenuIcon />
+              </IconButton>
+            )}
+            <img
+              src="logo.png"
+              style={{ width: lsMedium ? "60px" : "100px", margin: "10px" }}
+              onClick={() => navigate("/")}
+            />
+            {lsMedium && (
+              <IconButton
+                color="primary"
+                aria-label="open search"
+                edge="start"
+                onClick={handleDrawerToggle}
+                sx={{
+                  display: { md: "none" },
+                  padding: "0px",
+                  marginLeft: "auto",
+                }}
+              >
+                <Search />
+              </IconButton>
+            )}
+            <Box
+              sx={{
+                width: "100%",
+                display: { xs: "none", md: "flex" },
+                justifyContent: "space-between",
               }}
             >
-              <ListItemIcon>{icon}</ListItemIcon>
-              <ListItemText primary={label} />
-              {link === "/view" &&
-                (viewCategories && pathname === "/view" ? (
-                  <ExpandLess />
-                ) : (
-                  <ExpandMore />
+              {isAuthenticated() &&
+                defaultTabs.map((page: any) => (
+                  <Button
+                    color="sage"
+                    key={page}
+                    onClick={() => navigate(page.link)}
+                    sx={{ my: 2, display: "block", flex: "none" }}
+                  >
+                    {page.label}
+                  </Button>
                 ))}
-            </ListItemButton>
-            {link === "/view" && (
-              <Collapse
-                in={viewCategories && pathname === "/view"}
-                timeout="auto"
-                unmountOnExit
+              <Grid
+                container
+                style={{
+                  display: "flex",
+                  alignItems: "center",
+                  marginLeft: "auto",
+                  width: "100%",
+                  justifyContent: "flex-end",
+                }}
               >
-                <List component="div" disablePadding>
-                  {RecipeCategories.map((category) => (
-                    <ListItemButton
-                      key={category}
-                      onClick={() => handleCategoryClick(category)}
+                <Grid size={{ md: 6 }}>
+                  <SearchBar />
+                </Grid>
+                {!isAuthenticated() && (
+                  <>
+                    <Button
+                      onClick={() => setIsLoginOpen(true)}
+                      color="charcoal"
+                      sx={{ my: 2, display: "block" }}
                     >
-                      <ListItemText inset primary={category} />
-                    </ListItemButton>
-                  ))}
-                </List>
-              </Collapse>
+                      Login
+                    </Button>
+                    <Button
+                      onClick={() => setIsLoginOpen(true)}
+                      color="sage"
+                      sx={{ my: 2, color: "sage", display: "block" }}
+                    >
+                      Sign Up
+                    </Button>
+                  </>
+                )}
+              </Grid>
+            </Box>
+            {isAuthenticated() && (
+              <Box sx={{ flexGrow: 0, display: { xs: "none", md: "flex" } }}>
+                <IconButton onClick={handleOpenUserMenu} sx={{ p: 0 }}>
+                  <AccountCircle />
+                </IconButton>
+                <Menu
+                  sx={{ mt: "45px" }}
+                  id="menu-appbar"
+                  anchorEl={anchorElUser}
+                  anchorOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  keepMounted
+                  transformOrigin={{
+                    vertical: "top",
+                    horizontal: "right",
+                  }}
+                  open={Boolean(anchorElUser)}
+                  onClose={handleCloseUserMenu}
+                >
+                  <MenuItem onClick={() => signOut()}>
+                    <Button disableRipple>
+                      <ListItemIcon>
+                        <Logout fontSize="small" />
+                      </ListItemIcon>
+                      Logout
+                    </Button>
+                  </MenuItem>
+                </Menu>
+              </Box>
             )}
-          </React.Fragment>
-        ))}
-      </List>
-      <Divider />
+          </Toolbar>
+        </Container>
+      </AppBar>
+    );
+  };
+
+  const recentlyVisitedPanel = (
+    <div>
+      {lsMedium && (
+        <>
+          <List>
+            {isAuthenticated() ? (
+              <List>
+                {defaultTabs.map((page: any) => (
+                  <ListItem key={page.link}>
+                    <ListItemButton
+                      disableRipple
+                      onClick={() => navigate(page.link)}
+                    >
+                      <ListItemText primary={page.label} />
+                    </ListItemButton>
+                  </ListItem>
+                ))}
+                <ListItem>
+                  <ListItemButton disableRipple onClick={() => signOut()}>
+                    <ListItemText primary={"Logout"} />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            ) : (
+              <List>
+                <ListItem>
+                  <ListItemButton
+                    disableRipple
+                    onClick={() => setIsLoginOpen(true)}
+                  >
+                    <ListItemText primary={"Login"} />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton
+                    disableRipple
+                    onClick={() => setIsLoginOpen(true)}
+                  >
+                    <ListItemText primary={"Sign Up"} />
+                  </ListItemButton>
+                </ListItem>
+                <ListItem>
+                  <ListItemButton
+                    disableRipple
+                    onClick={() => navigate("/view")}
+                  >
+                    <ListItemText primary={"View Recipes"} />
+                  </ListItemButton>
+                </ListItem>
+              </List>
+            )}
+          </List>
+          <Divider />
+        </>
+      )}
+      <Typography variant="body1" color="sage" sx={{ padding: "10px 15px 0" }}>
+        Recently Visited
+      </Typography>
       <List>
         {tabsList.map((tab, index) => {
           return (
@@ -326,48 +420,16 @@ export default function ResponsiveDrawer() {
   );
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: lightGreen[50] }}>
+    <Box sx={{ display: "flex", backgroundColor: "FAF7F2" }}>
       <CssBaseline />
       <LoginDialog isLoginOpen={isLoginOpen} setIsLoginOpen={setIsLoginOpen} />
-      <AppBar
-        position="fixed"
-        sx={{
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          ml: { md: `${drawerWidth}px` },
-          zIndex: 2,
-        }}
-      >
-        {lsMedium && (
-          <Toolbar
-            sx={{
-              padding: "10px !important",
-              backgroundColor: lightGreen[50],
-            }}
-          >
-            <IconButton
-              color="primary"
-              aria-label="open drawer"
-              edge="start"
-              onClick={handleDrawerToggle}
-              sx={{ display: { md: "none" }, padding: "0 16px" }}
-            >
-              <Menu />
-            </IconButton>
-            {currentTab == -defaultTabs.length ? (
-              <SearchBar />
-            ) : (
-              <Typography color="primary" variant="h6">
-                {currentTab < 0 && currentTab > -defaultTabs.length
-                  ? defaultTabs[defaultTabs.length + currentTab].label
-                  : appBarTitle}
-              </Typography>
-            )}
-          </Toolbar>
-        )}
-      </AppBar>
+      <TopNav />
       <Box
         component="nav"
-        sx={{ width: { md: drawerWidth }, flexShrink: { md: 0 } }}
+        sx={{
+          width: { md: drawerWidth },
+          flexShrink: { md: 0 },
+        }}
         aria-label="sidebar container"
       >
         <Drawer
@@ -385,7 +447,7 @@ export default function ResponsiveDrawer() {
             },
           }}
         >
-          {drawer}
+          {recentlyVisitedPanel}
         </Drawer>
         <Drawer
           variant="permanent"
@@ -393,24 +455,26 @@ export default function ResponsiveDrawer() {
             display: { xs: "none", sm: "none", md: "block" },
             "& .MuiDrawer-paper": {
               boxSizing: "border-box",
+              marginTop: topBarHeight,
               width: drawerWidth,
             },
           }}
           open
         >
-          {drawer}
+          {recentlyVisitedPanel}
         </Drawer>
       </Box>
+      {/* page contents */}
       <Box
         component="main"
         sx={{
           flexGrow: 1,
           p: 3,
           width: { md: `calc(100% - ${drawerWidth}px)` },
+          marginTop: topBarHeight,
           padding: 0,
         }}
       >
-        {lsMedium && <Toolbar />}
         <Routes>
           <Route path="/" element={elements[0]} />
           <Route path="/view" element={elements[0]} />

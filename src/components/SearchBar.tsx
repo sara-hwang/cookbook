@@ -57,12 +57,13 @@ const SearchBar = () => {
         <TextField
           {...params}
           size="small"
-          sx={{ backgroundColor: "white" }}
+          sx={{ backgroundColor: "white", borderRadius: "10px" }}
           hiddenLabel
-          variant="outlined"
+          variant="filled"
           InputProps={{
             ...params.InputProps,
-            sx: { borderRadius: 0 },
+            disableUnderline: true,
+            sx: { borderRadius: "10px" },
             startAdornment: (
               <>
                 <InputAdornment position="start">

@@ -19,7 +19,6 @@ import "@splidejs/splide/css";
 import RandomButton from "./RandomButton";
 import { KeyboardArrowUp } from "@mui/icons-material";
 import theme from "../../../../utils/theme";
-import SearchBar from "../../../SearchBar";
 
 interface ScrollTopProps {
   children: React.ReactNode;
@@ -115,7 +114,6 @@ const ViewRecipes = () => {
 
   return (
     <Box>
-      <div style={{ padding: "15px" }}>{!lsMedium && <SearchBar />}</div>
       {defaultCategories.map((category, index) => {
         const catRecipes = recipes.filter((recipe) =>
           recipe.tags.some((tag) => tag === category.toLowerCase())

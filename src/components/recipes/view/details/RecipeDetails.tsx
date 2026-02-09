@@ -42,11 +42,7 @@ import NutritionLabel from "./NutritionLabel";
 import { defaultTabs } from "../../../../App";
 import RecipePhotos from "./RecipePhotos";
 
-interface RecipeDetailsProps {
-  setAppBarTitle: React.Dispatch<React.SetStateAction<string>>;
-}
-
-const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
+const RecipeDetails = () => {
   const dispatch = useAppDispatch();
   const auth = useAuthUser();
   const isAuthenticated = useIsAuthenticated();
@@ -98,7 +94,6 @@ const RecipeDetails = ({ setAppBarTitle }: RecipeDetailsProps) => {
         link: `/view/${id}`,
       };
       dispatch(pushTab(newTab));
-      setAppBarTitle(recipe.title);
     }
     setServings(recipe.servings);
     // create recipe details string to send to chat
