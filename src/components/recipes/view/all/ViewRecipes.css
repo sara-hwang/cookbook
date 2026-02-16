@@ -1,7 +1,3 @@
-html {
-  scroll-behavior: smooth;
-}
-
 .MuiBox-root.scroll-top {
   position: fixed;
   bottom: 16px;

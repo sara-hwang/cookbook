@@ -30,6 +30,14 @@ img.MuiCardMedia-root {
   height: 226px;
 }
 
+.MuiCard-root:first-of-type {
+  margin-left: 0;
+}
+
+.MuiCard-root:last-of-type {
+  margin-right: 0;
+}
+
 .MuiCardMedia-root .MuiSkeleton-root {
   height: 140px;
 }

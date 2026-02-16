@@ -7,10 +7,18 @@ body {
 }
 
 html {
-  background-color: #f1f8e9;
+  scroll-behavior: smooth;
+  background-color: var(--lightCream);
 }
 
 .MuiTypography-root.MuiTypography-h4 {
   /* font-family: "Roboto", "Helvetica", "Arial", sans-serif; */
   font-weight: bold;
+}
+
+:root {
+  --lightCream: #faf7f2;
+  --terracotta: #b4532a;
+  --darkCream: #ede7dd;
+  --sage: #7a8f6a;
 }

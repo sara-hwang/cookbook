@@ -1,0 +1,28 @@
+.full-width {
+  width: 100vw;
+}
+
+#hero-image {
+  width: 100%; /* make image fill div width */
+  height: auto; /* maintain aspect ratio */
+  padding-top: 20px;
+  padding-bottom: 20px;
+}
+
+#hero-section {
+  background-color: var(--darkCream);
+  padding: 0 10%;
+}
+
+#recipe-categories-section {
+  padding: 20px 10%;
+}
+
+#recipe-categories-section .recipe-grid-container {
+  margin-bottom: 20px;
+}
+
+h4.section-titles {
+  font-weight: 500 !important;
+  font-size: larger;
+}

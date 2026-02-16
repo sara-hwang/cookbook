@@ -33,6 +33,7 @@ declare module "@mui/material/Button" {
     charcoal: true;
     moderateGrey: true;
     sage: true;
+    terracotta: true;
   }
 }
 

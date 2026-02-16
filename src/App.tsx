@@ -29,6 +29,7 @@ import {
   EditNote,
   ExpandLess,
   ExpandMore,
+  GitHub,
   Logout,
   MenuBook,
   PostAdd,
@@ -41,6 +42,7 @@ import { Route, Routes, useLocation, useNavigate } from "react-router-dom";
 import { useAppDispatch, useAppSelector } from "./redux/hooks";
 import { styled } from "@mui/material/styles";
 import MuiAppBar, { AppBarProps as MuiAppBarProps } from "@mui/material/AppBar";
+
 import ViewRecipes from "./components/recipes/view/all/ViewRecipes";
 import AddRecipe from "./components/recipes/add/AddRecipe";
 import RecipeDetails from "./components/recipes/view/details/RecipeDetails";
@@ -53,6 +55,7 @@ import SearchBar from "./components/SearchBar";
 import MealPlanCalendar from "./components/plan/MealPlanCalendar";
 import MealLog from "./components/log/MealLog";
 import theme from "./utils/theme";
+import HomeNotLoggedIn from "./pages/HomeNotLoggedIn";
 
 const drawerWidth = 240;
 const topBarHeight = "70px";
@@ -206,7 +209,7 @@ export default function App() {
     return (
       <AppBar color="lightCream" elevation={0} position="fixed">
         <Container maxWidth="xl">
-          <Toolbar>
+          <Toolbar style={{ height: topBarHeight }}>
             {lsMedium && (
               <IconButton
                 color="primary"
@@ -221,7 +224,7 @@ export default function App() {
             <img
               src="logo.png"
               style={{ width: lsMedium ? "60px" : "100px", margin: "10px" }}
-              onClick={() => navigate("/")}
+              onClick={() => navigate(isAuthenticated() ? "/" : "/home")}
             />
             {lsMedium && (
               <IconButton
@@ -420,72 +423,98 @@ export default function App() {
   );
 
   return (
-    <Box sx={{ display: "flex", backgroundColor: "FAF7F2" }}>
+    <Box
+      sx={{
+        display: "flex",
+        flexDirection: "column",
+        minHeight: "100vh",
+        backgroundColor: "#FAF7F2",
+      }}
+    >
       <CssBaseline />
       <LoginDialog isLoginOpen={isLoginOpen} setIsLoginOpen={setIsLoginOpen} />
-      <TopNav />
-      <Box
-        component="nav"
-        sx={{
-          width: { md: drawerWidth },
-          flexShrink: { md: 0 },
-        }}
-        aria-label="sidebar container"
-      >
-        <Drawer
-          variant="temporary"
-          open={mobileOpen}
-          onClose={handleDrawerToggle}
-          ModalProps={{
-            keepMounted: true, // Better open performance on mobile.
-          }}
+      <Box sx={{ display: "flex", flex: 1 }}>
+        <TopNav />
+        {pathname !== "/home" && (
+          <Box
+            component="nav"
+            sx={{
+              width: { md: drawerWidth },
+              flexShrink: { md: 0 },
+            }}
+            aria-label="sidebar container"
+          >
+            <Drawer
+              variant="temporary"
+              open={mobileOpen}
+              onClose={handleDrawerToggle}
+              ModalProps={{
+                keepMounted: true, // Better open performance on mobile.
+              }}
+              sx={{
+                display: { sm: "block", md: "none" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  width: drawerWidth,
+                },
+              }}
+            >
+              {recentlyVisitedPanel}
+            </Drawer>
+            <Drawer
+              variant="permanent"
+              sx={{
+                display: { xs: "none", sm: "none", md: "block" },
+                "& .MuiDrawer-paper": {
+                  boxSizing: "border-box",
+                  marginTop: topBarHeight,
+                  width: drawerWidth,
+                },
+              }}
+              open
+            >
+              {recentlyVisitedPanel}
+            </Drawer>
+          </Box>
+        )}
+        {/* page contents */}
+        <Box
+          component="main"
           sx={{
-            display: { sm: "block", md: "none" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              width: drawerWidth,
-            },
+            flexGrow: 1,
+            p: 3,
+            width: { md: `calc(100% - ${drawerWidth}px)` },
+            marginTop: topBarHeight,
+            padding: 0,
           }}
         >
-          {recentlyVisitedPanel}
-        </Drawer>
-        <Drawer
-          variant="permanent"
-          sx={{
-            display: { xs: "none", sm: "none", md: "block" },
-            "& .MuiDrawer-paper": {
-              boxSizing: "border-box",
-              marginTop: topBarHeight,
-              width: drawerWidth,
-            },
-          }}
-          open
-        >
-          {recentlyVisitedPanel}
-        </Drawer>
+          <Routes>
+            <Route path="/" element={elements[0]} />
+            <Route path="/home" element={<HomeNotLoggedIn />} />
+            <Route path="/view" element={elements[0]} />
+            <Route path="/view/:id" element={elements[1]} />
+            <Route path="/add" element={elements[2]} />
+            <Route path="/add/:id" element={elements[2]} />
+            <Route path="/grocery" element={elements[3]} />
+            <Route path="/plan" element={elements[4]} />
+            <Route path="/log" element={elements[5]} />
+          </Routes>
+        </Box>
       </Box>
-      {/* page contents */}
-      <Box
-        component="main"
-        sx={{
-          flexGrow: 1,
-          p: 3,
-          width: { md: `calc(100% - ${drawerWidth}px)` },
-          marginTop: topBarHeight,
-          padding: 0,
-        }}
-      >
-        <Routes>
-          <Route path="/" element={elements[0]} />
-          <Route path="/view" element={elements[0]} />
-          <Route path="/view/:id" element={elements[1]} />
-          <Route path="/add" element={elements[2]} />
-          <Route path="/add/:id" element={elements[2]} />
-          <Route path="/grocery" element={elements[3]} />
-          <Route path="/plan" element={elements[4]} />
-          <Route path="/log" element={elements[5]} />
-        </Routes>
-      </Box>
+      <footer>
+        <div className="footer-content">
+          <span>
+            <img
+              src="logo-white.png"
+              style={{ width: "50px", marginRight: "10px" }}
+            />
+            UX Case Study &bull; Designed by Sara
+          </span>
+          <span>
+            <GitHub />
+          </span>
+        </div>
+      </footer>
     </Box>
   );
 }
