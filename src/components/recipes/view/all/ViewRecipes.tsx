@@ -114,56 +114,6 @@ const ViewRecipes = () => {
 
   return (
     <Box>
-      {defaultCategories.map((category, index) => {
-        const catRecipes = recipes.filter((recipe) =>
-          recipe.tags.some((tag) => tag === category.toLowerCase())
-        );
-        return (
-          <div
-            key={category + keys[index]}
-            style={{
-              padding: `0 ${cardSpacing * 2}px ${cardSpacing}px`,
-              maxWidth: width,
-            }}
-          >
-            <div className="spaced-apart">
-              <Typography
-                id={category}
-                variant="h6"
-                sx={{
-                  scrollMarginTop: lsMedium ? "70px" : "10px",
-                }}
-              >
-                {category}
-              </Typography>
-              {catRecipes.length > 0 && <RandomButton recipes={catRecipes} />}
-            </div>
-            <Splide
-              options={{
-                type: "loop",
-                perPage: cardsPerRow,
-                drag: "free",
-                perMove: cardsPerRow,
-                gap: cardSpacing * 2,
-              }}
-            >
-              {(loading ? [...Array(cardsPerRow).keys()] : catRecipes).map(
-                (item, index) => (
-                  <SplideSlide key={typeof item === "number" ? item : item.key}>
-                    <RecipeCard
-                      cardSpacing={0}
-                      cardWidth={"99%"}
-                      cardWidthPixels={cardWidthPixels}
-                      isSkeleton={loading}
-                      recipe={typeof item === "object" ? item : EmptyRecipe}
-                    />
-                  </SplideSlide>
-                )
-              )}
-            </Splide>
-          </div>
-        );
-      })}
       <div className="recipe-grid-container">
         <div
           className="spaced-apart"

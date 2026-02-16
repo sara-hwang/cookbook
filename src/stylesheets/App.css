@@ -51,6 +51,7 @@ footer {
   width: 100%;
   margin-top: auto;
   border-top: 1px solid #d4c5bc;
+  z-index: 2;
 }
 
 footer .footer-content {

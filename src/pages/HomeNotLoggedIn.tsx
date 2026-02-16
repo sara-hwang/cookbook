@@ -191,6 +191,7 @@ const HomeNotLoggedIn = () => {
           variant="contained"
           color="terracotta"
           sx={{ display: "block", marginLeft: "auto" }}
+          onClick={() => navigate("/view")}
         >
           View All Recipes
         </Button>

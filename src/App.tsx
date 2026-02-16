@@ -469,6 +469,7 @@ export default function App() {
                   boxSizing: "border-box",
                   marginTop: topBarHeight,
                   width: drawerWidth,
+                  zIndex: "0 !important",
                 },
               }}
               open
