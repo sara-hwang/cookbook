@@ -46,3 +46,10 @@ h6 + ul {
 .preserve-newlines {
   white-space: pre-wrap;
 }
+
+.darker-background-box {
+  background-color: var(--darkCream);
+  display: block;
+  position: absolute;
+  width: 100%;
+}

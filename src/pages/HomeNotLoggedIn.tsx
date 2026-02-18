@@ -54,11 +54,6 @@ const HomeNotLoggedIn = () => {
       }).observe(recipeGridContainer);
   }, []);
 
-  (useEffect(() => {
-    console.log(recipesList);
-  }),
-    [recipesList]);
-
   return (
     <Box className="full-width">
       <section id="hero-section">
@@ -75,7 +70,6 @@ const HomeNotLoggedIn = () => {
               gap: 3,
               padding: 0,
             }}
-            spacing={4}
           >
             <Typography variant="h4">{featuredRecipeDetails?.title}</Typography>
             <Button

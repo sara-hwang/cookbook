@@ -54,6 +54,9 @@ const RecipeDetails = () => {
   const [prepareMode, setPrepareMode] = useState(false);
   const [popupOpen, setPopupOpen] = useState(false);
   const [recipeString, setRecipeString] = useState("");
+  const [recipeTitlePosition, setRecipeTitlePosition] = useState(0);
+  const [tagsEndPosition, setTagsEndPosition] = useState(0);
+
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
@@ -80,6 +83,24 @@ const RecipeDetails = () => {
       }
     }
   };
+
+  useEffect(() => {
+    const recipeGridContainer = document.getElementById("view-recipe-box");
+    if (recipeGridContainer) {
+      const observer = new ResizeObserver(() => {
+        setRecipeTitlePosition(
+          document.getElementById("recipe-title")?.offsetTop ?? 0
+        );
+        const recipeTagsElement = document.getElementById("recipe-tags");
+        setTagsEndPosition(
+          recipeTagsElement?.getBoundingClientRect().bottom ?? 0
+        );
+      });
+      observer.observe(recipeGridContainer);
+
+      return () => observer.disconnect();
+    }
+  }, []);
 
   useEffect(() => {
     if (id) {
@@ -143,44 +164,59 @@ const RecipeDetails = () => {
   };
 
   return (
-    <Box sx={{ display: "flex", padding: "24px 10% 24px 24px" }}>
-      <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
-      <Grid container direction="row" spacing={2}>
-        <Grid size={12}>
-          {recipe.photo && recipe.photo.length > 0 && (
-            <img
-              src={recipe.photo[0]}
-              alt="Recipe"
-              style={{ width: "100%", height: "auto", objectFit: "cover" }}
-            />
-          )}
-          <Typography variant="h4">{recipe.title}</Typography>
-          <div>
-            {recipe.dateAdded
-              ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
-              : undefined}
-          </div>
-          {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
-        </Grid>
-        {recipe.notes && (
-          <Grid size={{ xs: 12, md: 10, lg: 9 }}>
-            <Typography variant="h6">{`Chef's Notes`}</Typography>
-            <div className="preserve-newlines">{recipe.notes}</div>
+    <>
+      <div
+        className="darker-background-box"
+        style={{
+          top: recipeTitlePosition - 100,
+          height: tagsEndPosition - recipeTitlePosition + 110,
+        }}
+      />
+      <Box
+        sx={{ display: "flex", padding: "24px 10% 24px 24px" }}
+        id="view-recipe-box"
+      >
+        <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
+        <Grid container direction="row" spacing={4}>
+          <Grid container direction="row" spacing={2} sx={{ zIndex: 1 }}>
+            <Grid size={12}>
+              {recipe.photo && recipe.photo.length > 0 && (
+                <img
+                  src={recipe.photo[0]}
+                  alt="Recipe"
+                  style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                />
+              )}
+              <Typography variant="h4" id="recipe-title">
+                {recipe.title}
+              </Typography>
+              <div>
+                {recipe.dateAdded
+                  ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
+                  : undefined}
+              </div>
+              {recipe.url && <a href={recipe.url}>{recipe.url}</a>}
+            </Grid>
+            {recipe.notes && (
+              <Grid size={{ xs: 12, md: 10, lg: 9 }}>
+                <Typography variant="h6">{`Chef's Notes`}</Typography>
+                <div className="preserve-newlines">{recipe.notes}</div>
+              </Grid>
+            )}
+            {recipe.tags.length > 0 && (
+              <Grid size={{ xs: 12, md: 10, lg: 9 }} id="recipe-tags">
+                <ChipDisplay
+                  tags={recipe.tags}
+                  size="medium"
+                  onChipClick={(tag) => {
+                    dispatch(setSearchTags([tag]));
+                    dispatch(setCurrentTab(-defaultTabs.length));
+                  }}
+                />
+              </Grid>
+            )}
           </Grid>
-        )}
-        {recipe.tags.length > 0 && (
-          <Grid size={{ xs: 12, md: 10, lg: 9 }}>
-            <ChipDisplay
-              tags={recipe.tags}
-              size="medium"
-              onChipClick={(tag) => {
-                dispatch(setSearchTags([tag]));
-                dispatch(setCurrentTab(-defaultTabs.length));
-              }}
-            />
-          </Grid>
-        )}
-        {/* <Grid size={1}>
+          {/* <Grid size={1}>
           <Menu
             id="basic-menu"
             anchorEl={anchorEl}
@@ -220,204 +256,212 @@ const RecipeDetails = () => {
             </Tooltip>
           </Menu>
         </Grid> */}
-        <Grid size={{ xs: 12, md: 10, lg: 9 }}>
-          <div className="side-by-side-container">
-            <p>Servings: &nbsp;</p>
-            <TextField
-              value={servings.toString()}
-              id="servings"
-              variant="outlined"
-              type="number"
-              InputProps={{
-                inputProps: { min: 1, step: 1 },
-              }}
-              onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
-                setServings(parseInt(event.target.value));
-              }}
-            />
-          </div>
-        </Grid>
-        {recipe.servingDescription && (
-          <Grid size={{ xs: 12, md: 10, lg: 9 }}>
-            Serving size: {recipe.servingDescription}
-          </Grid>
-        )}
-        <Grid size={{ xs: 12, md: 10, lg: 9 }}>
-          <Typography variant="h6">
-            Ingredients
-            <Tooltip
-              arrow
-              disableInteractive
-              title={
-                isAuthenticated()
-                  ? groceryMode
-                    ? "Add selected ingredients to grocery list"
-                    : "Enter grocery mode"
-                  : "Log in to add to grocery list"
-              }
-            >
-              <IconButton
-                disableRipple
-                sx={{ "&:hover": { color: theme.palette.primary.main } }}
-                onClick={() => {
-                  groceryMode && isAuthenticated() && addToGrocery();
-                  isAuthenticated() && setGroceryMode(!groceryMode);
-                }}
-              >
-                {groceryMode ? (
-                  <AddShoppingCartOutlined fontSize="large" />
-                ) : (
-                  <ShoppingCartOutlined fontSize="large" />
-                )}
-              </IconButton>
-            </Tooltip>
-            {groceryMode && (
-              <Button
-                color="error"
-                variant="contained"
-                onClick={() => {
-                  setGroceryMode(!groceryMode);
-                }}
-              >
-                Cancel
-              </Button>
+          <Grid container direction="row" spacing={2}>
+            <Grid size={{ xs: 12, md: 10, lg: 9 }}>
+              <div className="side-by-side-container">
+                <p>Servings: &nbsp;</p>
+                <TextField
+                  value={servings.toString()}
+                  id="servings"
+                  variant="outlined"
+                  type="number"
+                  InputProps={{
+                    inputProps: { min: 1, step: 1 },
+                  }}
+                  onChange={(event: React.ChangeEvent<HTMLInputElement>) => {
+                    setServings(parseInt(event.target.value));
+                  }}
+                />
+              </div>
+            </Grid>
+            {recipe.servingDescription && (
+              <Grid size={{ xs: 12, md: 10, lg: 9 }}>
+                Serving size: {recipe.servingDescription}
+              </Grid>
             )}
-          </Typography>
-          {groceryMode ? (
-            <form id="grocery-checklist">
-              {recipe?.ingredients.map((ing, index) => {
-                const parsed = markdownParser(ing.text);
-                return ing.isDivider ? (
-                  <Typography variant="h6" key={index}>
-                    {ing.text}
-                  </Typography>
-                ) : (
-                  <div
-                    key={index}
-                    className="checkbox-container view-recipe no-strike"
+            <Grid size={{ xs: 12, md: 10, lg: 9 }}>
+              <Typography variant="h6">
+                Ingredients
+                <Tooltip
+                  arrow
+                  disableInteractive
+                  title={
+                    isAuthenticated()
+                      ? groceryMode
+                        ? "Add selected ingredients to grocery list"
+                        : "Enter grocery mode"
+                      : "Log in to add to grocery list"
+                  }
+                >
+                  <IconButton
+                    disableRipple
+                    sx={{ "&:hover": { color: theme.palette.primary.main } }}
+                    onClick={() => {
+                      groceryMode && isAuthenticated() && addToGrocery();
+                      isAuthenticated() && setGroceryMode(!groceryMode);
+                    }}
                   >
-                    <input
-                      type="checkbox"
-                      name={"" + index}
-                      id={`ingredient-checkbox-${index}`}
-                    />
-                    <label htmlFor={`ingredient-checkbox-${index}`}>
-                      {parsed ? (
-                        <>
-                          {calculateAmount(parsed.rest)}
-                          <a href={parsed.url}>{parsed.text}</a>
-                        </>
-                      ) : (
-                        calculateAmount(ing.text)
-                      )}
-                    </label>
-                  </div>
-                );
-              })}
-            </form>
-          ) : (
-            <ul>
-              {recipe?.ingredients.map((ing, index) => {
-                const parsed = markdownParser(ing.text);
-                return ing.isDivider ? (
-                  <Typography variant="h6" marginLeft={"-30px"} key={index}>
-                    {ing.text}
-                  </Typography>
-                ) : (
-                  <Fragment key={index}>
-                    <li>
-                      {parsed ? (
-                        <>
-                          {calculateAmount(parsed.rest)}
-                          <a href={parsed.url}>{parsed.text}</a>
-                        </>
-                      ) : (
-                        calculateAmount(ing.text)
-                      )}
-                    </li>
-                  </Fragment>
-                );
-              })}
-            </ul>
-          )}
-        </Grid>
-        <Grid size={{ xs: 12, md: 10, lg: 9 }}>
-          <Typography variant="h6">
-            Steps
-            <Tooltip
-              arrow
-              disableInteractive
-              title={prepareMode ? "Exit prepare mode" : "Enter prepare mode"}
-            >
-              <IconButton
-                disableRipple
-                sx={{ "&:hover": { color: theme.palette.primary.main } }}
-                onClick={() => {
-                  setPrepareMode(!prepareMode);
-                }}
-              >
-                <ChecklistOutlined fontSize="large" />
-              </IconButton>
-            </Tooltip>
-          </Typography>
-          {prepareMode ? (
-            <form>
-              {recipe?.steps.map((step, index) =>
-                step.isDivider ? (
-                  <Typography variant="h6" key={index}>
-                    {step.text}
-                  </Typography>
-                ) : (
-                  <div key={index} className="checkbox-container view-recipe">
-                    <input
-                      type="checkbox"
-                      name={"" + index}
-                      id={`step-checkbox-${index}`}
-                    />
-                    <label htmlFor={`step-checkbox-${index}`}>
-                      {step.text}
-                    </label>
-                  </div>
-                )
+                    {groceryMode ? (
+                      <AddShoppingCartOutlined fontSize="large" />
+                    ) : (
+                      <ShoppingCartOutlined fontSize="large" />
+                    )}
+                  </IconButton>
+                </Tooltip>
+                {groceryMode && (
+                  <Button
+                    color="error"
+                    variant="contained"
+                    onClick={() => {
+                      setGroceryMode(!groceryMode);
+                    }}
+                  >
+                    Cancel
+                  </Button>
+                )}
+              </Typography>
+              {groceryMode ? (
+                <form id="grocery-checklist">
+                  {recipe?.ingredients.map((ing, index) => {
+                    const parsed = markdownParser(ing.text);
+                    return ing.isDivider ? (
+                      <Typography variant="h6" key={index}>
+                        {ing.text}
+                      </Typography>
+                    ) : (
+                      <div
+                        key={index}
+                        className="checkbox-container view-recipe no-strike"
+                      >
+                        <input
+                          type="checkbox"
+                          name={"" + index}
+                          id={`ingredient-checkbox-${index}`}
+                        />
+                        <label htmlFor={`ingredient-checkbox-${index}`}>
+                          {parsed ? (
+                            <>
+                              {calculateAmount(parsed.rest)}
+                              <a href={parsed.url}>{parsed.text}</a>
+                            </>
+                          ) : (
+                            calculateAmount(ing.text)
+                          )}
+                        </label>
+                      </div>
+                    );
+                  })}
+                </form>
+              ) : (
+                <ul>
+                  {recipe?.ingredients.map((ing, index) => {
+                    const parsed = markdownParser(ing.text);
+                    return ing.isDivider ? (
+                      <Typography variant="h6" marginLeft={"-30px"} key={index}>
+                        {ing.text}
+                      </Typography>
+                    ) : (
+                      <Fragment key={index}>
+                        <li>
+                          {parsed ? (
+                            <>
+                              {calculateAmount(parsed.rest)}
+                              <a href={parsed.url}>{parsed.text}</a>
+                            </>
+                          ) : (
+                            calculateAmount(ing.text)
+                          )}
+                        </li>
+                      </Fragment>
+                    );
+                  })}
+                </ul>
               )}
-            </form>
-          ) : (
-            <div>
-              {recipe?.steps.map((step, index) => {
-                stepNumber++;
-                if (step.isDivider) {
-                  stepNumber = 0;
-                  return (
-                    <Typography variant="h6" key={index}>
-                      {step.text}
-                    </Typography>
-                  );
-                }
-                return (
-                  <div key={index} className="recipe-step-text">
-                    <Typography>{stepNumber + ". "}</Typography>
-                    <Typography>{step.text}</Typography>
-                  </div>
-                );
-              })}
-            </div>
-          )}
-        </Grid>
-        {/* <Grid sx={{ padding: "16px" }} size={12}>
+            </Grid>
+            <Grid size={{ xs: 12, md: 10, lg: 9 }}>
+              <Typography variant="h6">
+                Steps
+                <Tooltip
+                  arrow
+                  disableInteractive
+                  title={
+                    prepareMode ? "Exit prepare mode" : "Enter prepare mode"
+                  }
+                >
+                  <IconButton
+                    disableRipple
+                    sx={{ "&:hover": { color: theme.palette.primary.main } }}
+                    onClick={() => {
+                      setPrepareMode(!prepareMode);
+                    }}
+                  >
+                    <ChecklistOutlined fontSize="large" />
+                  </IconButton>
+                </Tooltip>
+              </Typography>
+              {prepareMode ? (
+                <form>
+                  {recipe?.steps.map((step, index) =>
+                    step.isDivider ? (
+                      <Typography variant="h6" key={index}>
+                        {step.text}
+                      </Typography>
+                    ) : (
+                      <div
+                        key={index}
+                        className="checkbox-container view-recipe"
+                      >
+                        <input
+                          type="checkbox"
+                          name={"" + index}
+                          id={`step-checkbox-${index}`}
+                        />
+                        <label htmlFor={`step-checkbox-${index}`}>
+                          {step.text}
+                        </label>
+                      </div>
+                    )
+                  )}
+                </form>
+              ) : (
+                <div>
+                  {recipe?.steps.map((step, index) => {
+                    stepNumber++;
+                    if (step.isDivider) {
+                      stepNumber = 0;
+                      return (
+                        <Typography variant="h6" key={index}>
+                          {step.text}
+                        </Typography>
+                      );
+                    }
+                    return (
+                      <div key={index} className="recipe-step-text">
+                        <Typography>{stepNumber + ". "}</Typography>
+                        <Typography>{step.text}</Typography>
+                      </div>
+                    );
+                  })}
+                </div>
+              )}
+            </Grid>
+            {/* <Grid sx={{ padding: "16px" }} size={12}>
           {recipe?.photo && recipe.photo.length > 0 && (
             <RecipePhotos photos={recipe.photo} />
           )}
         </Grid> */}
-        {recipe.nutritionalValues && (
-          <Grid size={12}>
-            <NutritionLabel recipe={recipe} />
-          </Grid>
-        )}
-        {/* <Grid>
+            {recipe.nutritionalValues && (
+              <Grid size={12}>
+                <NutritionLabel recipe={recipe} />
+              </Grid>
+            )}
+            {/* <Grid>
           <Chat recipe={recipeString} />
         </Grid> */}
-      </Grid>
-    </Box>
+          </Grid>
+        </Grid>
+      </Box>
+    </>
   );
 };
 
