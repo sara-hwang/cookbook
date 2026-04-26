@@ -117,6 +117,7 @@ export default function App() {
   const isAuthenticated = useIsAuthenticated();
   const signOut = useSignOut();
   const [isLoginOpen, setIsLoginOpen] = useState(false);
+  const [searchOpen, setSearchOpen] = useState(false);
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
@@ -207,7 +208,12 @@ export default function App() {
     };
 
     return (
-      <AppBar color="lightCream" elevation={0} position="fixed">
+      <AppBar
+        color="lightCream"
+        elevation={0}
+        position="fixed"
+        style={{ borderBottom: "1px solid lightgrey" }}
+      >
         <Container maxWidth="xl">
           <Toolbar style={{ height: topBarHeight }}>
             {lsMedium && (
@@ -221,17 +227,19 @@ export default function App() {
                 <MenuIcon />
               </IconButton>
             )}
-            <img
-              src="logo.png"
-              style={{ width: lsMedium ? "60px" : "100px", margin: "10px" }}
-              onClick={() => navigate(isAuthenticated() ? "/" : "/home")}
-            />
-            {lsMedium && (
+            {!searchOpen && (
+              <img
+                src="logo.png"
+                style={{ width: lsMedium ? "60px" : "100px", margin: "10px" }}
+                onClick={() => navigate(isAuthenticated() ? "/" : "/home")}
+              />
+            )}
+            {lsMedium && !searchOpen && (
               <IconButton
                 color="primary"
                 aria-label="open search"
                 edge="start"
-                onClick={handleDrawerToggle}
+                onClick={() => setSearchOpen(true)}
                 sx={{
                   display: { md: "none" },
                   padding: "0px",
@@ -240,6 +248,9 @@ export default function App() {
               >
                 <Search />
               </IconButton>
+            )}
+            {lsMedium && searchOpen && (
+              <SearchBar setSearchOpen={setSearchOpen} />
             )}
             <Box
               sx={{
@@ -264,14 +275,13 @@ export default function App() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginLeft: "auto",
+                  marginLeft: "100px",
                   width: "100%",
                   justifyContent: "flex-end",
+                  flexWrap: "nowrap",
                 }}
               >
-                <Grid size={{ md: 6 }}>
-                  <SearchBar />
-                </Grid>
+                <SearchBar setSearchOpen={setSearchOpen} />
                 {!isAuthenticated() && (
                   <>
                     <Button
@@ -284,7 +294,12 @@ export default function App() {
                     <Button
                       onClick={() => setIsLoginOpen(true)}
                       color="sage"
-                      sx={{ my: 2, color: "sage", display: "block" }}
+                      sx={{
+                        my: 2,
+                        color: "sage",
+                        display: "block",
+                        whiteSpace: "nowrap",
+                      }}
                     >
                       Sign Up
                     </Button>
@@ -435,49 +450,47 @@ export default function App() {
       <LoginDialog isLoginOpen={isLoginOpen} setIsLoginOpen={setIsLoginOpen} />
       <Box sx={{ display: "flex", flex: 1 }}>
         <TopNav />
-        {pathname !== "/home" && (
-          <Box
-            component="nav"
-            sx={{
-              width: { md: drawerWidth },
-              flexShrink: { md: 0 },
+        <Box
+          component="nav"
+          sx={{
+            width: { md: drawerWidth },
+            flexShrink: { md: 0 },
+          }}
+          aria-label="sidebar container"
+        >
+          <Drawer
+            variant="temporary"
+            open={mobileOpen}
+            onClose={handleDrawerToggle}
+            ModalProps={{
+              keepMounted: true, // Better open performance on mobile.
             }}
-            aria-label="sidebar container"
+            sx={{
+              display: { sm: "block", md: "none" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                width: drawerWidth,
+              },
+            }}
           >
-            <Drawer
-              variant="temporary"
-              open={mobileOpen}
-              onClose={handleDrawerToggle}
-              ModalProps={{
-                keepMounted: true, // Better open performance on mobile.
-              }}
-              sx={{
-                display: { sm: "block", md: "none" },
-                "& .MuiDrawer-paper": {
-                  boxSizing: "border-box",
-                  width: drawerWidth,
-                },
-              }}
-            >
-              {recentlyVisitedPanel}
-            </Drawer>
-            <Drawer
-              variant="permanent"
-              sx={{
-                display: { xs: "none", sm: "none", md: "block" },
-                "& .MuiDrawer-paper": {
-                  boxSizing: "border-box",
-                  marginTop: topBarHeight,
-                  width: drawerWidth,
-                  zIndex: "0 !important",
-                },
-              }}
-              open
-            >
-              {recentlyVisitedPanel}
-            </Drawer>
-          </Box>
-        )}
+            {recentlyVisitedPanel}
+          </Drawer>
+          <Drawer
+            variant="permanent"
+            sx={{
+              display: { xs: "none", sm: "none", md: "block" },
+              "& .MuiDrawer-paper": {
+                boxSizing: "border-box",
+                marginTop: topBarHeight,
+                width: drawerWidth,
+                zIndex: "0 !important",
+              },
+            }}
+            open
+          >
+            {recentlyVisitedPanel}
+          </Drawer>
+        </Box>
         {/* page contents */}
         <Box
           component="main"

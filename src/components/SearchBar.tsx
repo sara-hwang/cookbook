@@ -6,8 +6,13 @@ import SearchIcon from "@mui/icons-material/Search";
 import { setSearchTags, setSearchTitle } from "../redux/searchTags";
 import ChipDisplay from "./ChipDisplay";
 import { useNavigate, useLocation } from "react-router-dom";
+import React from "react";
 
-const SearchBar = () => {
+interface SearchBarProps {
+  setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}
+
+const SearchBar = ({ setSearchOpen }: SearchBarProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -46,6 +51,7 @@ const SearchBar = () => {
       onFocus={() => {
         if (pathname !== "/view") navigate("/view");
       }}
+      onBlur={() => setSearchOpen(false)}
       onChange={(e, value) => dispatch(setSearchTags(value))}
       renderTags={(value: readonly string[], getTagProps) => (
         <ChipDisplay tags={value} size="small" getTagProps={getTagProps} />
@@ -56,6 +62,7 @@ const SearchBar = () => {
       renderInput={(params) => (
         <TextField
           {...params}
+          autoFocus
           size="small"
           sx={{ backgroundColor: "white", borderRadius: "10px" }}
           hiddenLabel
