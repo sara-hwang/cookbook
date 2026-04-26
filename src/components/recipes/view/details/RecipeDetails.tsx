@@ -219,46 +219,6 @@ const RecipeDetails = () => {
               </Grid>
             )}
           </Grid>
-          {/* <Grid size={1}>
-          <Menu
-            id="basic-menu"
-            anchorEl={anchorEl}
-            open={open}
-            onClose={() => setAnchorEl(null)}
-          >
-            <Tooltip
-              title={
-                !isAuthenticated()
-                  ? "You must login to edit or delete recipes"
-                  : undefined
-              }
-              disableInteractive
-            >
-              <div>
-                <MenuItem
-                  disabled={!isAuthenticated()}
-                  onClick={() => {
-                    navigate(`/add/${id}`);
-                    setAnchorEl(null);
-                  }}
-                >
-                  <Edit fontSize="small" color="action" />
-                  &nbsp;Edit
-                </MenuItem>
-                <MenuItem
-                  disabled={!isAuthenticated()}
-                  onClick={() => {
-                    setPopupOpen(true);
-                    setAnchorEl(null);
-                  }}
-                >
-                  <Delete fontSize="small" color="action" />
-                  &nbsp;Delete
-                </MenuItem>
-              </div>
-            </Tooltip>
-          </Menu>
-        </Grid> */}
           <Grid container direction="row" spacing={2}>
             <Grid size={{ xs: 12, md: 10, lg: 9 }}>
               <div className="side-by-side-container">
