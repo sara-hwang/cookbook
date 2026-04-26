@@ -82,6 +82,22 @@ const theme = createTheme({
     fontWeightRegular: 400,
     fontWeightMedium: 500,
   },
+  components: {
+    MuiButtonBase: {
+      defaultProps: {
+        disableRipple: true,
+      },
+    },
+    MuiIconButton: {
+      styleOverrides: {
+        root: {
+          "&:hover": {
+            backgroundColor: "transparent", // No more hover background globally
+          },
+        },
+      },
+    },
+  },
 });
 
 export default theme;
