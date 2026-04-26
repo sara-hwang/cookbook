@@ -187,7 +187,12 @@ const RecipeDetails = () => {
                 <img
                   src={recipe.photo[0]}
                   alt="Recipe"
-                  style={{ width: "100%", height: "auto", objectFit: "cover" }}
+                  style={{
+                    maxHeight: "500px",
+                    width: "100%",
+                    height: "auto",
+                    objectFit: "cover",
+                  }}
                 />
               )}
               <Typography variant="h4" id="recipe-title">

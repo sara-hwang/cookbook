@@ -229,7 +229,7 @@ export default function App() {
             )}
             {!searchOpen && (
               <img
-                src="logo.png"
+                src="/logo.png"
                 style={{ width: lsMedium ? "60px" : "100px", margin: "10px" }}
                 onClick={() => navigate(isAuthenticated() ? "/" : "/home")}
               />
@@ -519,7 +519,7 @@ export default function App() {
         <div className="footer-content">
           <span>
             <img
-              src="logo-white.png"
+              src="/logo-white.png"
               style={{ width: "50px", marginRight: "10px" }}
             />
             UX Case Study &bull; Designed by Sara
