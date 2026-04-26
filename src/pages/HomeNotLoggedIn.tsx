@@ -47,7 +47,9 @@ const HomeNotLoggedIn = () => {
     });
     getRecipes();
 
-    const recipeGridContainer = document.getElementById("view-recipes-box");
+    const recipeGridContainer = document.getElementById(
+      "home-view-recipes-box"
+    );
     if (recipeGridContainer)
       new ResizeObserver(() => {
         setWidth(recipeGridContainer?.offsetWidth ?? 0);
@@ -102,7 +104,7 @@ const HomeNotLoggedIn = () => {
           </Typography>
           <Box
             style={{ padding: `0 0 ${cardSpacing}px` }}
-            id="view-recipes-box"
+            id="home-view-recipes-box"
           >
             {(loading
               ? [...Array(12).keys()]
@@ -131,7 +133,7 @@ const HomeNotLoggedIn = () => {
           </Typography>
           <Box
             style={{ padding: `0 0 ${cardSpacing}px` }}
-            id="view-recipes-box"
+            id="home-view-recipes-box"
           >
             {(loading
               ? [...Array(12).keys()]
@@ -162,7 +164,7 @@ const HomeNotLoggedIn = () => {
           </Typography>
           <Box
             style={{ padding: `0 0 ${cardSpacing}px` }}
-            id="view-recipes-box"
+            id="home-view-recipes-box"
           >
             {(loading
               ? [...Array(12).keys()]

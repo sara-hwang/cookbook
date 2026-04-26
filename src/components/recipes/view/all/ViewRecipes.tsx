@@ -113,7 +113,12 @@ const ViewRecipes = () => {
     searchTags.length > 0 || searchTitle ? [] : RecipeCategories.slice(0, -1);
 
   return (
-    <Box>
+    <Box
+      sx={{
+        display: "flex",
+        padding: lsMedium ? "24px 10%" : "24px 10% 24px 24px",
+      }}
+    >
       <div className="recipe-grid-container">
         <div
           className="spaced-apart"
@@ -128,7 +133,7 @@ const ViewRecipes = () => {
           >
             {`All (${recipes.length})`}
           </Typography>
-          <RandomButton recipes={recipes} />
+          {/* <RandomButton recipes={recipes} /> */}
         </div>
         <Box
           style={{ padding: `0 ${cardSpacing}px ${cardSpacing}px` }}

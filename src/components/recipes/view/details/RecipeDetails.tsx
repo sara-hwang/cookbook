@@ -173,7 +173,10 @@ const RecipeDetails = () => {
         }}
       />
       <Box
-        sx={{ display: "flex", padding: "24px 10% 24px 24px" }}
+        sx={{
+          display: "flex",
+          padding: lsMedium ? "24px 10%" : "24px 10% 24px 24px",
+        }}
         id="view-recipe-box"
       >
         <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />

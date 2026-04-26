@@ -30,7 +30,7 @@ img.MuiCardMedia-root {
   height: 226px;
 }
 
-.MuiCard-root:first-of-type {
+#home-view-recipes-box .MuiCard-root:first-of-type {
   margin-left: 0;
 }
 
