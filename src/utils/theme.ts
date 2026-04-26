@@ -43,6 +43,12 @@ declare module "@mui/material/Typography" {
   }
 }
 
+declare module "@mui/material/IconButton" {
+  interface IconButtonPropsColorOverrides {
+    lightCream: true;
+  }
+}
+
 const theme = createTheme({
   palette: {
     primary: {

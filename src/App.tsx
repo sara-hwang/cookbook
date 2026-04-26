@@ -525,7 +525,14 @@ export default function App() {
             UX Case Study &bull; Designed by Sara
           </span>
           <span>
-            <GitHub />
+            <IconButton
+              onClick={() =>
+                window.open("https://github.com/sara-hwang/cookbook", "_blank")
+              }
+              color="lightCream"
+            >
+              <GitHub />
+            </IconButton>
           </span>
         </div>
       </footer>
