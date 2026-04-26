@@ -31,9 +31,8 @@ import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,
   ChecklistOutlined,
-  Delete,
   Edit,
-  MoreVert,
+  FavoriteBorder,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
 import DeleteRecipeDialog from "./DeleteRecipeDialog";
@@ -195,9 +194,39 @@ const RecipeDetails = () => {
                   }}
                 />
               )}
-              <Typography variant="h4" id="recipe-title">
-                {recipe.title}
-              </Typography>
+              <span
+                style={{
+                  display: "flex",
+                  flexWrap: "nowrap",
+                  justifyContent: "space-between",
+                }}
+              >
+                <Typography variant="h4" id="recipe-title">
+                  {recipe.title}
+                </Typography>
+                {isAuthenticated() && (
+                  <span style={{ display: "flex", gap: "8px" }}>
+                    <Tooltip arrow disableInteractive title="Add to Favourites">
+                      <IconButton
+                        onClick={() => {
+                          console.log("added to favourites");
+                        }}
+                        sx={{ p: 0 }}
+                      >
+                        <FavoriteBorder fontSize="large" />
+                      </IconButton>
+                    </Tooltip>
+                    <Tooltip arrow disableInteractive title="Edit">
+                      <IconButton
+                        onClick={() => navigate(`/add/${id}`)}
+                        sx={{ p: 0 }}
+                      >
+                        <Edit fontSize="large" />
+                      </IconButton>
+                    </Tooltip>
+                  </span>
+                )}
+              </span>
               <div>
                 {recipe.dateAdded
                   ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
