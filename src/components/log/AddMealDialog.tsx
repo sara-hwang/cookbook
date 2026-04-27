@@ -148,7 +148,7 @@ export const AddMealDialog = ({
                       label="Date"
                       size="small"
                       sx={{ width: "100%" }}
-                      onChange={(date: any) => setFieldValue("date", date)}
+                      onChange={(date: string) => setFieldValue("date", date)}
                     />
                   </Grid>
                   <Grid sx={{ marginTop: "10px", width: "100%" }}>
