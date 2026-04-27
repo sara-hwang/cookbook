@@ -9,10 +9,11 @@ import { useNavigate, useLocation } from "react-router-dom";
 import React from "react";
 
 interface SearchBarProps {
+  autoFocus?: boolean;
   setSearchOpen: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const SearchBar = ({ setSearchOpen }: SearchBarProps) => {
+const SearchBar = ({ autoFocus, setSearchOpen }: SearchBarProps) => {
   const dispatch = useAppDispatch();
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -62,7 +63,7 @@ const SearchBar = ({ setSearchOpen }: SearchBarProps) => {
       renderInput={(params) => (
         <TextField
           {...params}
-          autoFocus
+          autoFocus={autoFocus}
           size="small"
           sx={{ backgroundColor: "white", borderRadius: "10px" }}
           hiddenLabel

@@ -25,11 +25,13 @@ import { addMealEntry } from "../../utils/api";
 interface AddMealDialogProps {
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
+  getMeals?: () => void;
 }
 
 export const AddMealDialog = ({
   dialogOpen,
   setDialogOpen,
+  getMeals,
 }: AddMealDialogProps) => {
   const authUser = useAuthUser();
   const [recipeTitles, setRecipeTitles] = useState<
@@ -52,7 +54,6 @@ export const AddMealDialog = ({
   }, []);
 
   const validationSchema = yup.object({
-    title: yup.string().required("Required").max(50),
     recipe: yup.string().required("Required").max(500),
     portions: yup.number().required("Required").min(0),
   });
@@ -74,7 +75,6 @@ export const AddMealDialog = ({
           <Formik
             initialValues={{
               date: new Date(),
-              title: "",
               recipe: "",
               portions: 1,
               user: authUser()?.username,
@@ -86,6 +86,9 @@ export const AddMealDialog = ({
               if (response && response.status === 200) {
                 resetForm();
                 setDialogOpen(false);
+                if (getMeals) {
+                  getMeals();
+                }
               } else {
                 alert(response?.data);
               }
@@ -114,18 +117,6 @@ export const AddMealDialog = ({
                       as={DatePicker}
                       label="Date"
                       size="small"
-                      sx={{ width: "100%" }}
-                    />
-                  </Grid>
-                  <Grid sx={{ marginTop: "10px", width: "100%" }}>
-                    <Field
-                      name="title"
-                      type="input"
-                      as={TextField}
-                      label="Meal Title"
-                      size="small"
-                      error={errors.title !== undefined}
-                      helperText={errors.title}
                       sx={{ width: "100%" }}
                     />
                   </Grid>

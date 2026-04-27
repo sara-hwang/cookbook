@@ -52,7 +52,6 @@ import GroceryList from "./components/grocery/GroceryList";
 import { popTab, setCurrentTab } from "./redux/tabsList";
 import { RootState } from "./redux/store";
 import SearchBar from "./components/SearchBar";
-import MealPlanCalendar from "./components/plan/MealPlanCalendar";
 import MealLog from "./components/log/MealLog";
 import theme from "./utils/theme";
 import HomeNotLoggedIn from "./pages/HomeNotLoggedIn";
@@ -102,9 +101,9 @@ export const defaultTabs: TabItem[] = [
     index: -2,
   },
   {
-    label: "Meal Planning",
+    label: "Meal Logging",
     icon: <CalendarMonth fontSize="small" sx={{ marginRight: 1 }} />,
-    link: "/plan",
+    link: "/log",
     index: -1,
   },
 ];
@@ -169,12 +168,6 @@ export default function App() {
     </>,
     <>
       <GroceryList />
-      {!isAuthenticated() && (
-        <LoginDialog isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
-      )}
-    </>,
-    <>
-      <MealPlanCalendar />
       {!isAuthenticated() && (
         <LoginDialog isLoginOpen={true} setIsLoginOpen={setIsLoginOpen} />
       )}
@@ -251,7 +244,7 @@ export default function App() {
               </IconButton>
             )}
             {lsMedium && searchOpen && (
-              <SearchBar setSearchOpen={setSearchOpen} />
+              <SearchBar autoFocus={true} setSearchOpen={setSearchOpen} />
             )}
             <Box
               sx={{
@@ -282,7 +275,7 @@ export default function App() {
                   flexWrap: "nowrap",
                 }}
               >
-                <SearchBar setSearchOpen={setSearchOpen} />
+                <SearchBar autoFocus={false} setSearchOpen={setSearchOpen} />
                 {!isAuthenticated() && (
                   <>
                     <Button
@@ -511,8 +504,7 @@ export default function App() {
             <Route path="/add" element={elements[2]} />
             <Route path="/add/:id" element={elements[2]} />
             <Route path="/grocery" element={elements[3]} />
-            <Route path="/plan" element={elements[4]} />
-            <Route path="/log" element={elements[5]} />
+            <Route path="/log" element={elements[4]} />
           </Routes>
         </Box>
       </Box>

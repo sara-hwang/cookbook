@@ -2,7 +2,6 @@ import { ReactElement } from "react";
 
 export type MealEntry = {
   date: Date;
-  title: string;
   recipe: string;
   portions: number;
   user: string;
