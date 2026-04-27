@@ -71,10 +71,6 @@ export const AddMealDialog = ({
     generateRecipeTitles();
   }, []);
 
-  useEffect(() => {
-    console.log("Selected recipe:", selectedRecipe);
-  }, [selectedRecipe]);
-
   const validationSchema = yup.object({
     recipe: yup.string().required("Required").max(500),
     portions: yup.number().required("Required").min(0),
@@ -113,7 +109,6 @@ export const AddMealDialog = ({
             enableReinitialize={true}
             validationSchema={validationSchema}
             onSubmit={async (data: MealEntry, { resetForm }) => {
-              console.log(mealEntry)
               const response =
                 isEditing && mealEntry?._id
                   ? await updateMealEntry(mealEntry._id, data)
@@ -153,6 +148,7 @@ export const AddMealDialog = ({
                       label="Date"
                       size="small"
                       sx={{ width: "100%" }}
+                      onChange={(date: any) => setFieldValue("date", date)}
                     />
                   </Grid>
                   <Grid sx={{ marginTop: "10px", width: "100%" }}>

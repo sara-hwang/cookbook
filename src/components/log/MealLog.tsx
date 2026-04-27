@@ -60,7 +60,6 @@ const MealLog = () => {
     if (!mealEntries) {
       return;
     }
-    console.log(mealEntries);
     const updatedMeals = new Map();
     const updatedMealDetails = new Map();
 
