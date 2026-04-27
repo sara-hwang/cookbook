@@ -40,6 +40,7 @@ declare module "@mui/material/Button" {
 declare module "@mui/material/Typography" {
   interface TypographyPropsColorOverrides {
     sage: true;
+    terracotta: true;
   }
 }
 

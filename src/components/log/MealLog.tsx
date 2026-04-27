@@ -143,7 +143,7 @@ const MealLog = () => {
               </Typography>
               <Typography
                 variant="subtitle1"
-                color="primary"
+                color="sage"
                 sx={{ marginBottom: 1 }}
               >
                 Total Calories: {Math.round(dailyCalories)} kcal
@@ -176,7 +176,8 @@ const MealLog = () => {
                   </Typography>
                   <Typography
                     variant="body2"
-                    sx={{ fontWeight: "bold", color: "primary.main" }}
+                    color="sage"
+                    sx={{ fontWeight: "bold" }}
                   >
                     Calories: {detail.calories || 0} kcal
                   </Typography>
@@ -209,7 +210,11 @@ const MealLog = () => {
             <Typography variant="h5">Meal History</Typography>
           </Grid>
           <Grid size={6} sx={{ display: "flex", justifyContent: "flex-end" }}>
-            <Button variant="contained" onClick={() => setDialogOpen(true)}>
+            <Button
+              color="terracotta"
+              variant="contained"
+              onClick={() => setDialogOpen(true)}
+            >
               Add Meal
             </Button>
           </Grid>
