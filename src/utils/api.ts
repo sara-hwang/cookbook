@@ -72,6 +72,16 @@ export const updateMealEntry = async (id: string, data: MealEntry) => {
   }
 };
 
+export const deleteMealEntry = async (id: string) => {
+  try {
+    const response = await axios.delete(`${URI}/log/${id}`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
 export const getMealEntry = async (user: string) => {
   try {
     const response = await axios.get(`${URI}/users/${user}/logs`);

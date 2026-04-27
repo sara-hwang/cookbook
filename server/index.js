@@ -153,6 +153,20 @@ app.put("/log/:id", async (req, res) => {
   }
 });
 
+app.delete("/log/:id", async (req, res) => {
+  const { id } = req.params;
+  try {
+    let response = await MealEntryModel.findByIdAndDelete(id);
+    res.status(200);
+    res.json(response);
+    console.log("deleted meal log");
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
+});
+
 app.get("/users/:userId/logs", async (req, res) => {
     console.log(`Getting meal logs for user: ${req.params.userId}`);
     try {

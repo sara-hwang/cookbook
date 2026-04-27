@@ -6,20 +6,29 @@ import {
   Typography,
   Card,
   CardContent,
+  Dialog,
+  DialogActions,
+  DialogContent,
+  DialogContentText,
+  DialogTitle,
   IconButton,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import AddMealDialog from "./AddMealDialog";
-import { getMealEntry, getRecipe } from "../../utils/api";
+import { getMealEntry, getRecipe, deleteMealEntry } from "../../utils/api";
 import { useAuthUser } from "react-auth-kit";
 import { MealEntry, Recipe, FdcNutrientId } from "../../utils/types";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 import EditIcon from "@mui/icons-material/Edit";
+import DeleteIcon from "@mui/icons-material/Delete";
+import { getRecipeDetails } from "../../utils/helpers";
 
 const MealLog = () => {
   const authUser = useAuthUser();
   const [dialogOpen, setDialogOpen] = useState(false);
   const [selectedMeal, setSelectedMeal] = useState<MealEntry | null>(null);
+  const [selectedMealTitle, setSelectedMealTitle] = useState<string>("");
+  const [deleteDialogOpen, setDeleteDialogOpen] = useState(false);
   const [mealDetails, setMealDetails] = useState<
     Map<
       string,
@@ -35,6 +44,16 @@ const MealLog = () => {
   useEffect(() => {
     getMeals();
   }, []);
+
+  useEffect(() => {
+    const fetchSelectedMealTitle = async () => {
+      if (selectedMeal) {
+        const recipeResponse = await getRecipeDetails(selectedMeal.recipe);
+        setSelectedMealTitle(recipeResponse.title);
+      }
+    };
+    fetchSelectedMealTitle();
+  }, [selectedMeal]);
 
   const getMeals = async () => {
     const mealEntries = await getMealEntry(authUser()?.username);
@@ -120,6 +139,34 @@ const MealLog = () => {
   const handleEdit = (meal: MealEntry) => {
     setSelectedMeal(meal);
     setDialogOpen(true);
+  };
+
+  const handleDelete = (meal: MealEntry) => {
+    setSelectedMeal(meal);
+    setDeleteDialogOpen(true);
+  };
+
+  const confirmDelete = async () => {
+    if (!selectedMeal?._id) {
+      alert("Unable to delete this meal entry.");
+      setDeleteDialogOpen(false);
+      return;
+    }
+
+    const response = await deleteMealEntry(selectedMeal._id);
+    setDeleteDialogOpen(false);
+    setSelectedMeal(null);
+
+    if (response && response.status === 200) {
+      getMeals();
+    } else {
+      alert(response?.data || "Failed to delete meal entry.");
+    }
+  };
+
+  const cancelDelete = () => {
+    setDeleteDialogOpen(false);
+    setSelectedMeal(null);
   };
 
   const renderMeals = () => {
@@ -262,15 +309,25 @@ const MealLog = () => {
                     </Typography>
                     <Typography variant="body2" color="text.secondary">
                       P: {detail.macros?.protein || 0}g | C:{" "}
-                      {detail.macros?.carbs || 0}g | F: {detail.macros?.fat || 0}g
+                      {detail.macros?.carbs || 0}g | F:{" "}
+                      {detail.macros?.fat || 0}g
                     </Typography>
                   </Box>
-                  <IconButton
-                    onClick={() => handleEdit(detail.meal)}
-                    size="small"
-                  >
-                    <EditIcon />
-                  </IconButton>
+                  <Box sx={{ display: "flex", gap: 1 }}>
+                    <IconButton
+                      onClick={() => handleEdit(detail.meal)}
+                      size="small"
+                    >
+                      <EditIcon />
+                    </IconButton>
+                    <IconButton
+                      onClick={() => handleDelete(detail.meal)}
+                      size="small"
+                      sx={{ color: "error.main" }}
+                    >
+                      <DeleteIcon />
+                    </IconButton>
+                  </Box>
                 </Box>
               ))}
             </CardContent>
@@ -291,6 +348,31 @@ const MealLog = () => {
           mealEntry={selectedMeal || undefined}
         />
       )}
+      <Dialog open={deleteDialogOpen} onClose={cancelDelete}>
+        <DialogTitle>Confirm Deletion</DialogTitle>
+        <DialogContent>
+          <DialogContentText>
+            Are you sure you want to delete this meal entry? This action cannot
+            be undone.
+          </DialogContentText>
+          {selectedMeal && (
+            <Box sx={{ mt: 2 }}>
+              <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                {selectedMealTitle}
+              </Typography>
+              <Typography variant="body2" color="text.secondary">
+                Portions: {selectedMeal.portions}
+              </Typography>
+            </Box>
+          )}
+        </DialogContent>
+        <DialogActions>
+          <Button onClick={cancelDelete}>Cancel</Button>
+          <Button color="error" onClick={confirmDelete} variant="contained">
+            Delete
+          </Button>
+        </DialogActions>
+      </Dialog>
       <Box sx={{ padding: "24px" }}>
         <Grid container spacing={2} sx={{ marginBottom: 2 }}>
           <Grid size={6}>
