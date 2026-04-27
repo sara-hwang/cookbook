@@ -57,7 +57,7 @@ const HomeNotLoggedIn = () => {
   }, []);
 
   return (
-    <Box className="full-width">
+    <Box>
       <section id="hero-section">
         <Grid container direction="row" spacing={2}>
           <Grid
