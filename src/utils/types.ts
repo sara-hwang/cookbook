@@ -1,3 +1,5 @@
+import { ReactElement } from "react";
+
 export type MealEntry = {
   date: Date;
   title: string;
@@ -89,6 +91,8 @@ export type Step = {
 export type TabItem = {
   label: string;
   link: string;
+  icon?: ReactElement;
+  index?: number;
 };
 
 export const EmptyRecipe = {

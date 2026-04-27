@@ -56,6 +56,7 @@ import MealPlanCalendar from "./components/plan/MealPlanCalendar";
 import MealLog from "./components/log/MealLog";
 import theme from "./utils/theme";
 import HomeNotLoggedIn from "./pages/HomeNotLoggedIn";
+import { TabItem } from "./utils/types";
 
 const drawerWidth = 240;
 const topBarHeight = "70px";
@@ -81,7 +82,7 @@ const AppBar = styled(MuiAppBar, {
   }),
 }));
 
-export const defaultTabs = [
+export const defaultTabs: TabItem[] = [
   {
     label: "View Recipes",
     icon: <MenuBook fontSize="small" sx={{ marginRight: 1 }} />,
@@ -149,7 +150,7 @@ export default function App() {
     }
     const currTab = defaultTabs.find((tab) => tab.link === pathname);
     if (currTab) {
-      dispatch(setCurrentTab(currTab.index));
+      dispatch(setCurrentTab(currTab.index ?? 0));
     }
   }, [pathname]);
 
@@ -260,10 +261,10 @@ export default function App() {
               }}
             >
               {isAuthenticated() &&
-                defaultTabs.map((page: any) => (
+                defaultTabs.map((page: TabItem) => (
                   <Button
                     color="sage"
-                    key={page}
+                    key={page.label}
                     onClick={() => navigate(page.link)}
                     sx={{ my: 2, display: "block", flex: "none" }}
                   >
@@ -352,7 +353,7 @@ export default function App() {
           <List>
             {isAuthenticated() ? (
               <List>
-                {defaultTabs.map((page: any) => (
+                {defaultTabs.map((page: TabItem) => (
                   <ListItem key={page.link}>
                     <ListItemButton
                       disableRipple

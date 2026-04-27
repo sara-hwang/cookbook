@@ -84,7 +84,7 @@ const HomeNotLoggedIn = () => {
           </Grid>
           <Grid size={8}>
             <img
-              src={featuredRecipeDetails?.photo![0]}
+              src={featuredRecipeDetails?.photo?.[0]}
               alt={featuredRecipeDetails?.title}
               id="hero-image"
             />
