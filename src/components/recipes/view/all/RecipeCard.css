@@ -1,48 +1,48 @@
-.card-content-skeleton {
+.recipe-card .card-content-skeleton {
   display: inline-flex;
 }
 
-.card-content-skeleton .MuiSkeleton-root {
+.recipe-card .card-content-skeleton .MuiSkeleton-root {
   border-radius: 25px;
 }
 
-.MuiCardContent-root.card-content-container-skeleton {
+.recipe-card .MuiCardContent-root.card-content-container-skeleton {
   padding: 0 10px 0 5px;
 }
 
-.card-content-container-skeleton .MuiSkeleton-root {
+.recipe-card .card-content-container-skeleton .MuiSkeleton-root {
   margin: 0 0 -5px 5px;
 }
 
-img.MuiCardMedia-root {
+.recipe-card img.MuiCardMedia-root {
   position: absolute;
   top: 0;
   object-fit: cover;
   height: 140px;
 }
 
-.MuiCard-root:hover {
+.recipe-card.MuiCard-root:hover {
   transform: scale(1.05);
   transition: transform 0.3s ease;
 }
 
-.MuiCard-root {
+.recipe-card.MuiCard-root {
   height: 226px;
 }
 
-#home-view-recipes-box .MuiCard-root:first-of-type {
+#home-view-recipes-box .recipe-card.MuiCard-root:first-of-type {
   margin-left: 0;
 }
 
-.MuiCard-root:last-of-type {
+.recipe-card.MuiCard-root:last-of-type {
   margin-right: 0;
 }
 
-.MuiCardMedia-root .MuiSkeleton-root {
+.recipe-card .MuiCardMedia-root .MuiSkeleton-root {
   height: 140px;
 }
 
-.MuiCard-root .MuiCardActionArea-root {
+.recipe-card.MuiCard-root .MuiCardActionArea-root {
   display: flex;
   position: relative;
   flex-direction: column;
@@ -50,13 +50,13 @@ img.MuiCardMedia-root {
   height: 100%;
 }
 
-.card-content .MuiTypography-root {
+.recipe-card .card-content .MuiTypography-root {
   text-overflow: clip;
   overflow: hidden;
   white-space: nowrap;
 }
 
-.MuiCardContent-root.card-content {
+.recipe-card .MuiCardContent-root.card-content {
   flex: 1;
   position: absolute;
   top: 140px;
@@ -71,14 +71,14 @@ img.MuiCardMedia-root {
   box-sizing: border-box;
 }
 
-.disable-scrollbars::-webkit-scrollbar {
+.recipe-card .disable-scrollbars::-webkit-scrollbar {
   background: transparent; /* Chrome/Safari/Webkit */
   display: none;
   width: 0px;
   height: 0px;
 }
 
-.disable-scrollbars {
+.recipe-card .disable-scrollbars {
   scrollbar-width: none; /* Firefox */
   -ms-overflow-style: none; /* IE 10+ */
 }

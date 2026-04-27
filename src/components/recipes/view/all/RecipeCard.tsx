@@ -91,7 +91,10 @@ const RecipeCard = ({
   };
 
   return isSkeleton ? (
-    <Card sx={{ width: cardWidth, margin: `${cardSpacing}px` }}>
+    <Card
+      sx={{ width: cardWidth, margin: `${cardSpacing}px` }}
+      className="recipe-card"
+    >
       <CardMedia>
         <Skeleton animation="wave" variant="rectangular" />
       </CardMedia>
@@ -106,6 +109,7 @@ const RecipeCard = ({
   ) : (
     <Card
       sx={{ width: cardWidth, margin: `${cardSpacing}px` }}
+      className="recipe-card"
       onMouseEnter={handleCardHover}
       onMouseLeave={handleCardLeave}
     >
