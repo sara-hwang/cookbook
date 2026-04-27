@@ -1,0 +1,4 @@
+.recharts-wrapper > svg > g {
+  outline: none !important;
+}
+

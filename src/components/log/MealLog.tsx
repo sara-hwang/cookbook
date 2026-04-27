@@ -1,3 +1,4 @@
+import "./MealLog.css";
 import {
   Box,
   Button,
@@ -11,6 +12,7 @@ import AddMealDialog from "./AddMealDialog";
 import { getMealEntry, getRecipe } from "../../utils/api";
 import { useAuthUser } from "react-auth-kit";
 import { MealEntry, Recipe, FdcNutrientId } from "../../utils/types";
+import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
 
 const MealLog = () => {
   const authUser = useAuthUser();
@@ -133,30 +135,95 @@ const MealLog = () => {
         <Grid size={12} key={date}>
           <Card sx={{ marginBottom: 2 }}>
             <CardContent>
-              <Typography variant="h6" gutterBottom>
-                {new Date(date).toLocaleDateString("en-US", {
-                  weekday: "long",
-                  year: "numeric",
-                  month: "long",
-                  day: "numeric",
-                })}
-              </Typography>
-              <Typography
-                variant="subtitle1"
-                color="sage"
-                sx={{ marginBottom: 1 }}
-              >
-                Total Calories: {Math.round(dailyCalories)} kcal
-              </Typography>
-              <Typography
-                variant="body2"
-                color="text.secondary"
-                sx={{ marginBottom: 2 }}
-              >
-                Protein: {Math.round(dailyMacros.protein * 10) / 10}g | Carbs:{" "}
-                {Math.round(dailyMacros.carbs * 10) / 10}g | Fat:{" "}
-                {Math.round(dailyMacros.fat * 10) / 10}g
-              </Typography>
+              <Grid container spacing={2} alignItems="center">
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  <Typography variant="h6" gutterBottom>
+                    {new Date(date).toLocaleDateString("en-US", {
+                      weekday: "long",
+                      year: "numeric",
+                      month: "long",
+                      day: "numeric",
+                    })}
+                  </Typography>
+                  <Typography
+                    variant="subtitle1"
+                    color="sage"
+                    sx={{ marginBottom: 1 }}
+                  >
+                    Total Calories: {Math.round(dailyCalories)} kcal
+                  </Typography>
+                  <Typography
+                    variant="body2"
+                    color="text.secondary"
+                    sx={{ marginBottom: 2 }}
+                  >
+                    Protein: {Math.round(dailyMacros.protein * 10) / 10}g |
+                    Carbs: {Math.round(dailyMacros.carbs * 10) / 10}g | Fat:{" "}
+                    {Math.round(dailyMacros.fat * 10) / 10}g
+                  </Typography>
+                </Grid>
+                <Grid size={{ xs: 12, sm: 6 }}>
+                  {/* Pie Chart for Macros */}
+                  <Box sx={{ height: 200 }}>
+                    <ResponsiveContainer width="100%" height="100%">
+                      <PieChart>
+                        <Pie
+                          style={{ outline: "none" }}
+                          data={[
+                            {
+                              name: "Protein",
+                              value: Math.round(dailyMacros.protein * 10) / 10,
+                              color: "#8884d8",
+                            },
+                            {
+                              name: "Carbs",
+                              value: Math.round(dailyMacros.carbs * 10) / 10,
+                              color: "#82ca9d",
+                            },
+                            {
+                              name: "Fat",
+                              value: Math.round(dailyMacros.fat * 10) / 10,
+                              color: "#ffc658",
+                            },
+                          ].filter((item) => item.value > 0)}
+                          cx="50%"
+                          cy="50%"
+                          labelLine={false}
+                          label={({ name, percent }) =>
+                            `${name} ${percent ? (percent * 100).toFixed(0) : 0}%`
+                          }
+                          outerRadius={60}
+                          fill="#8884d8"
+                          dataKey="value"
+                        >
+                          {[
+                            {
+                              name: "Protein",
+                              value: Math.round(dailyMacros.protein * 10) / 10,
+                              color: "#8884d8",
+                            },
+                            {
+                              name: "Carbs",
+                              value: Math.round(dailyMacros.carbs * 10) / 10,
+                              color: "#82ca9d",
+                            },
+                            {
+                              name: "Fat",
+                              value: Math.round(dailyMacros.fat * 10) / 10,
+                              color: "#ffc658",
+                            },
+                          ]
+                            .filter((item) => item.value > 0)
+                            .map((entry, index) => (
+                              <Cell key={`cell-${index}`} fill={entry.color} />
+                            ))}
+                        </Pie>
+                        <Tooltip formatter={(value) => [`${value}g`, ""]} />
+                      </PieChart>
+                    </ResponsiveContainer>
+                  </Box>
+                </Grid>
+              </Grid>
 
               {meal.map((detail, index) => (
                 <Box
