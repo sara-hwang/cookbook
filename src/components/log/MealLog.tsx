@@ -6,6 +6,7 @@ import {
   Typography,
   Card,
   CardContent,
+  IconButton,
 } from "@mui/material";
 import { useEffect, useState } from "react";
 import AddMealDialog from "./AddMealDialog";
@@ -13,10 +14,12 @@ import { getMealEntry, getRecipe } from "../../utils/api";
 import { useAuthUser } from "react-auth-kit";
 import { MealEntry, Recipe, FdcNutrientId } from "../../utils/types";
 import { PieChart, Pie, Cell, ResponsiveContainer, Tooltip } from "recharts";
+import EditIcon from "@mui/icons-material/Edit";
 
 const MealLog = () => {
   const authUser = useAuthUser();
   const [dialogOpen, setDialogOpen] = useState(false);
+  const [selectedMeal, setSelectedMeal] = useState<MealEntry | null>(null);
   const [mealDetails, setMealDetails] = useState<
     Map<
       string,
@@ -112,6 +115,11 @@ const MealLog = () => {
     }
 
     setMealDetails(updatedMealDetails);
+  };
+
+  const handleEdit = (meal: MealEntry) => {
+    setSelectedMeal(meal);
+    setDialogOpen(true);
   };
 
   const renderMeals = () => {
@@ -233,25 +241,36 @@ const MealLog = () => {
                     padding: 1,
                     backgroundColor: "#f5f5f5",
                     borderRadius: 1,
+                    display: "flex",
+                    justifyContent: "space-between",
+                    alignItems: "center",
                   }}
                 >
-                  <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
-                    {detail.recipe?.title || detail.meal.recipe}
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    Portions: {detail.meal.portions}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    color="sage"
-                    sx={{ fontWeight: "bold" }}
+                  <Box>
+                    <Typography variant="subtitle2" sx={{ fontWeight: "bold" }}>
+                      {detail.recipe?.title || detail.meal.recipe}
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      Portions: {detail.meal.portions}
+                    </Typography>
+                    <Typography
+                      variant="body2"
+                      color="sage"
+                      sx={{ fontWeight: "bold" }}
+                    >
+                      Calories: {detail.calories || 0} kcal
+                    </Typography>
+                    <Typography variant="body2" color="text.secondary">
+                      P: {detail.macros?.protein || 0}g | C:{" "}
+                      {detail.macros?.carbs || 0}g | F: {detail.macros?.fat || 0}g
+                    </Typography>
+                  </Box>
+                  <IconButton
+                    onClick={() => handleEdit(detail.meal)}
+                    size="small"
                   >
-                    Calories: {detail.calories || 0} kcal
-                  </Typography>
-                  <Typography variant="body2" color="text.secondary">
-                    P: {detail.macros?.protein || 0}g | C:{" "}
-                    {detail.macros?.carbs || 0}g | F: {detail.macros?.fat || 0}g
-                  </Typography>
+                    <EditIcon />
+                  </IconButton>
                 </Box>
               ))}
             </CardContent>
@@ -269,6 +288,7 @@ const MealLog = () => {
           dialogOpen={dialogOpen}
           setDialogOpen={setDialogOpen}
           getMeals={getMeals}
+          mealEntry={selectedMeal || undefined}
         />
       )}
       <Box sx={{ padding: "24px" }}>
@@ -280,7 +300,10 @@ const MealLog = () => {
             <Button
               color="terracotta"
               variant="contained"
-              onClick={() => setDialogOpen(true)}
+              onClick={() => {
+                setSelectedMeal(null);
+                setDialogOpen(true);
+              }}
             >
               Add Meal
             </Button>

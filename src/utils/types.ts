@@ -1,6 +1,7 @@
 import { ReactElement } from "react";
 
 export type MealEntry = {
+  _id?: string;
   date: Date;
   recipe: string;
   portions: number;

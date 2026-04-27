@@ -17,29 +17,47 @@ import { useEffect, useState } from "react";
 import CloseIcon from "@mui/icons-material/Close";
 import { useAppSelector } from "../../redux/hooks";
 import { RootState } from "../../redux/store";
-import { getRecipesList } from "../../utils/helpers";
+import { getRecipeDetails, getRecipesList } from "../../utils/helpers";
 import { MealEntry } from "../../utils/types";
 import { useAuthUser } from "react-auth-kit";
-import { addMealEntry } from "../../utils/api";
+import { addMealEntry, updateMealEntry } from "../../utils/api";
 
 interface AddMealDialogProps {
   dialogOpen: boolean;
   setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
   getMeals?: () => void;
+  mealEntry?: MealEntry;
 }
 
 export const AddMealDialog = ({
   dialogOpen,
   setDialogOpen,
   getMeals,
+  mealEntry,
 }: AddMealDialogProps) => {
   const authUser = useAuthUser();
   const [recipeTitles, setRecipeTitles] = useState<
     { label: string; id: string }[]
   >([]);
+  const [selectedRecipe, setSelectedRecipe] = useState<{
+    label: string;
+    id: string;
+  } | null>(null);
   let { recipesList } = useAppSelector((state: RootState) => state.recipesList);
 
+  const isEditing = !!mealEntry;
+
   useEffect(() => {
+    const fetchSelectedRecipe = async () => {
+      if (mealEntry) {
+        const recipe = await getRecipeDetails(mealEntry.recipe);
+        if (recipe) {
+          setSelectedRecipe({ label: recipe.title, id: recipe.key });
+        }
+      }
+    };
+
+    fetchSelectedRecipe();
     const generateRecipeTitles = async () => {
       if (!recipesList || recipesList.length == 0) {
         recipesList = await getRecipesList();
@@ -53,6 +71,10 @@ export const AddMealDialog = ({
     generateRecipeTitles();
   }, []);
 
+  useEffect(() => {
+    console.log("Selected recipe:", selectedRecipe);
+  }, [selectedRecipe]);
+
   const validationSchema = yup.object({
     recipe: yup.string().required("Required").max(500),
     portions: yup.number().required("Required").min(0),
@@ -62,7 +84,7 @@ export const AddMealDialog = ({
     <LocalizationProvider dateAdapter={AdapterDateFns}>
       <Dialog open={dialogOpen}>
         <DialogTitle>
-          Add Meal
+          {isEditing ? "Edit Meal" : "Add Meal"}
           <IconButton
             disableRipple
             onClick={() => setDialogOpen(false)}
@@ -73,16 +95,29 @@ export const AddMealDialog = ({
         </DialogTitle>
         <DialogContent>
           <Formik
-            initialValues={{
-              date: new Date(),
-              recipe: "",
-              portions: 1,
-              user: authUser()?.username,
-            }}
+            initialValues={
+              mealEntry
+                ? {
+                    date: new Date(mealEntry.date),
+                    recipe: mealEntry.recipe,
+                    portions: mealEntry.portions,
+                    user: mealEntry.user,
+                  }
+                : {
+                    date: new Date(),
+                    recipe: "",
+                    portions: 1,
+                    user: authUser()?.username,
+                  }
+            }
             enableReinitialize={true}
             validationSchema={validationSchema}
             onSubmit={async (data: MealEntry, { resetForm }) => {
-              const response = await addMealEntry(data);
+              console.log(mealEntry)
+              const response =
+                isEditing && mealEntry?._id
+                  ? await updateMealEntry(mealEntry._id, data)
+                  : await addMealEntry(data);
               if (response && response.status === 200) {
                 resetForm();
                 setDialogOpen(false);
@@ -127,6 +162,7 @@ export const AddMealDialog = ({
                       onChange={(e, value) => {
                         setFieldValue("recipe", value?.id);
                       }}
+                      value={selectedRecipe}
                       renderInput={(params) => (
                         <TextField
                           {...params}
@@ -162,7 +198,7 @@ export const AddMealDialog = ({
                       disabled={!dirty || !isValid || isSubmitting}
                       onClick={submitForm}
                     >
-                      Save
+                      {isEditing ? "Update" : "Save"}
                     </Button>
                   </Grid>
                 </Grid>

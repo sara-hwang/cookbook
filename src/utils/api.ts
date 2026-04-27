@@ -59,6 +59,19 @@ export const addMealEntry = async (data: MealEntry) => {
   }
 };
 
+export const updateMealEntry = async (id: string, data: MealEntry) => {
+  try {
+    const response = await axios.put(`${URI}/log/${id}`, {
+      ...data,
+      date: extractDate(data.date),
+    });
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
 export const getMealEntry = async (user: string) => {
   try {
     const response = await axios.get(`${URI}/users/${user}/logs`);

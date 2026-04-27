@@ -138,6 +138,21 @@ app.post("/log/add", async (req, res) => {
   }
 });
 
+app.put("/log/:id", async (req, res) => {
+  const { id } = req.params;
+  const obj = req.body;
+  try {
+    let response = await MealEntryModel.findByIdAndUpdate(id, obj, { new: true });
+    res.status(200);
+    res.json(response);
+    console.log("updated meal log");
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
+});
+
 app.get("/users/:userId/logs", async (req, res) => {
     console.log(`Getting meal logs for user: ${req.params.userId}`);
     try {
