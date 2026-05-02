@@ -52,13 +52,20 @@ const SearchBar = ({ autoFocus, setSearchOpen }: SearchBarProps) => {
       onFocus={() => {
         if (pathname !== "/view") navigate("/view");
       }}
-      onBlur={() => setSearchOpen(false)}
+      onBlur={() => {
+        if (searchTags.length === 0) setSearchOpen(false);
+      }}
       onChange={(e, value) => dispatch(setSearchTags(value))}
       renderTags={(value: readonly string[], getTagProps) => (
         <ChipDisplay tags={value} size="small" getTagProps={getTagProps} />
       )}
+      inputValue={searchTitle}
       onInputChange={(event, newInputValue, reason) => {
-        reason === "clear" && dispatch(setSearchTitle(""));
+        if (reason === "clear") {
+          dispatch(setSearchTitle(""));
+          return;
+        }
+        dispatch(setSearchTitle(newInputValue));
       }}
       renderInput={(params) => (
         <TextField
@@ -81,9 +88,7 @@ const SearchBar = ({ autoFocus, setSearchOpen }: SearchBarProps) => {
               </>
             ),
           }}
-          onChange={(e) => dispatch(setSearchTitle(e.target.value))}
           placeholder="Start typing to search by title or press enter to search for a tag"
-          value={searchTitle}
         />
       )}
     />

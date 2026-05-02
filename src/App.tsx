@@ -121,6 +121,9 @@ export default function App() {
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
+  const { searchTags, searchKey, searchTitle } = useAppSelector(
+    (state: RootState) => state.searchTags
+  );
 
   const topBarHeight = isMobile ? "100px" : "70px";
 
@@ -131,6 +134,12 @@ export default function App() {
     dispatch(setCurrentTab(index));
     setMobileOpen(false);
   };
+
+  useEffect(() => {
+    if (!searchOpen) {
+      setSearchOpen(true);
+    }
+  }, [searchTags]);
 
   useEffect(() => {
     if (currentTab === -(defaultTabs.length + 1)) navigate(pathname);

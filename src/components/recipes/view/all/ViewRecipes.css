@@ -5,6 +5,10 @@
   z-index: 1;
 }
 
+.recipe-grid-container {
+  width: 100%;
+}
+
 .recipe-grid-container .MuiBox-root {
   display: flex;
   flex-wrap: wrap;
