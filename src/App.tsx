@@ -58,7 +58,6 @@ import HomeNotLoggedIn from "./pages/HomeNotLoggedIn";
 import { TabItem } from "./utils/types";
 
 const drawerWidth = 240;
-const topBarHeight = "70px";
 
 interface AppBarProps extends MuiAppBarProps {
   open?: boolean;
@@ -110,6 +109,7 @@ export const defaultTabs: TabItem[] = [
 
 export default function App() {
   const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery("(max-width:480px)");
   const [mobileOpen, setMobileOpen] = React.useState(false);
   const { pathname } = useLocation();
   const navigate = useNavigate();
@@ -121,6 +121,8 @@ export default function App() {
   const { tabsList, currentTab } = useAppSelector(
     (state: RootState) => state.tabsList
   );
+
+  const topBarHeight = isMobile ? "100px" : "70px";
 
   const handleListItemClick = (
     event: React.MouseEvent<HTMLDivElement, MouseEvent>,
@@ -209,7 +211,13 @@ export default function App() {
         style={{ borderBottom: "1px solid lightgrey" }}
       >
         <Container maxWidth="xl">
-          <Toolbar style={{ height: topBarHeight }}>
+          <Toolbar
+            style={{
+              height: topBarHeight,
+              alignItems: isMobile ? "flex-end" : "center",
+              paddingBottom: isMobile ? "10px" : undefined,
+            }}
+          >
             {lsMedium && (
               <IconButton
                 color="primary"
@@ -221,7 +229,7 @@ export default function App() {
                 <MenuIcon />
               </IconButton>
             )}
-            {!searchOpen && (
+            {!searchOpen && !isMobile && (
               <img
                 src="/logo.png"
                 style={{ width: lsMedium ? "60px" : "100px", margin: "10px" }}
@@ -340,7 +348,7 @@ export default function App() {
   };
 
   const recentlyVisitedPanel = (
-    <div>
+    <div style={{ paddingTop: isMobile ? "40px" : undefined }}>
       {lsMedium && (
         <>
           <List>

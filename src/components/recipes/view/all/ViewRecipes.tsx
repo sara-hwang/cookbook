@@ -14,9 +14,6 @@ import { RootState } from "../../../../redux/store";
 import { getRecipesList } from "../../../../utils/helpers";
 import { setRecipesList } from "../../../../redux/recipesList";
 import RecipeCard from "./RecipeCard";
-import { Splide, SplideSlide } from "@splidejs/react-splide";
-import "@splidejs/splide/css";
-import RandomButton from "./RandomButton";
 import { KeyboardArrowUp } from "@mui/icons-material";
 import theme from "../../../../utils/theme";
 
@@ -53,6 +50,7 @@ const ViewRecipes = () => {
     (state: RootState) => state.recipesList
   );
   const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery("(max-width:480px)");
   const cardSpacing = 10;
   const cardsPerRow = width > 1000 ? 5 : width > 800 ? 4 : width > 600 ? 3 : 2;
   const cardWidth = `calc(${100 / cardsPerRow}% - ${cardSpacing * 2}px)`;
@@ -116,7 +114,11 @@ const ViewRecipes = () => {
     <Box
       sx={{
         display: "flex",
-        padding: lsMedium ? "24px 10%" : "24px 10% 24px 24px",
+        padding: isMobile
+          ? "24px 0"
+          : lsMedium
+            ? "24px 10%"
+            : "24px 10% 24px 24px",
       }}
     >
       <div className="recipe-grid-container">

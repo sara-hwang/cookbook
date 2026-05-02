@@ -67,6 +67,7 @@ const RecipeDetails = () => {
   };
   const gtLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
+  const isMobile = useMediaQuery("(max-width:480px)");
 
   let stepNumber = 0;
 
@@ -90,7 +91,10 @@ const RecipeDetails = () => {
         setRecipeTitlePosition(
           document.getElementById("recipe-title")?.offsetTop ?? 0
         );
-        const recipeTagsElement = document.getElementById("recipe-tags");
+        let recipeTagsElement = document.getElementById("recipe-tags");
+        if (recipeTagsElement == null) {
+          recipeTagsElement = document.getElementById("date-added");
+        }
         setTagsEndPosition(
           recipeTagsElement?.getBoundingClientRect().bottom ?? 0
         );
@@ -174,7 +178,11 @@ const RecipeDetails = () => {
       <Box
         sx={{
           display: "flex",
-          padding: lsMedium ? "24px 10%" : "24px 10% 24px 24px",
+          padding: isMobile
+            ? "24px"
+            : lsMedium
+              ? "24px 10%"
+              : "24px 10% 24px 24px",
         }}
         id="view-recipe-box"
       >
@@ -227,7 +235,7 @@ const RecipeDetails = () => {
                   </span>
                 )}
               </span>
-              <div>
+              <div id="date-added">
                 {recipe.dateAdded
                   ? `Added ${new Date(recipe.dateAdded).toLocaleString()}`
                   : undefined}
