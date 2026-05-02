@@ -16,6 +16,8 @@ import { setRecipesList } from "../../../../redux/recipesList";
 import RecipeCard from "./RecipeCard";
 import { KeyboardArrowUp } from "@mui/icons-material";
 import theme from "../../../../utils/theme";
+import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
+import { getFavourites } from "../../../../utils/api";
 
 interface ScrollTopProps {
   children: React.ReactNode;
@@ -39,10 +41,13 @@ const ScrollTop = (props: ScrollTopProps) => {
 
 const ViewRecipes = () => {
   const dispatch = useAppDispatch();
+  const auth = useAuthUser();
+  const isAuthenticated = useIsAuthenticated();
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState(true);
   const [width, setWidth] = useState(0);
   const [keys, setKeys] = useState([1, 2, 3, 4, 5, 6]);
+  const [favouriteRecipes, setFavouriteRecipes] = useState<Recipe[]>([]);
   const { searchTags, searchTitle } = useAppSelector(
     (state: RootState) => state.searchTags
   );
@@ -67,6 +72,19 @@ const ViewRecipes = () => {
     );
   }
 
+  async function getFavouriteRecipes() {
+    if (auth()?.username) {
+      const response = await getFavourites(auth()?.username);
+      if (response && response.status === 200) {
+        const favRecipeKeys = response.data.favourites || [];
+        const favRecipes = recipesList.filter((recipe) =>
+          favRecipeKeys.includes(recipe.key)
+        );
+        setFavouriteRecipes(favRecipes);
+      }
+    }
+  }
+
   useEffect(() => {
     getRecipes();
 
@@ -83,6 +101,12 @@ const ViewRecipes = () => {
     //   }, 50);
     // }
   }, []);
+
+  useEffect(() => {
+    if (isAuthenticated()) {
+      getFavouriteRecipes();
+    }
+  }, [recipesList, isAuthenticated]);
 
   useLayoutEffect(() => {
     const tagsFilter =
@@ -122,10 +146,33 @@ const ViewRecipes = () => {
       }}
     >
       <div className="recipe-grid-container">
-        <div
-          className="spaced-apart"
-          style={{ padding: `0 ${cardSpacing * 2}px` }}
-        >
+        {isAuthenticated() && favouriteRecipes.length > 0 && (
+          <div style={{ marginBottom: 24 }}>
+            <div style={{ padding: `0 ${cardSpacing * 2}px` }}>
+              <Typography
+                variant="h5"
+                sx={{
+                  scrollMarginTop: lsMedium ? "70px" : "10px",
+                }}
+              >
+                {`Favourites (${favouriteRecipes.length})`}
+              </Typography>
+            </div>
+            <Box style={{ padding: `0 ${cardSpacing}px ${cardSpacing}px` }}>
+              {favouriteRecipes.map((recipe) => (
+                <RecipeCard
+                  cardSpacing={cardSpacing}
+                  cardWidth={cardWidth}
+                  cardWidthPixels={cardWidthPixels}
+                  isSkeleton={false}
+                  key={recipe.key}
+                  recipe={recipe}
+                />
+              ))}
+            </Box>
+          </div>
+        )}
+        <div style={{ padding: `0 ${cardSpacing * 2}px` }}>
           <Typography
             id="All"
             variant="h5"
@@ -135,7 +182,6 @@ const ViewRecipes = () => {
           >
             {`All (${recipes.length})`}
           </Typography>
-          {/* <RandomButton recipes={recipes} /> */}
         </div>
         <Box
           style={{ padding: `0 ${cardSpacing}px ${cardSpacing}px` }}

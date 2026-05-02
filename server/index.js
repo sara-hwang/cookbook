@@ -84,6 +84,35 @@ app.put("/user/:id/grocery", async (req, res) => {
   }
 });
 
+app.get("/user/:id/favourites", async (req, res) => {
+  try {
+    let response = await UserModel.findOne({ username: req.params.id });
+    res.status(200).json(response);
+  } catch (error) {
+    res.status(500).json({
+      message: `Error getting favourites for user ${req.params.id}`,
+    });
+  }
+});
+
+app.put("/user/:id/favourites", async (req, res) => {
+  const obj = req.body;
+  try {
+    let response = await UserModel.updateOne(
+      { username: req.params.id },
+      {
+        favourites: [...obj],
+      }
+    );
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
+});
+
 app.get("/recipes/getAll", async (req, res) => {
   console.log("Getting all recipes");
   try {
@@ -142,7 +171,9 @@ app.put("/log/:id", async (req, res) => {
   const { id } = req.params;
   const obj = req.body;
   try {
-    let response = await MealEntryModel.findByIdAndUpdate(id, obj, { new: true });
+    let response = await MealEntryModel.findByIdAndUpdate(id, obj, {
+      new: true,
+    });
     res.status(200);
     res.json(response);
     console.log("updated meal log");
@@ -168,17 +199,17 @@ app.delete("/log/:id", async (req, res) => {
 });
 
 app.get("/users/:userId/logs", async (req, res) => {
-    console.log(`Getting meal logs for user: ${req.params.userId}`);
-    try {
-      let response = await MealEntryModel.find({ user: req.params.userId });
-      res.status(200);
-      res.json(response);
-    } catch (error) {
-      console.log(error);
-      res.status(400);
-      res.json(error);
-    }
-})
+  console.log(`Getting meal logs for user: ${req.params.userId}`);
+  try {
+    let response = await MealEntryModel.find({ user: req.params.userId });
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(400);
+    res.json(error);
+  }
+});
 
 app.post("/image/upload", upload.single("image"), async (req, res) => {
   const AUTH = "Client-ID " + process.env.IMGUR_CLIENT_ID;

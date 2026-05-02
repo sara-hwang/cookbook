@@ -46,6 +46,26 @@ export const updateGroceryList = async (user: string, item: Ingredient[]) => {
   }
 };
 
+export const getFavourites = async (user: string) => {
+  try {
+    const response = await axios.get(`${URI}/user/${user}/favourites`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
+export const updateFavourites = async (user: string, favourites: string[]) => {
+  try {
+    const response = await axios.put(`${URI}/user/${user}/favourites`, favourites);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
 export const addMealEntry = async (data: MealEntry) => {
   try {
     const response = await axios.post(`${URI}/log/add`, {

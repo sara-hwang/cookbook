@@ -26,12 +26,18 @@ import ChipDisplay from "../../../ChipDisplay";
 import "./RecipeDetails.css";
 import { RootState } from "../../../../redux/store";
 import { getRecipeDetails, markdownParser } from "../../../../utils/helpers";
-import { getGroceryList, updateGroceryList } from "../../../../utils/api";
+import {
+  getGroceryList,
+  updateGroceryList,
+  getFavourites,
+  updateFavourites,
+} from "../../../../utils/api";
 import { useAuthUser, useIsAuthenticated } from "react-auth-kit";
 import {
   AddShoppingCartOutlined,
   ChecklistOutlined,
   Edit,
+  Favorite,
   FavoriteBorder,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
@@ -55,6 +61,7 @@ const RecipeDetails = () => {
   const [recipeString, setRecipeString] = useState("");
   const [recipeTitlePosition, setRecipeTitlePosition] = useState(0);
   const [tagsEndPosition, setTagsEndPosition] = useState(0);
+  const [isFavourite, setIsFavourite] = useState(false);
 
   const navigate = useNavigate();
   const { recipesList } = useAppSelector(
@@ -126,6 +133,15 @@ const RecipeDetails = () => {
       if (!ing.isDivider) recipeString += ing.text + ", ";
     });
     setRecipeString(recipeString);
+
+    // check if favourited
+    if (auth()?.username && recipe.key) {
+      getFavourites(auth()?.username).then((response) => {
+        if (response && response.status === 200) {
+          setIsFavourite(response.data.favourites.includes(recipe.key));
+        }
+      });
+    }
   }, [recipe]);
 
   const calculateAmount = (ingredientText: string) => {
@@ -163,6 +179,34 @@ const RecipeDetails = () => {
       } else {
         alert("Could not add to groceries, server returned " + response?.data);
       }
+    }
+  };
+
+  const toggleFavourite = async () => {
+    if (!auth()?.username || !recipe.key) {
+      return;
+    }
+    const response = await getFavourites(auth()?.username);
+    if (response && response.status === 200) {
+      let favourites: string[] = response.data.favourites || [];
+      if (isFavourite) {
+        favourites = favourites.filter((fav) => fav !== recipe.key);
+      } else {
+        favourites.push(recipe.key);
+      }
+      const updateResponse = await updateFavourites(
+        auth()?.username,
+        favourites
+      );
+      if (updateResponse && updateResponse.status === 200) {
+        setIsFavourite(!isFavourite);
+      } else {
+        alert(
+          "Could not update favourites, server returned " + updateResponse?.data
+        );
+      }
+    } else {
+      alert("Could not get favourites, server returned " + response?.data);
     }
   };
 
@@ -215,13 +259,12 @@ const RecipeDetails = () => {
                 {isAuthenticated() && (
                   <span style={{ display: "flex", gap: "8px" }}>
                     <Tooltip arrow disableInteractive title="Add to Favourites">
-                      <IconButton
-                        onClick={() => {
-                          console.log("added to favourites");
-                        }}
-                        sx={{ p: 0 }}
-                      >
-                        <FavoriteBorder fontSize="large" />
+                      <IconButton onClick={toggleFavourite} sx={{ p: 0 }}>
+                        {isFavourite ? (
+                          <Favorite fontSize="large" />
+                        ) : (
+                          <FavoriteBorder fontSize="large" />
+                        )}
                       </IconButton>
                     </Tooltip>
                     <Tooltip arrow disableInteractive title="Edit">
