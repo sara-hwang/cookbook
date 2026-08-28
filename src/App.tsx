@@ -155,7 +155,7 @@ export default function App() {
 
   useEffect(() => {
     if (pathname == "/") {
-      dispatch(setCurrentTab(-defaultTabs.length));
+      dispatch(setCurrentTab(-(defaultTabs.length + 1)));
       return;
     }
     const currTab = defaultTabs.find((tab) => tab.link === pathname);
