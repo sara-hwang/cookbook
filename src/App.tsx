@@ -238,7 +238,7 @@ export default function App() {
                 <MenuIcon />
               </IconButton>
             )}
-            {!searchOpen && !isMobile && (
+            {!lsMedium && (
               <img
                 src="/logo.png"
                 style={{ width: lsMedium ? "60px" : "100px", margin: "10px" }}
