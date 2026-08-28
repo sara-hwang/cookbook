@@ -286,7 +286,6 @@ export default function App() {
                 style={{
                   display: "flex",
                   alignItems: "center",
-                  marginLeft: "100px",
                   width: "100%",
                   justifyContent: "flex-end",
                   flexWrap: "nowrap",

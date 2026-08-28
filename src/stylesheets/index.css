@@ -2,6 +2,7 @@
 
 body {
   margin: 0;
+  overflow-x: hidden;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
@@ -9,6 +10,7 @@ body {
 html {
   scroll-behavior: smooth;
   background-color: var(--lightCream);
+  overflow-x: hidden;
 }
 
 .MuiTypography-root.MuiTypography-h4 {
