@@ -58,7 +58,10 @@ export const getFavourites = async (user: string) => {
 
 export const updateFavourites = async (user: string, favourites: string[]) => {
   try {
-    const response = await axios.put(`${URI}/user/${user}/favourites`, favourites);
+    const response = await axios.put(
+      `${URI}/user/${user}/favourites`,
+      favourites
+    );
     return response;
   } catch (e) {
     const error = e as AxiosError;
@@ -171,6 +174,16 @@ export const getRecipe = async (key: string | undefined) => {
 export const deleteRecipe = async (key: string | undefined) => {
   try {
     const response = await axios.delete(`${URI}/recipes/${key}`);
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
+export const duplicateRecipe = async (key: string | undefined) => {
+  try {
+    const response = await axios.post(`${URI}/recipes/${key}/duplicate`);
     return response;
   } catch (e) {
     const error = e as AxiosError;

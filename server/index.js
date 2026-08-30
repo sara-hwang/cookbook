@@ -245,6 +245,62 @@ app.put("/recipes/:id", async (req, res) => {
   }
 });
 
+app.post("/recipes/:id/duplicate", async (req, res) => {
+  console.log(`Duplicating recipe ${req.params.id}`);
+  try {
+    // Get the original recipe
+    let originalRecipe = await RecipeModel.findOne({ key: req.params.id });
+    if (!originalRecipe) {
+      res.status(404);
+      res.json({ message: "Recipe not found" });
+      return;
+    }
+
+    // Create a copy of the recipe with a new key and title
+    let newRecipe = originalRecipe.toObject();
+    delete newRecipe._id; // Remove MongoDB ID to generate a new one
+    
+    // Preserve important fields
+    const thumbnail = newRecipe.thumbnail;
+    const photo = newRecipe.photo;
+    
+    // Generate a new key by appending "-copy"
+    let newKey = `${newRecipe.key}-copy`;
+    let keyExists = true;
+    let attempts = 0;
+    
+    // Keep appending "-copy" until we find a unique key
+    while (keyExists && attempts < 100) {
+      const existing = await RecipeModel.findOne({ key: newKey });
+      if (!existing) {
+        keyExists = false;
+      } else {
+        newKey = `${newKey}-copy`;
+        attempts++;
+      }
+    }
+    
+    newRecipe.key = newKey;
+    newRecipe.thumbnail = thumbnail;
+    newRecipe.photo = photo;
+    
+    // Update title to indicate it's a copy
+    newRecipe.title = `${newRecipe.title} (Copy)`;
+    
+    // Reset dateAdded to current time
+    newRecipe.dateAdded = Date.now();
+
+    // Create the duplicate recipe
+    let response = await RecipeModel.create(newRecipe);
+    res.status(200);
+    res.json(response);
+  } catch (error) {
+    console.log(error);
+    res.status(500);
+    res.json(error.message);
+  }
+});
+
 app.delete("/recipes/:id", async (req, res) => {
   console.log(`Deleting ${req.params.id}`);
   try {

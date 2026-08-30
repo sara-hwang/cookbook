@@ -41,7 +41,7 @@ import {
   FavoriteBorder,
   ShoppingCartOutlined,
 } from "@mui/icons-material";
-import DeleteRecipeDialog from "./DeleteRecipeDialog";
+import RecipeOptionsMenu from "./RecipeOptionsMenu";
 import Chat from "./Chat";
 import NutritionLabel from "./NutritionLabel";
 import { defaultTabs } from "../../../../App";
@@ -57,7 +57,6 @@ const RecipeDetails = () => {
   const [servings, setServings] = useState(recipe.servings);
   const [groceryMode, setGroceryMode] = useState(false);
   const [prepareMode, setPrepareMode] = useState(false);
-  const [popupOpen, setPopupOpen] = useState(false);
   const [recipeString, setRecipeString] = useState("");
   const [recipeTitlePosition, setRecipeTitlePosition] = useState(0);
   const [tagsEndPosition, setTagsEndPosition] = useState(0);
@@ -67,11 +66,6 @@ const RecipeDetails = () => {
   const { recipesList } = useAppSelector(
     (state: RootState) => state.recipesList
   );
-  const [anchorEl, setAnchorEl] = useState<null | HTMLElement>(null);
-  const open = Boolean(anchorEl);
-  const handleClick = (event: React.MouseEvent<HTMLButtonElement>) => {
-    setAnchorEl(event.currentTarget);
-  };
   const gtLarge = useMediaQuery(theme.breakpoints.up("lg"));
   const lsMedium = useMediaQuery(theme.breakpoints.down("md"));
   const isMobile = useMediaQuery("(max-width:480px)");
@@ -230,7 +224,6 @@ const RecipeDetails = () => {
         }}
         id="view-recipe-box"
       >
-        <DeleteRecipeDialog popupOpen={popupOpen} setPopupOpen={setPopupOpen} />
         <Grid container direction="row" spacing={4}>
           <Grid container direction="row" spacing={2} sx={{ zIndex: 1 }}>
             <Grid size={12}>
@@ -275,6 +268,7 @@ const RecipeDetails = () => {
                         <Edit fontSize="large" />
                       </IconButton>
                     </Tooltip>
+                    <RecipeOptionsMenu />
                   </span>
                 )}
               </span>
