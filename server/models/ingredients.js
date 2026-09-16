@@ -17,9 +17,10 @@ const IngredientPortion = new mongoose.Schema({
 const IngredientSchema = new mongoose.Schema({
   fdcId: {
     type: Number,
-    required: true,
+    sparse: true,
     unique: true,
   },
+  name: String,
   category: String,
   nutrition: [NutrientSchema],
   portions: [IngredientPortion],

@@ -234,8 +234,34 @@ app.post("/image/upload", upload.single("image"), async (req, res) => {
 app.put("/recipes/:id", async (req, res) => {
   const obj = req.body;
   try {
-    RecipeModel.validate(obj);
-    let response = await RecipeModel.updateOne({ key: obj.key }, obj);
+    const sanitizedIngredients = (obj.ingredients ?? []).map((ingredient) => {
+      if (!ingredient || ingredient.isDivider) return ingredient;
+      const hasFdcLink =
+        ingredient.fdcId !== undefined &&
+        ingredient.fdcId !== null &&
+        ingredient.fdcId !== "" &&
+        Number.isFinite(Number(ingredient.fdcId));
+
+      if (!hasFdcLink) {
+        return {
+          ...ingredient,
+          fdcId: null,
+          fdcQuery: "",
+          fdcUnit: null,
+          fdcAmount: null,
+        };
+      }
+
+      return ingredient;
+    });
+
+    const payload = {
+      ...obj,
+      ingredients: sanitizedIngredients,
+    };
+
+    RecipeModel.validate(payload);
+    let response = await RecipeModel.updateOne({ key: obj.key }, payload);
     res.status(200);
     res.json(response);
   } catch (error) {
@@ -259,16 +285,16 @@ app.post("/recipes/:id/duplicate", async (req, res) => {
     // Create a copy of the recipe with a new key and title
     let newRecipe = originalRecipe.toObject();
     delete newRecipe._id; // Remove MongoDB ID to generate a new one
-    
+
     // Preserve important fields
     const thumbnail = newRecipe.thumbnail;
     const photo = newRecipe.photo;
-    
+
     // Generate a new key by appending "-copy"
     let newKey = `${newRecipe.key}-copy`;
     let keyExists = true;
     let attempts = 0;
-    
+
     // Keep appending "-copy" until we find a unique key
     while (keyExists && attempts < 100) {
       const existing = await RecipeModel.findOne({ key: newKey });
@@ -279,14 +305,14 @@ app.post("/recipes/:id/duplicate", async (req, res) => {
         attempts++;
       }
     }
-    
+
     newRecipe.key = newKey;
     newRecipe.thumbnail = thumbnail;
     newRecipe.photo = photo;
-    
+
     // Update title to indicate it's a copy
     newRecipe.title = `${newRecipe.title} (Copy)`;
-    
+
     // Reset dateAdded to current time
     newRecipe.dateAdded = Date.now();
 
@@ -314,6 +340,40 @@ app.delete("/recipes/:id", async (req, res) => {
   }
 });
 
+app.get("/ingredients/search", async (req, res) => {
+  const query = req.query.query;
+  if (!query || !query.toString().trim()) {
+    res.status(200).json([]);
+    return;
+  }
+
+  try {
+    const regex = new RegExp(
+      query
+        .toString()
+        .trim()
+        .replace(/[.*+?^${}()|[\]\\]/g, "\\$&"),
+      "i"
+    );
+    const response = await IngredientModel.find({
+      $or: [{ name: regex }, { category: regex }],
+    }).limit(20);
+
+    const results = response.map((ingredient) => ({
+      fdcId: ingredient.fdcId,
+      query:
+        ingredient.name ||
+        ingredient.category ||
+        `Custom ingredient ${ingredient.fdcId}`,
+    }));
+
+    res.status(200).json(results);
+  } catch (error) {
+    console.log(error);
+    res.status(500).json(error.message);
+  }
+});
+
 app.get("/ingredients/:id", async (req, res) => {
   console.log(`Getting ingredient ${req.params.id}`);
   try {
@@ -329,8 +389,58 @@ app.get("/ingredients/:id", async (req, res) => {
 
 app.post("/ingredients/add", async (req, res) => {
   const obj = req.body;
+  let candidate = { ...obj };
+
+  if (candidate.name && !candidate.fdcId) {
+    candidate.fdcId = -Math.abs(Date.now() + Math.floor(Math.random() * 1000));
+  }
+
+  // If fdcId exists and is negative (custom ingredient), try to update it
+  if (candidate.fdcId && candidate.fdcId < 0) {
+    try {
+      const response = await IngredientModel.findOneAndUpdate(
+        { fdcId: candidate.fdcId },
+        {
+          ...candidate,
+          category: candidate.category ?? "Custom",
+        },
+        { new: true }
+      );
+      if (response) {
+        res.status(200);
+        res.json(response);
+        return;
+      }
+    } catch (error) {
+      console.log(error);
+      res.status(500);
+      res.json(error.message);
+      return;
+    }
+  }
+
+  // For new ingredients, check for duplicates by name
+  if (candidate.name) {
+    const escapedName = candidate.name
+      .trim()
+      .replace(/[.*+?^${}()|[\]\\]/g, "\\$&");
+    const existingIngredient = await IngredientModel.findOne({
+      name: new RegExp(`^${escapedName}$`, "i"),
+    });
+
+    if (existingIngredient) {
+      res
+        .status(400)
+        .json({ message: "An ingredient with that name already exists." });
+      return;
+    }
+  }
+
   try {
-    let response = await IngredientModel.create(obj);
+    let response = await IngredientModel.create({
+      ...candidate,
+      category: candidate.category ?? "Custom",
+    });
     res.status(200);
     res.json(response);
   } catch (error) {
@@ -369,6 +479,6 @@ app.get("/chat", async (req, res) => {
   }
 });
 
-app.listen(3000, () => {
+app.listen(3001, () => {
   console.log("server is running");
 });

@@ -72,20 +72,50 @@ const getNutritionalValues = async (
       !response.data.nutrition
     )
       continue;
+
+    const ingredient = response.data;
+    const isCustomIngredient = ingredient.category === "Custom";
+
     response.data.nutrition.forEach((nutrient: Nutrient) => {
       let amountInGrams = ing.fdcAmount ?? 0;
-      if (ing.fdcUnit !== "g") {
-        const currUnit = response.data.portions.find(
-          (portion: IngredientPortion) =>
-            `${portion.amount} ${portion.unit}` === ing.fdcUnit
-        );
-        if (!currUnit || !ing.fdcAmount) return;
-        amountInGrams = currUnit.gramWeight * ing.fdcAmount;
+      let nutrientAmount = nutrient.amount;
+
+      if (isCustomIngredient) {
+        // Custom ingredients: nutrition values are for their portion size
+        // Need to calculate based on the portion's gram weight
+        const portionGramWeight = ingredient.portions?.[0]?.gramWeight ?? 100;
+        if (ing.fdcUnit !== "g") {
+          // User specified a unit (e.g., "30 g"), extract the gram amount
+          const unitMatch = ing.fdcUnit?.match(/(\d+(?:\.\d+)?)\s*g/);
+          if (unitMatch) {
+            amountInGrams = parseFloat(unitMatch[1]) * (ing.fdcAmount ?? 0);
+          }
+        } else {
+          amountInGrams = ing.fdcAmount ?? 0;
+        }
+        // Scale nutrient from portion size to actual grams used
+        nutrientAmount = (nutrient.amount / portionGramWeight) * amountInGrams;
+        // Apply unit conversion for mg nutrients
+        if (nutrient.unit === "mg") {
+          nutrientAmount = nutrientAmount / 1000;
+        }
+      } else {
+        // FDC ingredients: nutrition values are per 100g
+        if (ing.fdcUnit !== "g") {
+          const currUnit = response.data.portions.find(
+            (portion: IngredientPortion) =>
+              `${portion.amount} ${portion.unit}` === ing.fdcUnit
+          );
+          if (!currUnit || !ing.fdcAmount) return;
+          amountInGrams = currUnit.gramWeight * ing.fdcAmount;
+        }
+        nutrientAmount =
+          ((amountInGrams / 100) * nutrient.amount) /
+          (nutrient.unit === "g" || nutrient.unit === "kcal" ? 1 : 1000);
       }
+
       const key = ("_" + nutrient.id) as keyof typeof nutritionObj;
-      nutritionObj[key] +=
-        ((amountInGrams / 100) * nutrient.amount) /
-        (nutrient.unit === "g" || nutrient.unit === "kcal" ? 1 : 1000);
+      nutritionObj[key] += nutrientAmount;
     });
   }
 
@@ -133,10 +163,41 @@ const AddRecipe = () => {
       yup.object().shape({
         isDivider: yup.boolean().required("Required"),
         text: yup.string().required("Required"),
-        fdcAmount: yup.number().when(["isDivider"], {
-          is: false,
-          then: (schema) => schema.min(0, "Must be at least 0"),
-        }),
+        fdcId: yup.number().nullable(),
+        fdcAmount: yup
+          .number()
+          .nullable()
+          .transform((value, originalValue) =>
+            originalValue === "" ||
+            originalValue === null ||
+            originalValue === undefined
+              ? undefined
+              : value
+          )
+          .when(["fdcId", "isDivider"], {
+            is: (fdcId: number | undefined | null, isDivider: boolean) =>
+              !isDivider && !!fdcId,
+            then: (schema) =>
+              schema.required("Required").min(0, "Must be at least 0"),
+            otherwise: (schema) =>
+              schema.notRequired().min(0, "Must be at least 0"),
+          }),
+        fdcUnit: yup
+          .string()
+          .nullable()
+          .transform((value, originalValue) =>
+            originalValue === "" ||
+            originalValue === null ||
+            originalValue === undefined
+              ? undefined
+              : value
+          )
+          .when(["fdcId", "isDivider"], {
+            is: (fdcId: number | undefined | null, isDivider: boolean) =>
+              !isDivider && !!fdcId,
+            then: (schema) => schema.required("Required"),
+            otherwise: (schema) => schema.notRequired(),
+          }),
       })
     ),
     steps: yup.array().of(

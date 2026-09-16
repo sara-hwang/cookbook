@@ -331,3 +331,39 @@ export const sendChatMessage = async (messages: string[]) => {
     return error.response;
   }
 };
+
+export const searchCustomIngredients = async (query: string) => {
+  try {
+    const response = await axios.get(`${URI}/ingredients/search`, {
+      params: {
+        query,
+      },
+    });
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
+
+export const addCustomIngredient = async (ingredient: {
+  name: string;
+  category?: string;
+  fdcId?: number;
+  nutrition: Nutrient[];
+  portions?: IngredientPortion[];
+}) => {
+  try {
+    const response = await axios.post(`${URI}/ingredients/add`, {
+      ...ingredient,
+      category: ingredient.category ?? "Custom",
+      portions: ingredient.portions ?? [
+        { gramWeight: 100, amount: 1, unit: "g" },
+      ],
+    });
+    return response;
+  } catch (e) {
+    const error = e as AxiosError;
+    return error.response;
+  }
+};
