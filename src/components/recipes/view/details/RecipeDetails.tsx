@@ -3,8 +3,6 @@ import {
   Button,
   Grid,
   IconButton,
-  Menu,
-  MenuItem,
   TextField,
   Tooltip,
   Typography,
@@ -44,7 +42,7 @@ import {
 import RecipeOptionsMenu from "./RecipeOptionsMenu";
 import Chat from "./Chat";
 import NutritionLabel from "./NutritionLabel";
-import { defaultTabs } from "../../../../App";
+import { defaultTabs } from "../../../TopNav";
 import RecipePhotos from "./RecipePhotos";
 
 const RecipeDetails = () => {

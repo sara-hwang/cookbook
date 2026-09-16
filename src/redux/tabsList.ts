@@ -1,7 +1,7 @@
 import { createSlice } from "@reduxjs/toolkit";
 import type { PayloadAction } from "@reduxjs/toolkit";
 import { TabItem } from "../utils/types";
-import { defaultTabs } from "../App";
+import { defaultTabs } from "../components/TopNav";
 
 const initialState: { tabsList: TabItem[]; currentTab: number } = {
   tabsList: [],
